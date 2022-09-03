@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Car Rental System using SpringBoot And React JS.iml" filepath="$PROJECT_DIR$/.idea/Car Rental System using SpringBoot And React JS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backEnd/backEnd.iml" filepath="$PROJECT_DIR$/backEnd/backEnd.iml" />
       <module fileurl="file://$PROJECT_DIR$/frontEnd/frontEnd.iml" filepath="$PROJECT_DIR$/frontEnd/frontEnd.iml" />
     </modules>
   </component>

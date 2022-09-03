@@ -8,6 +8,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import classes from "./manageCars.module.css";
 import CommonButton from "../common/btn";
 import { useEffect } from "react";
+import CommonTable from "../common/table/table";
 
 export const ManageCars = (props) => {
   const [view, setView] = useState();
@@ -1005,15 +1006,36 @@ export const ManageCars = (props) => {
                     height: "40%",
                     backgroundColor: "#4BBDE1",
                   }}
-                  onClick={async (e) => {
-                    //   if (
-                    //     window.confirm("Do you want to delete this customer") ==
-                    //     true
-                    //   ) {
-                    //     let response = await CustomerService.deleteCustomer(
-                    //       customerObj.nic
-                    //     );
-                    //   }
+                  onClick={(e) => {
+                    setView(
+                      <CommonTable
+                        width="100%"
+                        height="100%"
+                        tblRows={[
+                          "Row No",
+                          "Reg No",
+                          "Brand",
+                          "Type",
+                          "Transmission Type",
+                          "Fuel Type",
+                          "No Of Passengers",
+                          "Mileage In KM",
+                          "Free KM Per Day",
+                          "Free KM Per Month",
+                          "Daily Rate",
+                          "Monthly Rate",
+                          "Booked Status",
+                          "Maintenance Status",
+                          "loss Damage Waiver",
+                          "Car Image 1",
+                          "Car Image 2",
+                          "Car Image 3",
+                          "Car Image 4",
+                        ]}
+                        dataList={[]}
+                        id="carViewAllTableId"
+                      />
+                    );
                   }}
                   onDblClick={(e) => {
                     setView(mainView());

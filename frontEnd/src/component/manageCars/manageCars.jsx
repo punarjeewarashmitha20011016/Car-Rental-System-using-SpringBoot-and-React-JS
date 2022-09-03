@@ -1059,15 +1059,27 @@ export const ManageCars = (props) => {
                   label={"View Schedule"}
                   size={"medium"}
                   style={{ display: "flex", width: "70%", height: "40%" }}
-                  onClick={async (e) => {
-                    //   if (
-                    //     window.confirm("Do you want to delete this customer") ==
-                    //     true
-                    //   ) {
-                    //     let response = await CustomerService.deleteCustomer(
-                    //       customerObj.nic
-                    //     );
-                    //   }
+                  onClick={(e) => {
+                    setView(
+                      <CommonTable
+                        width="100%"
+                        height="100%"
+                        tblRows={[
+                          "Row No",
+                          "Reg No",
+                          "Booked Status",
+                          "Booked Date",
+                          "Booked Time",
+                          "Return Date",
+                          "Return Time",
+                        ]}
+                        dataList={[]}
+                        id="carViewAllTableId"
+                      />
+                    );
+                  }}
+                  onDblClick={(e) => {
+                    setView(mainView());
                   }}
                 />
               </Grid>

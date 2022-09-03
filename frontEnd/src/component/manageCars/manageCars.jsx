@@ -982,7 +982,7 @@ export const ManageCars = (props) => {
                   variant={"contained"}
                   label={"Save"}
                   size={"small"}
-                  style={{ width: "80%", height: "50%", display: "flex" }}
+                  style={{ width: "80%", height: "40%", display: "flex" }}
                 />
               </Grid>
 
@@ -1002,7 +1002,7 @@ export const ManageCars = (props) => {
                   size={"small"}
                   style={{
                     width: "80%",
-                    height: "50%",
+                    height: "40%",
                     display: "flex",
                     backgroundColor: "grey",
                   }}
@@ -1024,7 +1024,7 @@ export const ManageCars = (props) => {
                   color={"error"}
                   label={"Delete"}
                   size={"medium"}
-                  style={{ display: "flex", width: "70%", height: "50%" }}
+                  style={{ display: "flex", width: "70%", height: "40%" }}
                   onClick={async (e) => {
                     //   if (
                     //     window.confirm("Do you want to delete this customer") ==
@@ -1055,7 +1055,7 @@ export const ManageCars = (props) => {
                   style={{
                     display: "flex",
                     width: "70%",
-                    height: "50%",
+                    height: "40%",
                     backgroundColor: "#4BBDE1",
                   }}
                   onClick={async (e) => {
@@ -1086,7 +1086,7 @@ export const ManageCars = (props) => {
                   color={"success"}
                   label={"View Schedule"}
                   size={"medium"}
-                  style={{ display: "flex", width: "70%", height: "50%" }}
+                  style={{ display: "flex", width: "70%", height: "40%" }}
                   onClick={async (e) => {
                     //   if (
                     //     window.confirm("Do you want to delete this customer") ==

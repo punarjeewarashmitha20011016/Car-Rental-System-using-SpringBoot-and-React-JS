@@ -1,0 +1,168 @@
+.loginContainer{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(231, 231, 231);
+}
+
+.loginContainer img {
+    width: 60%;
+}
+
+.loginContainer > div:nth-child(1) {
+    position: absolute;
+    top: 0;
+    bottom: unset;
+    left: 0;
+    right: unset;
+    margin: unset;
+    width: unset;
+    height: unset;
+    background-color: unset !important;
+    border-radius: unset;
+}
+
+.loginContainer > div:nth-child(2) {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    border: 1p solid red;
+}
+
+.loginContainer > div:nth-child(3) {
+    position: absolute;
+    top: 30%;
+    left: 5%;
+}
+
+.loginContainer > div:nth-child(4) {
+    position: absolute;
+    top: 40%;
+    left: 15%;
+}
+
+.loginContainer > div:nth-child(5) {
+    position: absolute;
+    top: 60%;
+    left: 2%;
+}
+
+.loginContainer > div:nth-child(6) {
+    position: absolute;
+    top: 70%;
+    left: 15%;
+}
+
+.loginContainer > div:nth-child(7) {
+    position: absolute;
+    top: 85%;
+    left: 5%;
+}
+
+.loginContainer > div:nth-child(8) {
+    position: absolute;
+    top: 0%;
+    left: 25%;
+}
+
+.loginContainer > div:nth-child(9) {
+    position: absolute;
+    top: 2%;
+    left: 75%;
+}
+
+.loginContainer > div:nth-child(10) {
+    position: absolute;
+    top: 1%;
+    left: 45%;
+}
+
+.loginContainer > div:nth-child(11) {
+    position: absolute;
+    top: 2%;
+    left: 60%;
+}
+
+.loginContainer > div:nth-child(12) {
+    position: absolute;
+    top: 2%;
+    left: 90%;
+}
+
+.loginContainer > div:nth-child(13) {
+    position: absolute;
+    top: 20%;
+    left: 80%;
+}
+
+.loginContainer > div:nth-child(14) {
+    position: absolute;
+    top: 40%;
+    left: 92%;
+}
+
+.loginContainer > div:nth-child(15) {
+    position: absolute;
+    top: 60%;
+    left: 85%;
+}
+
+.loginContainer > div:nth-child(16) {
+    position: absolute;
+    top: 85%;
+    left: 77%;
+}
+
+.loginContainer > div:nth-child(17) {
+    position: absolute;
+    top: 80%;
+    left: 90%;
+}
+
+.loginContainer > div:nth-child(18) {
+    position: absolute;
+    top: 40%;
+    left: 78%;
+}
+
+.loginContainer > div:nth-child(19) {
+    position: absolute;
+    top: 85%;
+    left: 65%;
+}
+
+.loginContainer > div:nth-child(20) {
+    position: absolute;
+    top: 88%;
+    left: 50%;
+}
+
+.loginContainer > div:nth-child(21) {
+    position: absolute;
+    top: 85%;
+    left: 35%;
+}
+
+.loginContainer > div:nth-child(22) {
+    position: absolute;
+    top: 85%;
+    left: 22%;
+}
+
+.loginContainer > .container{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 70%;
+    background-color: rgb(228, 225, 225);
+    box-shadow: 0px 0px 20px -8px;
+    border-radius: 20px;
+    align-items: center;
+    justify-content: center;
+}

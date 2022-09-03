@@ -1,0 +1,41 @@
+.card1{
+    display: flex;
+    width: 80%;
+    height: 80%;
+    background-color: #B2D545;
+}
+
+.card2{
+    display: flex;
+    width: 80%;
+    height: 80%;
+    background-color: #82E723;
+}
+
+.card3{
+    display: flex;
+    width: 80%;
+    height: 80%;
+    background-color: #82E723;
+}
+
+.card4{
+    display: flex;
+    width: 80%;
+    height: 80%;
+    background-color: #45D57C;
+}
+
+.card5{
+    display: flex;
+    width: 80%;
+    height: 80%;
+    background-color: #459CD5;
+}
+
+.card6{
+    display: flex;
+    width: 80%;
+    height: 80%;
+    background-color: #A145D5;
+}

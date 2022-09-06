@@ -6,12 +6,13 @@ import LoginPage from "../pages/loginPage";
 import { CustomerSignupPage } from "../pages/customerSignupPage";
 import { AdminDashboardPage } from "../pages/adminDashboardPage";
 import { ManageCarsPage } from "../pages/manageCarsPage";
+import { CustomerInAdminPage } from "../pages/customerInAdminPage";
 
 function App() {
   const adminNavPaths = [
     "/adminDashboard",
     "/manageCars",
-    "/viewAllCustomers",
+    "/customerInAdmin",
     "/manageDrivers",
     "/income",
     "/bookingRequest",
@@ -55,7 +56,7 @@ function App() {
             navBtns: [
               { path: "/adminDashboard", btn: "Home" },
               { path: "/manageCars", btn: "Car" },
-              { path: "/viewAllCustomers", btn: "Customer" },
+              { path: "/customerInAdmin", btn: "Customer" },
               { path: "/manageDrivers", btn: "Driver" },
               { path: "/income", btn: "Income" },
               { path: "/bookingRequest", btn: "Booking Request" },
@@ -112,6 +113,11 @@ function App() {
             element={<AdminDashboardPage />}
           />
           <Route exact path="/manageCars" element={<ManageCarsPage />} />
+          <Route
+            exact
+            path="/customerInAdmin"
+            element={<CustomerInAdminPage />}
+          />
         </Routes>
       </main>
     </div>

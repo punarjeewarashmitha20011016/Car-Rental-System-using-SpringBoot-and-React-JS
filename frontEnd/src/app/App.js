@@ -8,7 +8,7 @@ import { AdminDashboardPage } from "../pages/adminDashboardPage";
 import { ManageCarsPage } from "../pages/manageCarsPage";
 import { CustomerInAdminPage } from "../pages/customerInAdminPage";
 import { ManageDriversPage } from "../pages/manageDriversPage";
-
+import { IncomePage } from "../pages/incomePage";
 function App() {
   const adminNavPaths = [
     "/adminDashboard",
@@ -121,6 +121,7 @@ function App() {
           />
 
           <Route exact path="/manageDrivers" element={<ManageDriversPage />} />
+          <Route exact path="/income" element={<IncomePage />} />
         </Routes>
       </main>
     </div>

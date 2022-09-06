@@ -1067,7 +1067,7 @@ export const ManageCars = (props) => {
                   variant={"contained"}
                   label={"Save"}
                   size={"small"}
-                  style={{ width: "80%", height: "40%", display: "flex" }}
+                  style={{ width: "70%", height: "40%", display: "flex" }}
                   onClick={async (e) => {
                     let file = document.getElementById("carImagesFile").files;
                     console.log("Car Obj = ", carDataObj);
@@ -1105,7 +1105,7 @@ export const ManageCars = (props) => {
                   label={"Update"}
                   size={"small"}
                   style={{
-                    width: "80%",
+                    width: "70%",
                     height: "40%",
                     display: "flex",
                     backgroundColor: "grey",

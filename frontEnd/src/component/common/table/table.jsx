@@ -18,9 +18,9 @@ export default function CommonTable(props) {
       fontSize: 14,
     },
   }));
-  const { width, height, tblRows, dataList, id } = props;
+  const { width, height, tblRows, dataList, id, style } = props;
   return (
-    <TableContainer component={Paper} sx={{ height: { height } }}>
+    <TableContainer component={Paper} sx={{ height: { height } }} style={style}>
       <Table sx={{ width: width }} aria-label="customized table" id={id}>
         <TableHead>
           <TableRow>

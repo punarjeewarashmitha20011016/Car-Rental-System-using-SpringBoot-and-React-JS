@@ -6,7 +6,6 @@ import LoginPage from "../pages/loginPage";
 import { CustomerSignupPage } from "../pages/customerSignupPage";
 import { AdminDashboardPage } from "../pages/adminDashboardPage";
 import { ManageCarsPage } from "../pages/manageCarsPage";
-import Context from "../store/auth-context";
 
 function App() {
   const adminNavPaths = [
@@ -99,14 +98,7 @@ function App() {
         id="mainContainer"
       >
         <Routes>
-          <Route
-            exact
-            path="/"
-            element={
-              // <HomePage setDataToNavBarInAdmin={setDataToNavBarHandler} />
-              <HomePage />
-            }
-          />
+          <Route exact path="/" element={<HomePage />} />
 
           <Route exact path="/login" element={<LoginPage />} />
           <Route
@@ -117,12 +109,7 @@ function App() {
           <Route
             exact
             path="/adminDashboard"
-            element={
-              // <AdminDashboardPage
-              //   setDataToNavBarInAdmin={setDataToNavBarHandler}
-              // />
-              <AdminDashboardPage />
-            }
+            element={<AdminDashboardPage />}
           />
           <Route exact path="/manageCars" element={<ManageCarsPage />} />
         </Routes>

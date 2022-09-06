@@ -29,7 +29,11 @@ export default function CommonTable(props) {
             ))}
           </TableRow>
         </TableHead>
-        <TableBody id="tblBody">{dataList.map((row) => row)}</TableBody>
+        <TableBody id="tblBody">
+          {dataList.map((row) => {
+            return row;
+          })}
+        </TableBody>
       </Table>
     </TableContainer>
   );

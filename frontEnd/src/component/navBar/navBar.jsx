@@ -94,8 +94,8 @@ const NavBar = (props) => {
         <Link
           to={"/login"}
           onClick={(e) => {
-            document.getElementById("navBar").style.display = "none";
             document.getElementById("mainContainer").style.height = "100%";
+            document.getElementById("navBar").style.display = "none";
           }}
         >
           <CommonButton className={classes.CommonButton}>

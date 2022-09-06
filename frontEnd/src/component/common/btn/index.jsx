@@ -3,6 +3,10 @@ import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 
 class CommonButton extends Component {
+  constructor(props) {
+    super(props);
+    this.timeout = null;
+  }
   static propTypes = {
     onClick: PropTypes.func,
     children: PropTypes.node,
@@ -28,19 +32,19 @@ class CommonButton extends Component {
   };
 
   handleButtonClick = (event) => {
-    const { onClick, disabled } = this.props;
-
-    if (disabled) return;
-
-    onClick && onClick({ event });
+    if (event.detail === 1) {
+      const { onClick, disabled } = this.props;
+      if (disabled) return;
+      onClick && onClick({ event });
+    }
   };
 
   handleButtonDblClick = (event) => {
-    const { onDblClick, disabled } = this.props;
-
-    if (disabled) return;
-
-    onDblClick && onDblClick({ event });
+    if (event.detail === 2) {
+      const { onDblClick, disabled } = this.props;
+      if (disabled) return;
+      onDblClick && onDblClick({ event });
+    }
   };
 
   renderChildren = (label, children) => {

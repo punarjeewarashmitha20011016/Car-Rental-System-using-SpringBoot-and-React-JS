@@ -200,10 +200,6 @@ const Login = (props) => {
           >
             <Link
               to="/customerSignup"
-              onClick={(e) => {
-                document.getElementById("navBar").style.display = "none";
-                document.getElementById("mainContainer").style.height = "100%";
-              }}
               style={{
                 textDecoration: "none",
                 width: "30%",

@@ -7,6 +7,7 @@ import { CustomerSignupPage } from "../pages/customerSignupPage";
 import { AdminDashboardPage } from "../pages/adminDashboardPage";
 import { ManageCarsPage } from "../pages/manageCarsPage";
 import { CustomerInAdminPage } from "../pages/customerInAdminPage";
+import { ManageDriversPage } from "../pages/manageDriversPage";
 
 function App() {
   const adminNavPaths = [
@@ -118,6 +119,8 @@ function App() {
             path="/customerInAdmin"
             element={<CustomerInAdminPage />}
           />
+
+          <Route exact path="/manageDrivers" element={<ManageDriversPage />} />
         </Routes>
       </main>
     </div>

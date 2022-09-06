@@ -17,7 +17,7 @@ export const CustomerInAdmin = (props) => {
           <td>{row.nic}</td>
           <td>{row.name}</td>
           <td>{row.licenseNo}</td>
-          <td>{row.contactNo}</td>
+          <td>{"0" + row.contactNo}</td>
           <td>{row.email}</td>
           <td>{row.password}</td>
 

@@ -30,9 +30,11 @@ export default function CommonTable(props) {
           </TableRow>
         </TableHead>
         <TableBody id="tblBody">
-          {dataList.map((row) => {
-            return row;
-          })}
+          {console.log("data = ", dataList)}
+          {dataList != null &&
+            dataList.map((row) => {
+              return row;
+            })}
         </TableBody>
       </Table>
     </TableContainer>

@@ -1,8 +1,27 @@
 import { Autocomplete, Grid, TextField, Typography } from "@mui/material";
+import { useState } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
+import { baseUrl } from "../../baseUrl";
+import DriverService from "../../services/driverService/driverService";
 import CommonButton from "../common/btn";
+import CommonTable from "../common/table/table";
 import classes from "./manageDrivers.module.css";
 export const ManageDrivers = (props) => {
+  const [driver, setDriver] = useState({
+    nic: "",
+    name: "",
+    licenseNo: "",
+    licensePhoto: "",
+    nicPhoto: "",
+    contactNo: "",
+    address: "",
+    availableStatus: "",
+    email: "",
+    password: "",
+  });
+  const [view, setView] = useState(null);
+  const [check, setCheck] = useState(false);
+  const [formData, setFormData] = useState(new FormData());
   return (
     <div className={classes.mainContainer}>
       <div className={classes.container}>
@@ -24,689 +43,676 @@ export const ManageDrivers = (props) => {
               height: "80%",
             }}
           >
-            <ValidatorForm
-              style={{
-                position: "relative",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              <Grid
-                container
+            {check === false ? (
+              <ValidatorForm
                 style={{
-                  height: "25%",
+                  position: "relative",
                   width: "100%",
+                  height: "100%",
                 }}
               >
                 <Grid
-                  item
-                  xs={4}
+                  container
                   style={{
-                    height: "100%",
+                    height: "25%",
+                    width: "100%",
                   }}
                 >
                   <Grid
                     item
-                    xs={12}
+                    xs={4}
                     style={{
-                      position: "relative",
-                      height: "30%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
+                      height: "100%",
                     }}
                   >
-                    <Typography
-                      variant="body1"
+                    <Grid
+                      item
+                      xs={12}
                       style={{
+                        position: "relative",
+                        height: "30%",
                         display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
                     >
-                      Nic
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      height: "70%",
-                      position: "relative",
-                    }}
-                  >
-                    <TextValidator
-                      label="Enter Your Nic Number"
-                      onChange={(e) => {
-                        // setCustomerObj((prevState) => {
-                        //   return {
-                        //     ...customerObj,
-                        //     nic: e.target.value,
-                        //   };
-                        // });
-                      }}
-                      name="nicNumber"
-                      size="small"
+                      <Typography
+                        variant="body1"
+                        style={{
+                          display: "flex",
+                        }}
+                      >
+                        Nic
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
                       style={{
-                        position: "absolute",
-                        width: "60%",
-                        height: "50%",
-                        display: "flex",
-                        inset: "0 0 0 0",
-                        margin: "auto",
+                        height: "70%",
+                        position: "relative",
                       }}
-                      //   value={customerObj.nic}
-                      //   validators={["required"]}
-                      //   errorMessages={[
-                      //     "this field is required",
-                      //     "Nic Number is not valid",
-                      //   ]}
-                    />
+                    >
+                      <TextValidator
+                        label="Enter Your Nic Number"
+                        onChange={(e) => {
+                          setDriver((prevState) => {
+                            return {
+                              ...driver,
+                              nic: e.target.value,
+                            };
+                          });
+                        }}
+                        name="nicNumber"
+                        size="small"
+                        style={{
+                          position: "absolute",
+                          width: "60%",
+                          height: "50%",
+                          display: "flex",
+                          inset: "0 0 0 0",
+                          margin: "auto",
+                        }}
+                        value={driver.nic}
+                        validators={["required"]}
+                        errorMessages={[
+                          "this field is required",
+                          "Nic Number is not valid",
+                        ]}
+                      />
+                    </Grid>
                   </Grid>
-                </Grid>
 
-                <Grid
-                  item
-                  xs={4}
-                  style={{
-                    height: "100%",
-                  }}
-                >
                   <Grid
                     item
-                    xs={12}
+                    xs={4}
                     style={{
-                      position: "relative",
-                      height: "30%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
+                      height: "100%",
                     }}
                   >
-                    <Typography
-                      variant="body1"
+                    <Grid
+                      item
+                      xs={12}
                       style={{
+                        position: "relative",
+                        height: "30%",
                         display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
                     >
-                      Name
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      height: "70%",
-                      position: "relative",
-                    }}
-                  >
-                    <TextValidator
-                      label="Enter Your Name"
-                      onChange={(e) => {
-                        // setCustomerObj((prevState) => {
-                        //   return {
-                        //     ...customerObj,
-                        //     nic: e.target.value,
-                        //   };
-                        // });
-                      }}
-                      name="driverName"
-                      size="small"
+                      <Typography
+                        variant="body1"
+                        style={{
+                          display: "flex",
+                        }}
+                      >
+                        Name
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
                       style={{
-                        position: "absolute",
-                        width: "60%",
-                        height: "50%",
-                        display: "flex",
-                        inset: "0 0 0 0",
-                        margin: "auto",
-                      }}
-                      //   value={customerObj.nic}
-                      //   validators={["required"]}
-                      //   errorMessages={[
-                      //     "this field is required",
-                      //     "Nic Number is not valid",
-                      //   ]}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid
-                  item
-                  xs={4}
-                  style={{
-                    height: "100%",
-                  }}
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      position: "relative",
-                      height: "30%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      style={{
-                        display: "flex",
+                        height: "70%",
+                        position: "relative",
                       }}
                     >
-                      License No
-                    </Typography>
+                      <TextValidator
+                        label="Enter Your Name"
+                        onChange={(e) => {
+                          setDriver((prevState) => {
+                            return {
+                              ...driver,
+                              name: e.target.value,
+                            };
+                          });
+                        }}
+                        name="driverName"
+                        size="small"
+                        style={{
+                          position: "absolute",
+                          width: "60%",
+                          height: "50%",
+                          display: "flex",
+                          inset: "0 0 0 0",
+                          margin: "auto",
+                        }}
+                        value={driver.name}
+                        validators={["required"]}
+                        errorMessages={[
+                          "this field is required",
+                          "Name is not valid",
+                        ]}
+                      />
+                    </Grid>
                   </Grid>
                   <Grid
                     item
-                    xs={12}
+                    xs={4}
                     style={{
-                      height: "70%",
-                      position: "relative",
+                      height: "100%",
                     }}
                   >
-                    <TextValidator
-                      label="Enter Your License Number"
-                      onChange={(e) => {
-                        // setCustomerObj((prevState) => {
-                        //   return {
-                        //     ...customerObj,
-                        //     nic: e.target.value,
-                        //   };
-                        // });
-                      }}
-                      name="licenseNumber"
-                      size="small"
+                    <Grid
+                      item
+                      xs={12}
                       style={{
-                        position: "absolute",
-                        width: "60%",
-                        height: "50%",
+                        position: "relative",
+                        height: "30%",
                         display: "flex",
-                        inset: "0 0 0 0",
-                        margin: "auto",
-                      }}
-                      //   value={customerObj.nic}
-                      //   validators={["required"]}
-                      //   errorMessages={[
-                      //     "this field is required",
-                      //     "Nic Number is not valid",
-                      //   ]}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid
-                  item
-                  xs={4}
-                  style={{
-                    height: "100%",
-                  }}
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      position: "relative",
-                      height: "30%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      style={{
-                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
                     >
-                      Contact No
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      height: "70%",
-                      position: "relative",
-                    }}
-                  >
-                    <TextValidator
-                      label="Enter Your Contact Number"
-                      onChange={(e) => {
-                        // setCustomerObj((prevState) => {
-                        //   return {
-                        //     ...customerObj,
-                        //     nic: e.target.value,
-                        //   };
-                        // });
-                      }}
-                      name="contactNumber"
-                      size="small"
+                      <Typography
+                        variant="body1"
+                        style={{
+                          display: "flex",
+                        }}
+                      >
+                        License No
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
                       style={{
-                        position: "absolute",
-                        width: "60%",
-                        height: "50%",
-                        display: "flex",
-                        inset: "0 0 0 0",
-                        margin: "auto",
-                      }}
-                      //   value={customerObj.nic}
-                      //   validators={["required"]}
-                      //   errorMessages={[
-                      //     "this field is required",
-                      //     "Nic Number is not valid",
-                      //   ]}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid
-                  item
-                  xs={4}
-                  style={{
-                    height: "100%",
-                  }}
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      position: "relative",
-                      height: "30%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      style={{
-                        display: "flex",
+                        height: "70%",
+                        position: "relative",
                       }}
                     >
-                      Email Address
-                    </Typography>
+                      <TextValidator
+                        label="Enter Your License Number"
+                        onChange={(e) => {
+                          setDriver((prevState) => {
+                            return {
+                              ...driver,
+                              licenseNo: e.target.value,
+                            };
+                          });
+                        }}
+                        name="licenseNumber"
+                        size="small"
+                        style={{
+                          position: "absolute",
+                          width: "60%",
+                          height: "50%",
+                          display: "flex",
+                          inset: "0 0 0 0",
+                          margin: "auto",
+                        }}
+                        value={driver.licenseNo}
+                        validators={["required"]}
+                        errorMessages={[
+                          "this field is required",
+                          "License Number is not valid",
+                        ]}
+                      />
+                    </Grid>
                   </Grid>
                   <Grid
                     item
-                    xs={12}
+                    xs={4}
                     style={{
-                      height: "70%",
-                      position: "relative",
+                      height: "100%",
                     }}
                   >
-                    <TextValidator
-                      label="Enter Your Email Address"
-                      onChange={(e) => {
-                        // setCustomerObj((prevState) => {
-                        //   return {
-                        //     ...customerObj,
-                        //     nic: e.target.value,
-                        //   };
-                        // });
-                      }}
-                      name="emailAddress"
-                      size="small"
+                    <Grid
+                      item
+                      xs={12}
                       style={{
-                        position: "absolute",
-                        width: "60%",
-                        height: "50%",
+                        position: "relative",
+                        height: "30%",
                         display: "flex",
-                        inset: "0 0 0 0",
-                        margin: "auto",
-                      }}
-                      //   value={customerObj.nic}
-                      //   validators={["required"]}
-                      //   errorMessages={[
-                      //     "this field is required",
-                      //     "Nic Number is not valid",
-                      //   ]}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid
-                  item
-                  xs={4}
-                  style={{
-                    height: "100%",
-                  }}
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      position: "relative",
-                      height: "30%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      style={{
-                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
                     >
-                      Password
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      height: "70%",
-                      position: "relative",
-                    }}
-                  >
-                    <TextValidator
-                      label="Enter Your Password"
-                      onChange={(e) => {
-                        // setCustomerObj((prevState) => {
-                        //   return {
-                        //     ...customerObj,
-                        //     nic: e.target.value,
-                        //   };
-                        // });
-                      }}
-                      name="password"
-                      size="small"
+                      <Typography
+                        variant="body1"
+                        style={{
+                          display: "flex",
+                        }}
+                      >
+                        Contact No
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
                       style={{
-                        position: "absolute",
-                        width: "60%",
-                        height: "50%",
-                        display: "flex",
-                        inset: "0 0 0 0",
-                        margin: "auto",
-                      }}
-                      //   value={customerObj.nic}
-                      //   validators={["required"]}
-                      //   errorMessages={[
-                      //     "this field is required",
-                      //     "Nic Number is not valid",
-                      //   ]}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  style={{
-                    height: "100%",
-                  }}
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      position: "relative",
-                      height: "30%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      style={{
-                        display: "flex",
+                        height: "70%",
+                        position: "relative",
                       }}
                     >
-                      Availabiliity Status
-                    </Typography>
+                      <TextValidator
+                        label="Enter Your Contact Number"
+                        onChange={(e) => {
+                          setDriver((prevState) => {
+                            return {
+                              ...driver,
+                              contactNo: "0" + parseInt(e.target.value),
+                            };
+                          });
+                        }}
+                        name="contactNumber"
+                        size="small"
+                        type="Number"
+                        style={{
+                          position: "absolute",
+                          width: "60%",
+                          height: "50%",
+                          display: "flex",
+                          inset: "0 0 0 0",
+                          margin: "auto",
+                        }}
+                        value={driver.contactNo}
+                        validators={["required"]}
+                        errorMessages={[
+                          "this field is required",
+                          "Contact Number is not valid",
+                        ]}
+                      />
+                    </Grid>
                   </Grid>
                   <Grid
                     item
-                    xs={12}
+                    xs={4}
                     style={{
-                      height: "70%",
-                      position: "relative",
+                      height: "100%",
                     }}
                   >
-                    <Autocomplete
-                      autoHighlight
-                      filterSelectedOptions
-                      disablePortal
-                      id="combo-box-demo"
-                      options={["Available", "Not Available"]}
+                    <Grid
+                      item
+                      xs={12}
                       style={{
-                        position: "absolute",
-                        width: "60%",
-                        height: "50%",
+                        position: "relative",
+                        height: "30%",
                         display: "flex",
-                        inset: "0 0 0 0",
-                        margin: "auto",
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          size={"small"}
-                          label="Type"
-                          style={{
-                            position: "absolute",
-                            width: "100%",
-                            height: "100%",
-                            display: "flex",
-                            inset: "0 0 0 0",
-                            margin: "auto",
-                          }}
-                        />
-                      )}
-                      onChange={(e, value) => {
-                        console.log("type = ", value);
-                        // setCarDataObj((prevState) => {
-                        //   return {
-                        //     ...carDataObj,
-                        //     type: value,
-                        //   };
-                        // });
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  style={{
-                    height: "100%",
-                  }}
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      position: "relative",
-                      height: "30%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      style={{
-                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
                     >
-                      Address
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      height: "70%",
-                      position: "relative",
-                    }}
-                  >
-                    <TextValidator
-                      label="Enter Your Address"
-                      onChange={(e) => {
-                        // setCustomerObj((prevState) => {
-                        //   return {
-                        //     ...customerObj,
-                        //     nic: e.target.value,
-                        //   };
-                        // });
-                      }}
-                      name="address"
-                      size="small"
+                      <Typography
+                        variant="body1"
+                        style={{
+                          display: "flex",
+                        }}
+                      >
+                        Email Address
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
                       style={{
-                        position: "absolute",
-                        width: "60%",
-                        height: "50%",
-                        display: "flex",
-                        inset: "0 0 0 0",
-                        margin: "auto",
-                      }}
-                      //   value={customerObj.nic}
-                      //   validators={["required"]}
-                      //   errorMessages={[
-                      //     "this field is required",
-                      //     "Nic Number is not valid",
-                      //   ]}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  style={{
-                    height: "100%",
-                  }}
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      position: "relative",
-                      height: "30%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      style={{
-                        display: "flex",
+                        height: "70%",
+                        position: "relative",
                       }}
                     >
-                      Nic Picture
-                    </Typography>
+                      <TextValidator
+                        label="Enter Your Email Address"
+                        onChange={(e) => {
+                          setDriver((prevState) => {
+                            return {
+                              ...driver,
+                              email: e.target.value,
+                            };
+                          });
+                        }}
+                        name="emailAddress"
+                        size="small"
+                        style={{
+                          position: "absolute",
+                          width: "60%",
+                          height: "50%",
+                          display: "flex",
+                          inset: "0 0 0 0",
+                          margin: "auto",
+                        }}
+                        value={driver.email}
+                        validators={["required", "isEmail"]}
+                        errorMessages={[
+                          "this field is required",
+                          "Email is not valid",
+                        ]}
+                      />
+                    </Grid>
                   </Grid>
                   <Grid
                     item
-                    xs={12}
+                    xs={4}
                     style={{
-                      height: "70%",
-                      position: "relative",
+                      height: "100%",
                     }}
                   >
-                    <TextValidator
-                      placeholder="License Picture"
-                      onChange={(e) => {
-                        console.log(e.target.files[0]);
-                        console.log(e.target.files[0].name);
-                        // setFormData((prevState) => {
-                        //   let data = formData;
-                        //   data.append(
-                        //     "licensePhoto",
-                        //     e.target.files[0],
-                        //     e.target.files[0].name
-                        //   );
-                        //   console.log(data.getAll("nicPhoto"));
-                        //   return data;
-                        // });
-                      }}
-                      name="licensePicture"
-                      size="small"
+                    <Grid
+                      item
+                      xs={12}
                       style={{
-                        position: "absolute",
-                        width: "60%",
-                        height: "50%",
+                        position: "relative",
+                        height: "30%",
                         display: "flex",
-                        inset: "0 0 0 0",
-                        margin: "auto",
-                      }}
-                      //value={customerObj.licensePhoto}
-                      validators={["required"]}
-                      type={"file"}
-                      errorMessages={[
-                        "this field is required",
-                        "User Name is not valid",
-                      ]}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  style={{
-                    height: "100%",
-                  }}
-                >
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      position: "relative",
-                      height: "30%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      style={{
-                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
                     >
-                      License Picture
-                    </Typography>
+                      <Typography
+                        variant="body1"
+                        style={{
+                          display: "flex",
+                        }}
+                      >
+                        Password
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+                        height: "70%",
+                        position: "relative",
+                      }}
+                    >
+                      <TextValidator
+                        label="Enter Your Password"
+                        onChange={(e) => {
+                          setDriver((prevState) => {
+                            return {
+                              ...driver,
+                              password: e.target.value,
+                            };
+                          });
+                        }}
+                        name="password"
+                        size="small"
+                        style={{
+                          position: "absolute",
+                          width: "60%",
+                          height: "50%",
+                          display: "flex",
+                          inset: "0 0 0 0",
+                          margin: "auto",
+                        }}
+                        value={driver.password}
+                        validators={["required"]}
+                        errorMessages={[
+                          "this field is required",
+                          "Password is not valid",
+                        ]}
+                      />
+                    </Grid>
                   </Grid>
                   <Grid
                     item
-                    xs={12}
+                    xs={6}
                     style={{
-                      height: "70%",
-                      position: "relative",
+                      height: "100%",
                     }}
                   >
-                    <TextValidator
-                      placeholder="License Picture"
-                      onChange={(e) => {
-                        console.log(e.target.files[0]);
-                        console.log(e.target.files[0].name);
-                        // setFormData((prevState) => {
-                        //   let data = formData;
-                        //   data.append(
-                        //     "licensePhoto",
-                        //     e.target.files[0],
-                        //     e.target.files[0].name
-                        //   );
-                        //   console.log(data.getAll("nicPhoto"));
-                        //   return data;
-                        // });
-                      }}
-                      name="licensePicture"
-                      size="small"
+                    <Grid
+                      item
+                      xs={12}
                       style={{
-                        position: "absolute",
-                        width: "60%",
-                        height: "50%",
+                        position: "relative",
+                        height: "30%",
                         display: "flex",
-                        inset: "0 0 0 0",
-                        margin: "auto",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
-                      //value={customerObj.licensePhoto}
-                      validators={["required"]}
-                      type={"file"}
-                      errorMessages={[
-                        "this field is required",
-                        "User Name is not valid",
-                      ]}
-                    />
+                    >
+                      <Typography
+                        variant="body1"
+                        style={{
+                          display: "flex",
+                        }}
+                      >
+                        Availability Status
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+                        height: "70%",
+                        position: "relative",
+                      }}
+                    >
+                      <Autocomplete
+                        autoHighlight
+                        filterSelectedOptions
+                        disablePortal
+                        id="combo-box-demo"
+                        options={["Available", "Not Available"]}
+                        style={{
+                          position: "absolute",
+                          width: "60%",
+                          height: "50%",
+                          display: "flex",
+                          inset: "0 0 0 0",
+                          margin: "auto",
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            size={"small"}
+                            label="Type"
+                            style={{
+                              position: "absolute",
+                              width: "100%",
+                              height: "100%",
+                              display: "flex",
+                              inset: "0 0 0 0",
+                              margin: "auto",
+                            }}
+                          />
+                        )}
+                        onChange={(e, value) => {
+                          console.log("type = ", value);
+                          setDriver((prevState) => {
+                            return {
+                              ...driver,
+                              availableStatus: value,
+                            };
+                          });
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={6}
+                    style={{
+                      height: "100%",
+                    }}
+                  >
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+                        position: "relative",
+                        height: "30%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography
+                        variant="body1"
+                        style={{
+                          display: "flex",
+                        }}
+                      >
+                        Address
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+                        height: "70%",
+                        position: "relative",
+                      }}
+                    >
+                      <TextValidator
+                        label="Enter Your Address"
+                        onChange={(e) => {
+                          setDriver((prevState) => {
+                            return {
+                              ...driver,
+                              address: e.target.value,
+                            };
+                          });
+                        }}
+                        name="address"
+                        size="small"
+                        style={{
+                          position: "absolute",
+                          width: "60%",
+                          height: "50%",
+                          display: "flex",
+                          inset: "0 0 0 0",
+                          margin: "auto",
+                        }}
+                        value={driver.address}
+                        validators={["required"]}
+                        errorMessages={[
+                          "this field is required",
+                          "Address is not valid",
+                        ]}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={6}
+                    style={{
+                      height: "100%",
+                    }}
+                  >
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+                        position: "relative",
+                        height: "30%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography
+                        variant="body1"
+                        style={{
+                          display: "flex",
+                        }}
+                      >
+                        Nic Picture
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+                        height: "70%",
+                        position: "relative",
+                      }}
+                    >
+                      <TextValidator
+                        placeholder="Nic Picture"
+                        onChange={(e) => {
+                          console.log("e");
+                          console.log(e.target.files[0]);
+                          console.log(e.target.files[0].name);
+
+                          formData.append(
+                            "nicPhoto",
+                            e.target.files[0],
+                            e.target.files[0].name
+                          );
+                        }}
+                        name="nicPicture"
+                        size="small"
+                        style={{
+                          position: "absolute",
+                          width: "60%",
+                          height: "50%",
+                          display: "flex",
+                          inset: "0 0 0 0",
+                          margin: "auto",
+                        }}
+                        //value={customerObj.licensePhoto}
+                        validators={["required"]}
+                        type={"file"}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={6}
+                    style={{
+                      height: "100%",
+                    }}
+                  >
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+                        position: "relative",
+                        height: "30%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography
+                        variant="body1"
+                        style={{
+                          display: "flex",
+                        }}
+                      >
+                        License Picture
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+                        height: "70%",
+                        position: "relative",
+                      }}
+                    >
+                      <TextValidator
+                        placeholder="License Picture"
+                        onChange={(e) => {
+                          formData.append(
+                            "licensePhoto",
+                            e.target.files[0],
+                            e.target.files[0].name
+                          );
+                        }}
+                        name="licensePicture"
+                        size="small"
+                        style={{
+                          position: "absolute",
+                          width: "60%",
+                          height: "50%",
+                          display: "flex",
+                          inset: "0 0 0 0",
+                          margin: "auto",
+                        }}
+                        //value={customerObj.licensePhoto}
+                        validators={["required"]}
+                        type={"file"}
+                      />
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            </ValidatorForm>
+              </ValidatorForm>
+            ) : (
+              view
+            )}
           </Grid>
 
           <Grid
@@ -736,22 +742,19 @@ export const ManageDrivers = (props) => {
                 size={"medium"}
                 style={{ display: "flex", width: "50%" }}
                 onClick={async (e) => {
-                  //   setFormData((prevState) => {
-                  //     return formData.append(
-                  //       "dto",
-                  //       new Blob([JSON.stringify(customerObj)], {
-                  //         type: "application/json",
-                  //       })
-                  //     );
-                  //   });
-                  //   if (
-                  //     window.confirm("Do you want to save this customer") ==
-                  //     true
-                  //   ) {
-                  //     let response = await CustomerService.createPost(
-                  //       formData
-                  //     );
-                  //   }
+                  console.log("Form = ", formData.getAll("nicPhoto"));
+                  console.log("Driver DTO = ", driver);
+                  formData.append(
+                    "dto",
+                    new Blob([JSON.stringify(driver)], {
+                      type: "application/json",
+                    })
+                  );
+                  if (
+                    window.confirm("Do you want to save this Driver") == true
+                  ) {
+                    let response = await DriverService.postDriver(formData);
+                  }
                 }}
               />
             </Grid>
@@ -775,22 +778,19 @@ export const ManageDrivers = (props) => {
                   backgroundColor: "grey",
                 }}
                 onClick={async (e) => {
-                  //   setFormData((prevState) => {
-                  //     return formData.append(
-                  //       "dto",
-                  //       new Blob([JSON.stringify(customerObj)], {
-                  //         type: "application/json",
-                  //       })
-                  //     );
-                  //   });
-                  //   if (
-                  //     window.confirm("Do you want to update this customer") ==
-                  //     true
-                  //   ) {
-                  //     let response = await CustomerService.createPut(
-                  //       formData
-                  //     );
-                  //   }
+                  console.log("Form = ", formData.getAll("nicPhoto"));
+                  console.log("Driver DTO = ", driver);
+                  formData.append(
+                    "dto",
+                    new Blob([JSON.stringify(driver)], {
+                      type: "application/json",
+                    })
+                  );
+                  if (
+                    window.confirm("Do you want to update this Driver") == true
+                  ) {
+                    let response = await DriverService.putDriver(formData);
+                  }
                 }}
               />
             </Grid>
@@ -811,14 +811,11 @@ export const ManageDrivers = (props) => {
                 size={"medium"}
                 style={{ display: "flex", width: "50%" }}
                 onClick={async (e) => {
-                  //   if (
-                  //     window.confirm("Do you want to delete this customer") ==
-                  //     true
-                  //   ) {
-                  //     let response = await CustomerService.deleteCustomer(
-                  //       customerObj.nic
-                  //     );
-                  //   }
+                  if (
+                    window.confirm("Do you want to delete this Driver") == true
+                  ) {
+                    let response = await DriverService.deleteDriver(driver.nic);
+                  }
                 }}
               />
             </Grid>
@@ -843,90 +840,58 @@ export const ManageDrivers = (props) => {
                   backgroundColor: "#4BBDE1",
                 }}
                 onClick={async (e) => {
-                  // console.log("onClick");
-                  // let res = await CarService.fetchCars();
-                  // let rowData = res.data.data;
-                  // let dataList = [];
-                  // let rowNo = 1;
-                  // await rowData.map(async (row) => {
-                  //   dataList.push(
-                  //     <tr>
-                  //       <td>{rowNo++}</td>
-                  //       <td>{row.c_RegNo}</td>
-                  //       <td>{row.brand}</td>
-                  //       <td>{row.type}</td>
-                  //       <td>{row.transmissionType}</td>
-                  //       <td>{row.fuelType}</td>
-                  //       <td>{row.noOfPassengers}</td>
-                  //       <td>{row.mileageInKm}</td>
-                  //       <td>{row.freeKmPerDay}</td>
-                  //       <td>{row.freeKmPerMonth}</td>
-                  //       <td>{row.dailyRate}</td>
-                  //       <td>{row.monthlyRate}</td>
-                  //       <td>{row.carBookedOrNotStatus}</td>
-                  //       <td>{row.maintenanceStatus}</td>
-                  //       <td>{row.lossDamageWaiver}</td>
-                  //       <td>
-                  //         <img
-                  //           src={baseUrl + "/" + row.images.firstImage}
-                  //           width="100px"
-                  //         ></img>
-                  //       </td>
-                  //       <td>
-                  //         <img
-                  //           src={baseUrl + "/" + row.images.secondImage}
-                  //           width="100px"
-                  //         ></img>
-                  //       </td>
-                  //       <td>
-                  //         <img
-                  //           src={baseUrl + "/" + row.images.thirdImage}
-                  //           width="100px"
-                  //         ></img>
-                  //       </td>
-                  //       <td>
-                  //         <img
-                  //           src={baseUrl + "/" + row.images.fourthImage}
-                  //           width="100px"
-                  //         ></img>
-                  //       </td>
-                  //     </tr>
-                  //   );
-                  // });
-                  // setCarList(res.data.data);
-                  // setCheck(true);
-                  // setView(
-                  //   <CommonTable
-                  //     width="100%"
-                  //     height="100%"
-                  //     tblRows={[
-                  //       "Row No",
-                  //       "Reg No",
-                  //       "Brand",
-                  //       "Type",
-                  //       "Transmission Type",
-                  //       "Fuel Type",
-                  //       "No Of Passengers",
-                  //       "Mileage In KM",
-                  //       "Free KM Per Day",
-                  //       "Free KM Per Month",
-                  //       "Daily Rate",
-                  //       "Monthly Rate",
-                  //       "Booked Status",
-                  //       "Maintenance Status",
-                  //       "loss Damage Waiver",
-                  //       "Car Image 1",
-                  //       "Car Image 2",
-                  //       "Car Image 3",
-                  //       "Car Image 4",
-                  //     ]}
-                  //     dataList={dataList}
-                  //     id="carViewAllTableId"
-                  //   />
-                  // );
+                  console.log("onClick");
+                  let res = await DriverService.fetchDrivers();
+                  let rowData = res.data.data;
+                  let dataList = [];
+                  let rowNo = 1;
+                  await rowData.map(async (row) => {
+                    dataList.push(
+                      <tr>
+                        <td>{rowNo++}</td>
+                        <td>{row.nic}</td>
+                        <td>{row.name}</td>
+                        <td>{row.licenseNo}</td>
+                        <td>{"0" + row.contactNo}</td>
+                        <td>{row.email}</td>
+                        <td>{row.password}</td>
+
+                        <td>
+                          <img
+                            src={baseUrl + "/" + row.nicPhoto}
+                            width="100px"
+                          ></img>
+                        </td>
+                        <td>
+                          <img
+                            src={baseUrl + "/" + row.licensePhoto}
+                            width="100px"
+                          ></img>
+                        </td>
+                      </tr>
+                    );
+                  });
+                  setCheck(true);
+                  setView(
+                    <CommonTable
+                      height={"90%"}
+                      tblRows={[
+                        "Row No",
+                        "Nic",
+                        "Name",
+                        "License No",
+                        "Contact No",
+                        "Email",
+                        "Password",
+                        "Nic Photo",
+                        "License Photo",
+                      ]}
+                      dataList={dataList}
+                    />
+                  );
                 }}
                 onDblClick={async (e) => {
-                  // setCheck(false);
+                  setCheck(false);
                 }}
               />
             </Grid>

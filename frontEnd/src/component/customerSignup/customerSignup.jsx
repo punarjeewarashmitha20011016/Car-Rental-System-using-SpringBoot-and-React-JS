@@ -236,13 +236,8 @@ export const CustomerSignup = (props) => {
                             inset: "0 0 0 0",
                             margin: "auto",
                           }}
-                          // value={customerObj.nicPhoto}
                           validators={["required"]}
                           type={"file"}
-                          errorMessages={[
-                            "this field is required",
-                            "User Name is not valid",
-                          ]}
                         />
                       </Grid>
                     </Grid>
@@ -298,13 +293,8 @@ export const CustomerSignup = (props) => {
                             inset: "0 0 0 0",
                             margin: "auto",
                           }}
-                          //value={customerObj.licensePhoto}
                           validators={["required"]}
                           type={"file"}
-                          errorMessages={[
-                            "this field is required",
-                            "User Name is not valid",
-                          ]}
                         />
                       </Grid>
                     </Grid>
@@ -395,7 +385,7 @@ export const CustomerSignup = (props) => {
                             setCustomerObj((prevState) => {
                               return {
                                 ...customerObj,
-                                contactNo: e.target.value,
+                                contactNo: parseInt(e.target.value),
                               };
                             });
                           }}

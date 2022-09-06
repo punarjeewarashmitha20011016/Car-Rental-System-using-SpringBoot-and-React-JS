@@ -37,5 +37,36 @@ class CarService {
     });
     return await promise;
   };
+
+  putCar = async (formData) => {
+    const promise = new Promise((resolve, reject) => {
+      instance
+        .put("car", formData, {
+          ContentType: false,
+          ProcessData: false,
+        })
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((er) => {
+          return resolve(er);
+        });
+    });
+    return await promise;
+  };
+
+  deleteCar = async (id) => {
+    const promise = new Promise((resolve, reject) => {
+      instance
+        .delete("car?regNo=" + id)
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((err) => {
+          return resolve(err);
+        });
+    });
+    return await promise;
+  };
 }
 export default new CarService();

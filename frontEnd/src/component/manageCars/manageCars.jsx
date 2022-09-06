@@ -2006,8 +2006,7 @@ export const ManageCars = (props) => {
                       })
                     );
                     if (
-                      window.confirm("Do you want to save this customer") ==
-                      true
+                      window.confirm("Do you want to save this car") == true
                     ) {
                       let response = await CarService.postCar(formData);
                     }
@@ -2035,6 +2034,25 @@ export const ManageCars = (props) => {
                     display: "flex",
                     backgroundColor: "grey",
                   }}
+                  onClick={async (e) => {
+                    let file = document.getElementById("carImagesFile").files;
+                    console.log("Car Obj = ", carDataObj);
+                    console.log("check = ", obj);
+                    for (let i = 0; i < file.length; i++) {
+                      formData.append("carImgFile", file[i], file[i].name);
+                    }
+                    formData.append(
+                      "dto",
+                      new Blob([JSON.stringify(carDataObj)], {
+                        type: "application/json",
+                      })
+                    );
+                    if (
+                      window.confirm("Do you want to update this car") == true
+                    ) {
+                      let response = await CarService.putCar(formData);
+                    }
+                  }}
                 />
               </Grid>
 
@@ -2055,14 +2073,13 @@ export const ManageCars = (props) => {
                   size={"medium"}
                   style={{ display: "flex", width: "70%", height: "40%" }}
                   onClick={async (e) => {
-                    //   if (
-                    //     window.confirm("Do you want to delete this customer") ==
-                    //     true
-                    //   ) {
-                    //     let response = await CustomerService.deleteCustomer(
-                    //       customerObj.nic
-                    //     );
-                    //   }
+                    if (
+                      window.confirm("Do you want to delete this car") == true
+                    ) {
+                      let response = await CarService.deleteCar(
+                        carDataObj.c_RegNo
+                      );
+                    }
                   }}
                 />
               </Grid>

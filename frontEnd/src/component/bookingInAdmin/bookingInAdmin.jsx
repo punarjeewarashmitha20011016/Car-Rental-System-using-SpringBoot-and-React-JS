@@ -6,6 +6,7 @@ import CommonButton from "../common/btn";
 import classes from "./bookingInAdmin.module.css";
 import { CartList } from "./cartList";
 import { MainFields } from "./mainField";
+import { ViewCurrentBookings } from "./viewCurrentBookings";
 
 export const BookingInAdmin = (props) => {
   const [check, setCheck] = useState(false);
@@ -142,8 +143,13 @@ export const BookingInAdmin = (props) => {
                   label={"View Bookings"}
                   size={"medium"}
                   style={{ display: "flex", width: "80%", height: "70%" }}
-                  onClick={(e) => {}}
-                  onDblClick={(e) => {}}
+                  onClick={(e) => {
+                    setCheck(true);
+                    setView(<ViewCurrentBookings />);
+                  }}
+                  onDblClick={(e) => {
+                    setCheck(false);
+                  }}
                 />
               </Grid>
             </Grid>

@@ -1,0 +1,34 @@
+.mainContainer{
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(228, 225, 225);
+}
+
+.mainContainer > .container{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 95%;
+    height: 90%;
+    background-color: rgb(228, 225, 225);
+    box-shadow: 0px 0px 20px -8px;
+    align-items: center;
+    justify-content: center;
+}
+.mainContainer > .container .subContainer{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 97%;
+    height: 90%;
+    background-color: rgb(228, 225, 225);
+    box-shadow: 0px 0px 20px -8px;
+    align-items: center;
+    justify-content: center;
+}

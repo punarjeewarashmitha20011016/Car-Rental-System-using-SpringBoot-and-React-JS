@@ -8,8 +8,18 @@ export const ViewCurrentBookings = (props) => {
   const [check, setCheck] = useState(false);
   const [view, setView] = useState(null);
   return (
-    <Grid container spacing={0} style={{ width: "95%", height: "95%" }}>
-      <Grid container item xs={12} style={{ height: "20%" }}>
+    <Grid
+      container
+      spacing={0}
+      style={{
+        width: "95%",
+        height: "95%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Grid container item xs={12} style={{ height: "20%", display: "flex" }}>
         <Grid
           item
           xs={7}

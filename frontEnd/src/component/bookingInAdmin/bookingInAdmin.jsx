@@ -167,7 +167,17 @@ export const BookingInAdmin = (props) => {
               }}
             >
               <div className={classes.subContainer}>
-                <Grid container item xs={12} style={{ height: "90%" }}>
+                <Grid
+                  container
+                  item
+                  xs={12}
+                  style={{
+                    height: "90%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   {check === false ? <MainFields /> : view}
                 </Grid>
               </div>

@@ -588,8 +588,8 @@ export const BookingInAdmin = (props) => {
                             size={"small"}
                             type={"Time"}
                             style={{
-                              width: "165%",
-                              marginLeft: "32%",
+                              width: "168%",
+                              marginLeft: "33%",
                             }}
                           />
                         </Grid>
@@ -722,8 +722,8 @@ export const BookingInAdmin = (props) => {
                             size={"small"}
                             type={"Time"}
                             style={{
-                              width: "165%",
-                              marginLeft: "32%",
+                              width: "168%",
+                              marginLeft: "33%",
                             }}
                           />
                         </Grid>

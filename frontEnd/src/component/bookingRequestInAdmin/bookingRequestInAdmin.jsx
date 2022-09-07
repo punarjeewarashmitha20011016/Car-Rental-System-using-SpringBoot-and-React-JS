@@ -1,11 +1,15 @@
 import { Grid, TextField, Typography } from "@mui/material";
 import React from "react";
+import { useState } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import CommonButton from "../common/btn";
 import CommonTable from "../common/table/table";
+import { BookingRequestInAdminDetails } from "./bookingRequestDetailsView";
 import classes from "./bookingRequestInAdmin.module.css";
 
 export const BookingRequestInAdmin = (props) => {
+  const [view, setView] = useState(null);
+  const [check, setCheck] = useState(false);
   return (
     <div className={classes.mainContainer}>
       <div className={classes.container}>
@@ -68,26 +72,22 @@ export const BookingRequestInAdmin = (props) => {
               justifyContent: "center",
             }}
           >
-            <CommonTable
-              style={{ width: "100%", height: "90%" }}
-              tblRows={[
-                "Row No",
-                "Booking Id",
-                "Car Reg No",
-                "Driver Nic",
-                "Car Type",
-                "Rental Type",
-                "Date of Pickup",
-                "Time Of Pickup",
-                "Pickup Venue",
-                "Return Date",
-                "Return Time",
-                "Return Venue",
-                "Loss Damage",
-                "Cost",
-              ]}
-              dataList={[]}
-            />
+            {check === false ? (
+              <CommonTable
+                style={{ width: "100%", height: "90%" }}
+                tblRows={[
+                  "Row No",
+                  "Booking Id",
+                  "Customer Nic",
+                  "Request Date",
+                  "Request Time",
+                  "Cost",
+                ]}
+                dataList={[]}
+              />
+            ) : (
+              view
+            )}
           </Grid>
           <Grid
             container
@@ -590,9 +590,11 @@ export const BookingRequestInAdmin = (props) => {
                   //       id="carViewAllTableId"
                   //     />
                   //   );
+                  setView(<BookingRequestInAdminDetails />);
+                  setCheck(true);
                 }}
                 onDblClick={async (e) => {
-                  //   setCheck(false);
+                  setCheck(false);
                 }}
               />
             </Grid>

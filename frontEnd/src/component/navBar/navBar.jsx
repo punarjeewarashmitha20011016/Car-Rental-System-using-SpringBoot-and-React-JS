@@ -45,7 +45,7 @@ const NavBar = (props) => {
         } else {
           if (e.btn === "Notifications") {
             arr.push(
-              <Link to={`/${e.path}`} style={liStyles}>
+              <Link to={`${e.path}`} style={liStyles}>
                 <li style={{ display: "flex", color: "black" }} key={e.path}>
                   {e.btn}
                 </li>

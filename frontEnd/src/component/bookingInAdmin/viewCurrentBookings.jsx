@@ -1,8 +1,12 @@
 import { Grid, TextField } from "@mui/material";
+import { useState } from "react";
 import CommonButton from "../common/btn";
 import CommonTable from "../common/table/table";
+import { ViewCurrentBookingDetailsTable } from "./viewCurrentBookingDetailsTbl";
 
 export const ViewCurrentBookings = (props) => {
+  const [check, setCheck] = useState(false);
+  const [view, setView] = useState(null);
   return (
     <Grid container spacing={0} style={{ width: "95%", height: "95%" }}>
       <Grid container item xs={12} style={{ height: "20%" }}>
@@ -54,6 +58,13 @@ export const ViewCurrentBookings = (props) => {
             color={"success"}
             label={"View Booking Details"}
             style={{ width: "80%" }}
+            onClick={(e) => {
+              setCheck(true);
+              setView(<ViewCurrentBookingDetailsTable />);
+            }}
+            onDblClick={(e) => {
+              setCheck(false);
+            }}
           />
         </Grid>
       </Grid>
@@ -68,18 +79,22 @@ export const ViewCurrentBookings = (props) => {
           justifyContent: "center",
         }}
       >
-        <CommonTable
-          tblRows={[
-            "Row No",
-            "Booking Id",
-            "Customer Nic",
-            "Booked Date",
-            "Booked Time",
-            "Cost",
-          ]}
-          dataList={[]}
-          style={{ width: "90%", height: "90%", display: "flex" }}
-        />
+        {check === false ? (
+          <CommonTable
+            tblRows={[
+              "Row No",
+              "Booking Id",
+              "Customer Nic",
+              "Booked Date",
+              "Booked Time",
+              "Cost",
+            ]}
+            dataList={[]}
+            style={{ width: "90%", height: "90%", display: "flex" }}
+          />
+        ) : (
+          view
+        )}
       </Grid>
     </Grid>
   );

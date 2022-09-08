@@ -20,6 +20,8 @@ import CommonButton from "../common/btn/index";
 import { Typography } from "@material-ui/core";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import customerService from "../../services/customerService/customerService";
+import DriverService from "../../services/driverService/driverService";
+import AdminService from "../../services/adminService/adminService";
 
 const Login = (props) => {
   const imgArr = [
@@ -58,10 +60,21 @@ const Login = (props) => {
         loginObj.userName,
         loginObj.password
       );
+      let responseDriver = await DriverService.searchDrivers(
+        loginObj.userName,
+        loginObj.password
+      );
+      let responseAdmin = await AdminService.searchAdmins(
+        loginObj.userName,
+        loginObj.password
+      );
+
       console.log("working = " + responseCustomer.data.data);
       if (responseCustomer.data.data == true) {
         return "customer";
-      } else {
+      } else if (responseDriver.data.data == true) {
+        return "driver";
+      } else if (responseAdmin.data.data == true) {
         return "admin";
       }
     } else {
@@ -250,11 +263,12 @@ const Login = (props) => {
                   if (check === "customer") {
                     console.log("Check = " + check);
                     navigate("/customer");
-                  }
-
-                  if (check === "admin") {
+                  } else if (check === "admin") {
                     console.log("Check = " + check);
                     navigate("/adminDashboard");
+                  } else if (check === "driver") {
+                    console.log("Check = " + check);
+                    navigate("/driverSchedule");
                   }
                 });
               }}

@@ -61,5 +61,21 @@ class DriverService {
     });
     return await promise;
   };
+
+  searchDrivers = async (userName, password) => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .get(
+          "driver/loginCheckDriver?email=" + userName + "&password=" + password
+        )
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(res);
+        });
+    });
+    return await promise;
+  };
 }
 export default new DriverService();

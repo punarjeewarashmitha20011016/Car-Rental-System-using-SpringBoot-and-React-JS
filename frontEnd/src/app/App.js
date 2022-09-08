@@ -18,6 +18,8 @@ import { ViewMyBookingsPage } from "../pages/viewMyBookingsPage";
 import { ViewMyAccount } from "../component/viewMyAccountInCustomer/viewMyAccount";
 import { PlaceBookingRequestPage } from "../pages/placeBookingRequestPage";
 import { CustomerNotificationsPage } from "../pages/customerNotificationsPage";
+import { DriverSchedulePage } from "../pages/driverSchedulePage";
+import { DriverAccountPage } from "../pages/driverAccountPage";
 function App() {
   const adminNavPaths = [
     "/adminDashboard",
@@ -39,6 +41,8 @@ function App() {
     "/placeBookingRequest",
     "/customerNotifications",
   ];
+
+  const driverNavPaths = ["/driverSchedule", "/driverAccount"];
 
   const setNavBar = (data) => {
     console.log("data = " + data.navBtns[0].path);
@@ -95,6 +99,17 @@ function App() {
                 path: "/customerNotifications",
                 btn: "Notifications",
               },
+            ],
+            style: { display: "flex" },
+          });
+        }
+      }
+      for (let i = 0; i < driverNavPaths.length; i++) {
+        if (driverNavPaths[i] === location.pathname) {
+          return setNavBar({
+            navBtns: [
+              { path: "/driverSchedule", btn: "Schedule" },
+              { path: "/driverAccount", btn: "My Account" },
             ],
             style: { display: "flex" },
           });
@@ -183,6 +198,18 @@ function App() {
             exact
             path="/customerNotifications"
             element={<CustomerNotificationsPage />}
+          ></Route>
+
+          <Route
+            exact
+            path="/driverSchedule"
+            element={<DriverSchedulePage />}
+          ></Route>
+
+          <Route
+            exact
+            path="/driverAccount"
+            element={<DriverAccountPage />}
           ></Route>
         </Routes>
       </main>

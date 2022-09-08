@@ -13,6 +13,7 @@ import { BookingRequestInAdminPage } from "../pages/bookingRequestInAdminPage";
 import { BookingInAdminPage } from "../pages/bookingInAdminPage";
 import { ViewAllBookingPage } from "../pages/viewAllBookingDetailsPage";
 import { NotificationsPage } from "../pages/notificationsPage";
+import { ViewCarsPage } from "../pages/viewCarsPage";
 function App() {
   const adminNavPaths = [
     "/adminDashboard",
@@ -142,6 +143,8 @@ function App() {
           />
 
           <Route exact path="/notifications" element={<NotificationsPage />} />
+
+          <Route exact path="/viewCars" element={<ViewCarsPage />}></Route>
         </Routes>
       </main>
     </div>

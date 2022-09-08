@@ -27,7 +27,7 @@ function App() {
   ];
 
   const customerNavPaths = [
-    "/home",
+    "/customer",
     "/viewCars",
     "/viewMyBookings",
     "/viewMyAccount",
@@ -77,7 +77,7 @@ function App() {
         if (customerNavPaths[i] == location.pathname) {
           return setNavBar({
             navBtns: [
-              { path: "/home", btn: "Home" },
+              { path: "/customer", btn: "Home" },
               { path: "/viewCars", btn: "View Cars" },
               { path: "/viewMyBookings", btn: "View My Bookings" },
               { path: "/viewMyAccount", btn: "View My Account" },
@@ -105,6 +105,8 @@ function App() {
       >
         <Routes>
           <Route exact path="/" element={<HomePage />} />
+
+          <Route exact path="/customer" element={<HomePage />} />
 
           <Route exact path="/login" element={<LoginPage />} />
           <Route

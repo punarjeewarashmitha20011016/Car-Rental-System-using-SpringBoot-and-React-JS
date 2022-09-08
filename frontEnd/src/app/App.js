@@ -17,6 +17,7 @@ import { ViewCarsPage } from "../pages/viewCarsPage";
 import { ViewMyBookingsPage } from "../pages/viewMyBookingsPage";
 import { ViewMyAccount } from "../component/viewMyAccountInCustomer/viewMyAccount";
 import { PlaceBookingRequestPage } from "../pages/placeBookingRequestPage";
+import { CustomerNotificationsPage } from "../pages/customerNotificationsPage";
 function App() {
   const adminNavPaths = [
     "/adminDashboard",
@@ -36,6 +37,7 @@ function App() {
     "/viewMyBookings",
     "/viewMyAccount",
     "/placeBookingRequest",
+    "/customerNotifications",
   ];
 
   const setNavBar = (data) => {
@@ -88,6 +90,10 @@ function App() {
               {
                 path: "/placeBookingRequest",
                 btn: "Place Booking Request",
+              },
+              {
+                path: "/customerNotifications",
+                btn: "Notifications",
               },
             ],
             style: { display: "flex" },
@@ -171,6 +177,12 @@ function App() {
             exact
             path="/placeBookingRequest"
             element={<PlaceBookingRequestPage />}
+          ></Route>
+
+          <Route
+            exact
+            path="/customerNotifications"
+            element={<CustomerNotificationsPage />}
           ></Route>
         </Routes>
       </main>

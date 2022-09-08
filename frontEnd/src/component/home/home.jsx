@@ -6,11 +6,12 @@ import { FaFacebookF } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
 import { FaLinkedinIn } from "react-icons/fa";
 import NavBar from "../navBar/navBar";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Home = (props) => {
   return (
     <Fragment>
-      {/* <NavBar navBtnsList={props.navBtnListFromParent}/> */}
       <section className={classes.homeContainer}>
         <img src={img} alt="" />
         <div className={classes.textContainer}>
@@ -25,12 +26,43 @@ const Home = (props) => {
             Best Car Rental Rates. No Hidden Extra Charges
           </p>
           <div className={classes.btnContainer}>
-            <CommonButton
-              variant="outlined"
-              label="View Cars"
-              size="large"
-              style={{ color: "white", border: "1px solid white" }}
-            />
+            {window.location.pathname == "/customer" ? (
+              <Link
+                to="/viewCarsForCustomer"
+                style={{
+                  textDecoration: "none",
+                  display: "flex",
+                }}
+                onClick={(e) => {
+                  console.log("e");
+                }}
+              >
+                <CommonButton
+                  variant="outlined"
+                  label="View Cars"
+                  size="large"
+                  style={{ color: "white", border: "1px solid white" }}
+                />
+              </Link>
+            ) : (
+              <Link
+                to="/viewCars"
+                style={{
+                  textDecoration: "none",
+                  display: "flex",
+                }}
+                onClick={(e) => {
+                  console.log("e");
+                }}
+              >
+                <CommonButton
+                  variant="outlined"
+                  label="View Cars"
+                  size="large"
+                  style={{ color: "white", border: "1px solid white" }}
+                />
+              </Link>
+            )}
           </div>
           <div className={classes.socialLinksContainer}>
             <a

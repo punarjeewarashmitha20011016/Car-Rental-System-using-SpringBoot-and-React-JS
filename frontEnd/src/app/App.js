@@ -29,7 +29,7 @@ function App() {
 
   const customerNavPaths = [
     "/customer",
-    "/viewCars",
+    "/viewCarsForCustomer",
     "/viewMyBookings",
     "/viewMyAccount",
     "/placeBookingRequest",
@@ -44,7 +44,7 @@ function App() {
 
   const checkNavPaths = () => {
     let mainContainer = document.getElementById("mainContainer");
-    if (location.pathname == "/") {
+    if (location.pathname == "/" || location.pathname == "/viewCars") {
       if (mainContainer != null) {
         mainContainer.style.height = "92%";
       }
@@ -79,7 +79,7 @@ function App() {
           return setNavBar({
             navBtns: [
               { path: "/customer", btn: "Home" },
-              { path: "/viewCars", btn: "View Cars" },
+              { path: "/viewCarsForCustomer", btn: "View Cars" },
               { path: "/viewMyBookings", btn: "View My Bookings" },
               { path: "/viewMyAccount", btn: "View My Account" },
               {
@@ -143,6 +143,12 @@ function App() {
           />
 
           <Route exact path="/notifications" element={<NotificationsPage />} />
+
+          <Route
+            exact
+            path="/viewCarsForCustomer"
+            element={<ViewCarsPage />}
+          ></Route>
 
           <Route exact path="/viewCars" element={<ViewCarsPage />}></Route>
         </Routes>

@@ -16,6 +16,7 @@ import { NotificationsPage } from "../pages/notificationsPage";
 import { ViewCarsPage } from "../pages/viewCarsPage";
 import { ViewMyBookingsPage } from "../pages/viewMyBookingsPage";
 import { ViewMyAccount } from "../component/viewMyAccountInCustomer/viewMyAccount";
+import { PlaceBookingRequestPage } from "../pages/placeBookingRequestPage";
 function App() {
   const adminNavPaths = [
     "/adminDashboard",
@@ -164,6 +165,12 @@ function App() {
             exact
             path="/viewMyAccount"
             element={<ViewMyAccount />}
+          ></Route>
+
+          <Route
+            exact
+            path="/placeBookingRequest"
+            element={<PlaceBookingRequestPage />}
           ></Route>
         </Routes>
       </main>

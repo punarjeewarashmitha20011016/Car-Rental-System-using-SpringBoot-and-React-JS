@@ -33,9 +33,6 @@ const Home = (props) => {
                   textDecoration: "none",
                   display: "flex",
                 }}
-                onClick={(e) => {
-                  console.log("e");
-                }}
               >
                 <CommonButton
                   variant="outlined"
@@ -50,9 +47,6 @@ const Home = (props) => {
                 style={{
                   textDecoration: "none",
                   display: "flex",
-                }}
-                onClick={(e) => {
-                  console.log("e");
                 }}
               >
                 <CommonButton

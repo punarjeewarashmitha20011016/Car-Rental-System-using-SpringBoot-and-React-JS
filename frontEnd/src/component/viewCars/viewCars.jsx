@@ -74,7 +74,7 @@ export const ViewCars = (props) => {
               onClick={(e) => {
                 let container = document.getElementById("carImgContainer");
                 console.log("container  = ", container);
-                container.style.marginLeft = "10%";
+                container.style.left = "10%";
               }}
             />
           </Grid>
@@ -124,7 +124,7 @@ export const ViewCars = (props) => {
               onClick={(e) => {
                 let container = document.getElementById("carImgContainer");
                 console.log("container  = ", container);
-                container.style.marginRight = "10%";
+                container.style.right = "10%";
               }}
             />
           </Grid>

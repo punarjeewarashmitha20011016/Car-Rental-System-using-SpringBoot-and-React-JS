@@ -14,24 +14,6 @@ import { baseUrl } from "../../baseUrl";
 
 export const ManageCars = (props) => {
   const [view, setView] = useState(null);
-  const [obj, setObj] = useState({
-    c_RegNo: "",
-    brand: "",
-    type: "",
-    transmissionType: "",
-    fuelType: "",
-    images: {},
-    noOfPassengers: "",
-    mileageInKm: "",
-    freeKmPerDay: "",
-    freeKmPerMonth: "",
-    priceForExtraKm: "",
-    dailyRate: "",
-    monthlyRate: "",
-    carBookedOrNotStatus: "",
-    maintenanceStatus: "",
-    lossDamageWaiver: "",
-  });
   const [carDataObj, setCarDataObj] = useState({
     c_RegNo: "",
     brand: "",
@@ -53,6 +35,8 @@ export const ManageCars = (props) => {
   const formData = new FormData();
   const [carList, setCarList] = useState(null);
   const [check, setCheck] = useState(false);
+  const [checkDisabled, setCheckDisabled] = useState(true);
+
   return (
     <Fragment>
       <div className={classes.mainContainer}>
@@ -68,7 +52,6 @@ export const ManageCars = (props) => {
           >
             <Grid container item xs={12} style={{ height: "80%" }}>
               {console.log("view = ", view)}
-              {/* {setDynamicallyViewWhenBtnClicked()} */}
               {check === false ? (
                 <ValidatorForm
                   style={{
@@ -129,12 +112,25 @@ export const ManageCars = (props) => {
                             inset: "0 0 0 0",
                             margin: "auto",
                           }}
-                          //validators={["required"]}
-                          // errorMessages={[
-                          //   "this field is required",
-                          //   "Car Reg Number is not valid",
-                          // ]}
+                          validators={[
+                            "required",
+                            "matchRegexp:^(CAR-)[0-9]{3}$",
+                          ]}
+                          errorMessages={[
+                            "this field is required",
+                            "Car Reg Number is not valid",
+                          ]}
                           value={carDataObj.c_RegNo}
+                          onKeyDown={(e) => {
+                            e.key === "Tab" && e.preventDefault();
+                            if (e.target.value.match("^(CAR-)[0-9]{3}$")) {
+                              e.key === "Enter" &&
+                                document
+                                  .getElementById("carBrandFieldInCarManage")
+                                  .focus();
+                            }
+                          }}
+                          id={"carRegNoFieldInCarManage"}
                         />
                       </Grid>
                     </Grid>
@@ -186,12 +182,22 @@ export const ManageCars = (props) => {
                             inset: "0 0 0 0",
                             margin: "auto",
                           }}
-                          // validators={["required"]}
-                          // errorMessages={[
-                          //   "this field is required",
-                          //   "Car Brand is not valid",
-                          // ]}
+                          validators={["required", "matchRegexp:^[A-z]{2,}$"]}
+                          errorMessages={[
+                            "this field is required",
+                            "Car Brand is not valid",
+                          ]}
                           value={carDataObj.brand}
+                          id={"carBrandFieldInCarManage"}
+                          onKeyDown={(e) => {
+                            e.key === "Tab" && e.preventDefault();
+                            if (e.target.value.match("^[A-z]{2,}$")) {
+                              e.key === "Enter" &&
+                                document
+                                  .getElementById("carTypeFieldInCarManage")
+                                  .focus();
+                            }
+                          }}
                         />
                       </Grid>
                     </Grid>
@@ -227,7 +233,7 @@ export const ManageCars = (props) => {
                           autoHighlight
                           filterSelectedOptions
                           disablePortal
-                          id="combo-box-demo"
+                          id={"carTypeFieldInCarManage"}
                           options={["Luxury", "Semi-Luxury"]}
                           style={{
                             position: "absolute",
@@ -296,7 +302,7 @@ export const ManageCars = (props) => {
                           autoHighlight
                           filterSelectedOptions
                           disablePortal
-                          id="combo-box-demo"
+                          id={"carTransmissionFieldInCarManage"}
                           options={["Manual", "Auto"]}
                           style={{
                             position: "absolute",
@@ -364,7 +370,7 @@ export const ManageCars = (props) => {
                           autoHighlight
                           filterSelectedOptions
                           disablePortal
-                          id="combo-box-demo"
+                          id={"carFuelFieldInCarManage"}
                           options={["Diesel", "Petrol"]}
                           style={{
                             position: "absolute",
@@ -449,12 +455,24 @@ export const ManageCars = (props) => {
                             inset: "0 0 0 0",
                             margin: "auto",
                           }}
-                          validators={["required"]}
-                          // errorMessages={[
-                          //   "this field is required",
-                          //   "No Of Passengers are not valid",
-                          // ]}
+                          validators={["required", "matchRegexp:^[0-9]+$"]}
+                          errorMessages={[
+                            "this field is required",
+                            "No Of Passengers are not valid",
+                          ]}
                           value={carDataObj.noOfPassengers}
+                          id={"carNoOfPassengersFieldInCarManage"}
+                          onKeyDown={(e) => {
+                            e.key === "Tab" && e.preventDefault();
+                            if (e.target.value.match("^[0-9]+$")) {
+                              e.key === "Enter" &&
+                                document
+                                  .getElementById(
+                                    "carMileageInKmFieldInCarManage"
+                                  )
+                                  .focus();
+                            }
+                          }}
                         />
                       </Grid>
                     </Grid>
@@ -506,12 +524,27 @@ export const ManageCars = (props) => {
                             inset: "0 0 0 0",
                             margin: "auto",
                           }}
-                          validators={["required"]}
-                          // errorMessages={[
-                          //   "this field is required",
-                          //   "Mileage In KM is not valid",
-                          // ]}
+                          validators={[
+                            "required",
+                            "matchRegexp:^[0-9]+[.]?[0-9]*$",
+                          ]}
+                          errorMessages={[
+                            "this field is required",
+                            "Mileage In KM is not valid",
+                          ]}
+                          onKeyDown={(e) => {
+                            e.key === "Tab" && e.preventDefault();
+                            if (e.target.value.match("^[0-9]+[.]?[0-9]*$")) {
+                              e.key === "Enter" &&
+                                document
+                                  .getElementById(
+                                    "carFreeKmPerDayFieldInCarManage"
+                                  )
+                                  .focus();
+                            }
+                          }}
                           value={carDataObj.mileageInKm}
+                          id={"carMileageInKmFieldInCarManage"}
                         />
                       </Grid>
                     </Grid>
@@ -563,12 +596,27 @@ export const ManageCars = (props) => {
                             inset: "0 0 0 0",
                             margin: "auto",
                           }}
-                          validators={["required"]}
-                          // errorMessages={[
-                          //   "this field is required",
-                          //   "Free KM Per Day is not valid",
-                          // ]}
+                          validators={[
+                            "required",
+                            "matchRegexp:^[0-9]+[.]?[0-9]*$",
+                          ]}
+                          errorMessages={[
+                            "this field is required",
+                            "Free KM Per Day is not valid",
+                          ]}
+                          onKeyDown={(e) => {
+                            e.key === "Tab" && e.preventDefault();
+                            if (e.target.value.match("^[0-9]+[.]?[0-9]*$")) {
+                              e.key === "Enter" &&
+                                document
+                                  .getElementById(
+                                    "carFreeKmPerMonthFieldInCarManage"
+                                  )
+                                  .focus();
+                            }
+                          }}
                           value={carDataObj.freeKmPerDay}
+                          id={"carFreeKmPerDayFieldInCarManage"}
                         />
                       </Grid>
                     </Grid>
@@ -620,12 +668,27 @@ export const ManageCars = (props) => {
                             inset: "0 0 0 0",
                             margin: "auto",
                           }}
-                          validators={["required"]}
-                          // errorMessages={[
-                          //   "this field is required",
-                          //   "Free KM Per Month is not valid",
-                          // ]}
+                          validators={[
+                            "required",
+                            "matchRegexp:^[0-9]+[.]?[0-9]*$",
+                          ]}
+                          errorMessages={[
+                            "this field is required",
+                            "Free KM Per Month is not valid",
+                          ]}
                           value={carDataObj.freeKmPerMonth}
+                          id={"carFreeKmPerMonthFieldInCarManage"}
+                          onKeyDown={(e) => {
+                            e.key === "Tab" && e.preventDefault();
+                            if (e.target.value.match("^[0-9]+[.]?[0-9]*$")) {
+                              e.key === "Enter" &&
+                                document
+                                  .getElementById(
+                                    "carPriceForExtraKmFieldInCarManage"
+                                  )
+                                  .focus();
+                            }
+                          }}
                         />
                       </Grid>
                     </Grid>
@@ -677,12 +740,27 @@ export const ManageCars = (props) => {
                             inset: "0 0 0 0",
                             margin: "auto",
                           }}
-                          validators={["required"]}
-                          // errorMessages={[
-                          //   "this field is required",
-                          //   "Price For Extra KM is not valid",
-                          // ]}
+                          errorMessages={[
+                            "this field is required",
+                            "Price For Extra KM is not valid",
+                          ]}
+                          validators={[
+                            "required",
+                            "matchRegexp:^[0-9]+[.]?[0-9]*$",
+                          ]}
                           value={carDataObj.priceForExtraKm}
+                          id={"carPriceForExtraKmFieldInCarManage"}
+                          onKeyDown={(e) => {
+                            e.key === "Tab" && e.preventDefault();
+                            if (e.target.value.match("^[0-9]+[.]?[0-9]*$")) {
+                              e.key === "Enter" &&
+                                document
+                                  .getElementById(
+                                    "carDailyRateFieldInCarManage"
+                                  )
+                                  .focus();
+                            }
+                          }}
                         />
                       </Grid>
                     </Grid>
@@ -734,12 +812,27 @@ export const ManageCars = (props) => {
                             inset: "0 0 0 0",
                             margin: "auto",
                           }}
-                          validators={["required"]}
-                          // errorMessages={[
-                          //   "this field is required",
-                          //   "Daily Rate is not valid",
-                          // ]}
+                          errorMessages={[
+                            "this field is required",
+                            "Daily Rate is not valid",
+                          ]}
                           value={carDataObj.dailyRate}
+                          id={"carDailyRateFieldInCarManage"}
+                          validators={[
+                            "required",
+                            "matchRegexp:^[0-9]+[.]?[0-9]*$",
+                          ]}
+                          onKeyDown={(e) => {
+                            e.key === "Tab" && e.preventDefault();
+                            if (e.target.value.match("^[0-9]+[.]?[0-9]*$")) {
+                              e.key === "Enter" &&
+                                document
+                                  .getElementById(
+                                    "carMonthlyRateFieldInCarManage"
+                                  )
+                                  .focus();
+                            }
+                          }}
                         />
                       </Grid>
                     </Grid>
@@ -791,12 +884,27 @@ export const ManageCars = (props) => {
                             inset: "0 0 0 0",
                             margin: "auto",
                           }}
-                          validators={["required"]}
-                          // errorMessages={[
-                          //   "this field is required",
-                          //   "Monthly Rate is not valid",
-                          // ]}
+                          errorMessages={[
+                            "this field is required",
+                            "Monthly Rate is not valid",
+                          ]}
                           value={carDataObj.monthlyRate}
+                          id={"carMonthlyRateFieldInCarManage"}
+                          validators={[
+                            "required",
+                            "matchRegexp:^[0-9]+[.]?[0-9]*$",
+                          ]}
+                          onKeyDown={(e) => {
+                            e.key === "Tab" && e.preventDefault();
+                            if (e.target.value.match("^[0-9]+[.]?[0-9]*$")) {
+                              e.key === "Enter" &&
+                                document
+                                  .getElementById(
+                                    "carBookStatusFieldInCarManage"
+                                  )
+                                  .focus();
+                            }
+                          }}
                         />
                       </Grid>
                     </Grid>
@@ -832,7 +940,7 @@ export const ManageCars = (props) => {
                           autoHighlight
                           filterSelectedOptions
                           disablePortal
-                          id="combo-box-demo"
+                          id="carBookStatusFieldInCarManage"
                           options={["Booked", "Not Booked"]}
                           style={{
                             position: "absolute",
@@ -900,7 +1008,7 @@ export const ManageCars = (props) => {
                           autoHighlight
                           filterSelectedOptions
                           disablePortal
-                          id="combo-box-demo"
+                          id="carMaintenanceStatusFieldInCarManage"
                           options={[
                             "Under Maintenance",
                             "No Maintenance Required",
@@ -1037,12 +1145,24 @@ export const ManageCars = (props) => {
                             inset: "0 0 0 0",
                             margin: "auto",
                           }}
-                          validators={["required"]}
-                          // errorMessages={[
-                          //   "this field is required",
-                          //   "Loss Damage Waiver is not valid",
-                          // ]}
+                          errorMessages={[
+                            "this field is required",
+                            "Loss Damage Waiver is not valid",
+                          ]}
                           value={carDataObj.lossDamageWaiver}
+                          id={"carLossDamageWaiverFieldInCarManage"}
+                          validators={[
+                            "required",
+                            "matchRegexp:^[0-9]+[.]?[0-9]*$",
+                          ]}
+                          onKeyDown={(e) => {
+                            e.key === "Tab" && e.preventDefault();
+                            if (e.target.value.match("^[0-9]+[.]?[0-9]*$")) {
+                              if (e.key === "Enter") {
+                                setCheckDisabled(false);
+                              }
+                            }
+                          }}
                         />
                       </Grid>
                     </Grid>
@@ -1064,6 +1184,8 @@ export const ManageCars = (props) => {
                 }}
               >
                 <CommonButton
+                  id={"carSaveBtnId"}
+                  disabled={checkDisabled}
                   variant={"contained"}
                   label={"Save"}
                   size={"small"}
@@ -1071,7 +1193,6 @@ export const ManageCars = (props) => {
                   onClick={async (e) => {
                     let file = document.getElementById("carImagesFile").files;
                     console.log("Car Obj = ", carDataObj);
-                    console.log("check = ", obj);
                     for (let i = 0; i < file.length; i++) {
                       formData.append("carImgFile", file[i], file[i].name);
                     }
@@ -1085,6 +1206,7 @@ export const ManageCars = (props) => {
                       window.confirm("Do you want to save this car") == true
                     ) {
                       let response = await CarService.postCar(formData);
+                      setCheckDisabled(true);
                     }
                   }}
                 />
@@ -1101,6 +1223,7 @@ export const ManageCars = (props) => {
                 }}
               >
                 <CommonButton
+                  disabled={checkDisabled}
                   variant={"contained"}
                   label={"Update"}
                   size={"small"}
@@ -1113,7 +1236,6 @@ export const ManageCars = (props) => {
                   onClick={async (e) => {
                     let file = document.getElementById("carImagesFile").files;
                     console.log("Car Obj = ", carDataObj);
-                    console.log("check = ", obj);
                     for (let i = 0; i < file.length; i++) {
                       formData.append("carImgFile", file[i], file[i].name);
                     }
@@ -1127,6 +1249,7 @@ export const ManageCars = (props) => {
                       window.confirm("Do you want to update this car") == true
                     ) {
                       let response = await CarService.putCar(formData);
+                      setCheckDisabled(true);
                     }
                   }}
                 />
@@ -1143,6 +1266,7 @@ export const ManageCars = (props) => {
                 }}
               >
                 <CommonButton
+                  disabled={checkDisabled}
                   variant={"contained"}
                   color={"error"}
                   label={"Delete"}
@@ -1155,6 +1279,7 @@ export const ManageCars = (props) => {
                       let response = await CarService.deleteCar(
                         carDataObj.c_RegNo
                       );
+                      setCheckDisabled(true);
                     }
                   }}
                 />

@@ -22,6 +22,7 @@ export const ManageDrivers = (props) => {
   const [view, setView] = useState(null);
   const [check, setCheck] = useState(false);
   const [formData, setFormData] = useState(new FormData());
+  const [checkDisable, setCheckDisable] = useState(true);
   return (
     <div className={classes.mainContainer}>
       <div className={classes.container}>
@@ -114,11 +115,29 @@ export const ManageDrivers = (props) => {
                           margin: "auto",
                         }}
                         value={driver.nic}
-                        validators={["required"]}
+                        validators={[
+                          "required",
+                          "matchRegexp:^(([0-9]{12})||([0-9]{9}(V)))$",
+                        ]}
                         errorMessages={[
                           "this field is required",
                           "Nic Number is not valid",
                         ]}
+                        onKeyDown={(e) => {
+                          e.key === "Tab" && e.preventDefault();
+                          if (
+                            e.target.value.match(
+                              "^(([0-9]{12})||([0-9]{9}(V)))$"
+                            )
+                          ) {
+                            if (e.key === "Enter") {
+                              document.getElementById("driverNameField");
+                              setCheckDisable(false);
+                            }
+                          } else {
+                            setCheckDisable(true);
+                          }
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -159,6 +178,7 @@ export const ManageDrivers = (props) => {
                       }}
                     >
                       <TextValidator
+                        id={"driverNameField"}
                         label="Enter Your Name"
                         onChange={(e) => {
                           setDriver((prevState) => {
@@ -179,11 +199,22 @@ export const ManageDrivers = (props) => {
                           margin: "auto",
                         }}
                         value={driver.name}
-                        validators={["required"]}
+                        validators={["required", "matchRegexp:^[A-z ]{3,}$"]}
                         errorMessages={[
                           "this field is required",
                           "Name is not valid",
                         ]}
+                        onKeyDown={(e) => {
+                          e.key === "Tab" && e.preventDefault();
+                          if (e.target.value.match("^[A-z ]{3,}$")) {
+                            if (e.key === "Enter") {
+                              document.getElementById("driverLicenseNoField");
+                              setCheckDisable(false);
+                            }
+                          } else {
+                            setCheckDisable(true);
+                          }
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -223,6 +254,7 @@ export const ManageDrivers = (props) => {
                       }}
                     >
                       <TextValidator
+                        id={"driverLicenseNoField"}
                         label="Enter Your License Number"
                         onChange={(e) => {
                           setDriver((prevState) => {
@@ -243,11 +275,22 @@ export const ManageDrivers = (props) => {
                           margin: "auto",
                         }}
                         value={driver.licenseNo}
-                        validators={["required"]}
+                        validators={["required", "matchRegexp:^[B][0-9]{7}$"]}
                         errorMessages={[
                           "this field is required",
                           "License Number is not valid",
                         ]}
+                        onKeyDown={(e) => {
+                          e.key === "Tab" && e.preventDefault();
+                          if (e.target.value.match("^[B][0-9]{7}$")) {
+                            if (e.key === "Enter") {
+                              document.getElementById("driverContactField");
+                              setCheckDisable(false);
+                            }
+                          } else {
+                            setCheckDisable(true);
+                          }
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -287,6 +330,7 @@ export const ManageDrivers = (props) => {
                       }}
                     >
                       <TextValidator
+                        id={"driverContactField"}
                         label="Enter Your Contact Number"
                         onChange={(e) => {
                           setDriver((prevState) => {
@@ -308,11 +352,22 @@ export const ManageDrivers = (props) => {
                           margin: "auto",
                         }}
                         value={driver.contactNo}
-                        validators={["required"]}
+                        validators={["required", "matchRegexp:^[0-9]{10}$"]}
                         errorMessages={[
                           "this field is required",
                           "Contact Number is not valid",
                         ]}
+                        onKeyDown={(e) => {
+                          e.key === "Tab" && e.preventDefault();
+                          if (e.target.value.match("^[0-9]{10}$")) {
+                            if (e.key === "Enter") {
+                              document.getElementById("driverEmailField");
+                              setCheckDisable(false);
+                            }
+                          } else {
+                            setCheckDisable(true);
+                          }
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -352,6 +407,7 @@ export const ManageDrivers = (props) => {
                       }}
                     >
                       <TextValidator
+                        id={"driverEmailField"}
                         label="Enter Your Email Address"
                         onChange={(e) => {
                           setDriver((prevState) => {
@@ -377,6 +433,21 @@ export const ManageDrivers = (props) => {
                           "this field is required",
                           "Email is not valid",
                         ]}
+                        onKeyDown={(e) => {
+                          e.key === "Tab" && e.preventDefault();
+                          if (
+                            e.target.value.match(
+                              "^[A-z0-9.]{5,30}[@][A-z]{3,7}[.](com|lk|uk|[a-z]){1,}$"
+                            )
+                          ) {
+                            if (e.key === "Enter") {
+                              document.getElementById("driverPasswordField");
+                              setCheckDisable(false);
+                            }
+                          } else {
+                            setCheckDisable(true);
+                          }
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -416,6 +487,7 @@ export const ManageDrivers = (props) => {
                       }}
                     >
                       <TextValidator
+                        id={"driverPasswordField"}
                         label="Enter Your Password"
                         onChange={(e) => {
                           setDriver((prevState) => {
@@ -436,11 +508,27 @@ export const ManageDrivers = (props) => {
                           margin: "auto",
                         }}
                         value={driver.password}
-                        validators={["required"]}
+                        validators={[
+                          "required",
+                          "matchRegexp:^[A-z.!@#$%&() ]{2,}$",
+                        ]}
                         errorMessages={[
                           "this field is required",
                           "Password is not valid",
                         ]}
+                        onKeyDown={(e) => {
+                          e.key === "Tab" && e.preventDefault();
+                          if (e.target.value.match("^[A-z.!@#$%&() ]{2,}$")) {
+                            if (e.key === "Enter") {
+                              document.getElementById(
+                                "driverAvailabilityStatusField"
+                              );
+                              setCheckDisable(false);
+                            }
+                          } else {
+                            setCheckDisable(true);
+                          }
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -483,7 +571,7 @@ export const ManageDrivers = (props) => {
                         autoHighlight
                         filterSelectedOptions
                         disablePortal
-                        id="combo-box-demo"
+                        id="driverAvailabilityStatusField"
                         options={["Available", "Not Available"]}
                         style={{
                           position: "absolute",
@@ -576,11 +664,29 @@ export const ManageDrivers = (props) => {
                           margin: "auto",
                         }}
                         value={driver.address}
-                        validators={["required"]}
+                        validators={[
+                          "required",
+                          "matchRegexp:^[A-z0-9,.  ]*[/]?[0-9]*[ ]?[A-z,. ]*$",
+                        ]}
                         errorMessages={[
                           "this field is required",
                           "Address is not valid",
                         ]}
+                        onKeyDown={(e) => {
+                          e.key === "Tab" && e.preventDefault();
+                          if (
+                            e.target.value.match(
+                              "^[A-z0-9,.  ]*[/]?[0-9]*[ ]?[A-z,. ]*$"
+                            )
+                          ) {
+                            if (e.key === "Enter") {
+                              document.getElementById("driverNicPictureField");
+                              setCheckDisable(false);
+                            }
+                          } else {
+                            setCheckDisable(true);
+                          }
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -620,6 +726,7 @@ export const ManageDrivers = (props) => {
                       }}
                     >
                       <TextValidator
+                        id={"driverNicPictureField"}
                         placeholder="Nic Picture"
                         onChange={(e) => {
                           console.log("e");
@@ -642,7 +749,6 @@ export const ManageDrivers = (props) => {
                           inset: "0 0 0 0",
                           margin: "auto",
                         }}
-                        //value={customerObj.licensePhoto}
                         validators={["required"]}
                         type={"file"}
                       />
@@ -702,7 +808,6 @@ export const ManageDrivers = (props) => {
                           inset: "0 0 0 0",
                           margin: "auto",
                         }}
-                        //value={customerObj.licensePhoto}
                         validators={["required"]}
                         type={"file"}
                       />
@@ -727,7 +832,7 @@ export const ManageDrivers = (props) => {
           >
             <Grid
               item
-              xs={4}
+              xs={3}
               style={{
                 height: "50%",
                 display: "flex",
@@ -736,6 +841,7 @@ export const ManageDrivers = (props) => {
               }}
             >
               <CommonButton
+                disabled={checkDisable}
                 variant={"contained"}
                 color={"primary"}
                 label={"Save"}
@@ -760,7 +866,7 @@ export const ManageDrivers = (props) => {
             </Grid>
             <Grid
               item
-              xs={4}
+              xs={3}
               style={{
                 height: "50%",
                 display: "flex",
@@ -769,6 +875,7 @@ export const ManageDrivers = (props) => {
               }}
             >
               <CommonButton
+                disabled={checkDisable}
                 variant={"contained"}
                 label={"Update"}
                 size={"medium"}
@@ -796,7 +903,7 @@ export const ManageDrivers = (props) => {
             </Grid>
             <Grid
               item
-              xs={4}
+              xs={3}
               style={{
                 height: "50%",
                 display: "flex",
@@ -805,6 +912,7 @@ export const ManageDrivers = (props) => {
               }}
             >
               <CommonButton
+                disabled={checkDisable}
                 variant={"contained"}
                 color={"error"}
                 label={"Delete"}
@@ -821,7 +929,7 @@ export const ManageDrivers = (props) => {
             </Grid>
             <Grid
               item
-              xs={2.4}
+              xs={3}
               style={{
                 height: "100%",
                 display: "flex",
@@ -835,7 +943,7 @@ export const ManageDrivers = (props) => {
                 size={"medium"}
                 style={{
                   display: "flex",
-                  width: "70%",
+                  width: "50%",
                   height: "40%",
                   backgroundColor: "#4BBDE1",
                 }}

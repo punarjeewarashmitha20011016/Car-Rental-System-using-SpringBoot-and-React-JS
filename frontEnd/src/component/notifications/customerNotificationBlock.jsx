@@ -18,36 +18,35 @@ export const CustomerNotificationsBlock = (props) => {
         container
         xs={11}
         style={{
-          width: "100%",
           height: "100%",
           backgroundColor: "#9FDFB9",
           marginTop: "2%",
           borderRadius: "3%",
-          boxShadow: "0px 10px 5px 0px #9FDFB9",
+          boxShadow: "0px 0px 8px 0px black",
         }}
       >
         <Grid
           item
           container
-          xs={12}
+          xs={10}
           style={{
-            height: "70%",
+            height: "100%",
             display: "flex",
-            alignItems: "end",
+            alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Typography variant="h5">{props.data.message}</Typography>
+          <Typography variant="subtitle1">{props.label}</Typography>
         </Grid>
         <Grid
           item
           container
-          xs={12}
+          xs={2}
           style={{
-            height: "30%",
+            height: "100%",
             display: "flex",
             alignItems: "center",
-            justifyContent: "end",
+            justifyContent: "center",
           }}
         >
           <CommonButton
@@ -55,9 +54,13 @@ export const CustomerNotificationsBlock = (props) => {
             size={"small"}
             label={"clear"}
             style={{
-              height: "100%",
+              width: "60%",
+              height: "50%",
               marginRight: "3%",
               backgroundColor: "#B3B8B5",
+            }}
+            onClick={(e) => {
+              e.event.target.parentElement.parentNode.parentNode.remove();
             }}
           />
         </Grid>

@@ -575,12 +575,6 @@ export const BookingRequestInAdmin = (props) => {
                     //   await PlaceBookingRequestService.placeBookingRequestAccept(
                     //     booking
                     //   );
-                    customerNotificationsArr.push({
-                      id: booking.boId,
-                      message:
-                        booking.boId +
-                        " Id Request is Successfully Accepted. Please Come on pickup date to borrow your rental car.",
-                    });
                     clearFields();
                   }
                 }}

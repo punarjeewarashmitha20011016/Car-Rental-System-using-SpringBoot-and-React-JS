@@ -73,6 +73,25 @@ class PlaceBookingRequestService {
     });
     return await promise;
   };
+
+  placeBookingRequestAccept = async (data) => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .post("bookingCarRequestController/pendingBookingRequestSave", data, {
+          headers: {
+            ContentType: false,
+            ProcessData: false,
+          },
+        })
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(res);
+        });
+    });
+    return await promise;
+  };
 }
 
 export default new PlaceBookingRequestService();

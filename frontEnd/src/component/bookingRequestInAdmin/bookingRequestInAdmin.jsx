@@ -6,7 +6,10 @@ import placeBookingRequest from "../../services/placeBookingRequest/placeBooking
 import CommonButton from "../common/btn";
 import CommonTable from "../common/table/table";
 import { BookingRequestInAdminDetails } from "./bookingRequestDetailsView";
+import PlaceBookingRequestService from "../../services/placeBookingRequest/placeBookingRequest";
+
 import classes from "./bookingRequestInAdmin.module.css";
+import { customerNotificationsArr } from "../../store/customerNotifications";
 
 export const BookingRequestInAdmin = (props) => {
   const [view, setView] = useState(null);
@@ -15,21 +18,43 @@ export const BookingRequestInAdmin = (props) => {
   const [dataList, setDataList] = useState([]);
   const [searchBoIdTxt, setSearchBoIdTxt] = useState(null);
   const [dataListForDetailsTbl, setDataListForDetailsTbl] = useState([]);
+
+  const [time, setTime] = useState(null);
+  const [date, setDate] = useState(null);
+  const [booking, setBooking] = useState({
+    boId: "",
+    cusNic: "",
+    date: "",
+    time: "",
+    cost: "",
+    bookingDetails: "",
+    payments: {
+      paymentsId: "",
+      boId: "",
+      cusNic: "",
+      dateOfPayment: "",
+      timeOfPayment: "",
+      lossDamageWaiver: "",
+      lossDamageWaiverPaymentSlip: "",
+      cost: "",
+    },
+  });
   const setDataToTable = (list) => {
     let arr = [];
     let rowNo = 1;
-    list.forEach((data) => {
-      arr.push(
-        <tr>
-          <td>{rowNo++}</td>
-          <td>{data.boId}</td>
-          <td>{data.cusNic}</td>
-          <td>{data.date}</td>
-          <td>{data.time}</td>
-          <td>{data.cost}</td>
-        </tr>
-      );
-    });
+    list != null &&
+      list.forEach((data) => {
+        arr.push(
+          <tr>
+            <td>{rowNo++}</td>
+            <td>{data.boId}</td>
+            <td>{data.cusNic}</td>
+            <td>{data.date}</td>
+            <td>{data.time}</td>
+            <td>{data.cost}</td>
+          </tr>
+        );
+      });
     setDataList(arr);
   };
 
@@ -37,26 +62,27 @@ export const BookingRequestInAdmin = (props) => {
     console.log(list);
     let arr = [];
     let rowNo = 1;
-    list.bookingDetails.forEach((data) => {
-      arr.push(
-        <tr>
-          <td>{rowNo++}</td>
-          <td>{data.bookingId}</td>
-          <td>{data.car_RegNo}</td>
-          <td>{data.driverNic}</td>
-          <td>{data.carType}</td>
-          <td>{data.rentalType}</td>
-          <td>{data.dateOfPickup}</td>
-          <td>{data.timeOfPickup}</td>
-          <td>{data.pickupVenue}</td>
-          <td>{data.returnedDate}</td>
-          <td>{data.returnedTime}</td>
-          <td>{data.returnedVenue}</td>
-          <td>{data.lossDamage}</td>
-          <td>{data.cost}</td>
-        </tr>
-      );
-    });
+    list != null &&
+      list.bookingDetails.forEach((data) => {
+        arr.push(
+          <tr>
+            <td>{rowNo++}</td>
+            <td>{data.bookingId}</td>
+            <td>{data.car_RegNo}</td>
+            <td>{data.driverNic}</td>
+            <td>{data.carType}</td>
+            <td>{data.rentalType}</td>
+            <td>{data.dateOfPickup}</td>
+            <td>{data.timeOfPickup}</td>
+            <td>{data.pickupVenue}</td>
+            <td>{data.returnedDate}</td>
+            <td>{data.returnedTime}</td>
+            <td>{data.returnedVenue}</td>
+            <td>{data.lossDamage}</td>
+            <td>{data.cost}</td>
+          </tr>
+        );
+      });
     setDataListForDetailsTbl(arr);
   };
   useEffect(() => {
@@ -68,6 +94,85 @@ export const BookingRequestInAdmin = (props) => {
 
     getAllBookingRequest();
   }, []);
+
+  const setDataToFields = (data) => {
+    let tm = data.time[8] + data.time[9];
+    console.log(data);
+    if (tm === "PM") {
+      var timer = data.time;
+      var hours = Number(timer.match(/^(\d+)/)[1]);
+      var minutes = Number(timer.match(/:(\d+)/)[1]);
+      var AMPM = timer.match(/\s(.*)$/)[1];
+      if (AMPM == "PM" && hours < 12) hours = hours + 12;
+      if (AMPM == "AM" && hours == 12) hours = hours - 12;
+      var sHours = hours.toString();
+      var sMinutes = minutes.toString();
+      if (hours < 10) sHours = "0" + sHours;
+      if (minutes < 10) sMinutes = "0" + sMinutes;
+      setTime(sHours + ":" + sMinutes + ":" + data.time[5] + data.time[6]);
+    } else {
+      setTime(
+        data.time[0] +
+          data.time[1] +
+          data.time[2] +
+          data.time[3] +
+          data.time[4] +
+          data.time[5] +
+          data.time[6]
+      );
+    }
+
+    let dt = data.date;
+    if (dt[1] && dt[2] < 10) {
+      setDate(dt[0] + "-" + 0 + dt[1] + "-" + 0 + dt[2]);
+    } else if (dt[1] < 10) {
+      setDate(dt[0] + "-" + 0 + dt[1] + "-" + dt[2]);
+    } else if (dt[2] < 10) {
+      setDate(dt[0] + "-" + dt[1] + "-" + 0 + dt[2]);
+    }
+    setBooking({
+      boId: data.boId,
+      cusNic: data.cusNic,
+      date: data.date,
+      time: data.time,
+      cost: data.cost,
+      bookingDetails: data.bookingDetails,
+      payments: {
+        paymentsId: data.payments.paymentsId,
+        boId: data.payments.boId,
+        cusNic: data.payments.cusNic,
+        dateOfPayment: data.payments.dateOfPayment,
+        timeOfPayment: data.payments.timeOfPayment,
+        lossDamageWaiver: data.payments.lossDamageWaiver,
+        lossDamageWaiverPaymentSlip: data.payments.lossDamageWaiverPaymentSlip,
+        cost: data.payments.cost,
+      },
+    });
+  };
+  const clearFields = () => {
+    setTime("");
+    setDate("");
+    setDataToTable(null);
+    setDataToDetailsTable(null);
+    setBooking({
+      boId: "",
+      cusNic: "",
+      date: "",
+      time: "",
+      cost: "",
+      bookingDetails: "",
+      payments: {
+        paymentsId: "",
+        boId: "",
+        cusNic: "",
+        dateOfPayment: "",
+        timeOfPayment: "",
+        lossDamageWaiver: "",
+        lossDamageWaiverPaymentSlip: "",
+        cost: "",
+      },
+    });
+  };
   return (
     <div className={classes.mainContainer}>
       <div className={classes.container}>
@@ -123,6 +228,7 @@ export const BookingRequestInAdmin = (props) => {
                     searchBoIdTxt
                   );
                   setDataToDetailsTable(res.data.data);
+                  setDataToFields(res.data.data);
                 }}
               />
             </Grid>
@@ -203,14 +309,7 @@ export const BookingRequestInAdmin = (props) => {
                   >
                     <TextValidator
                       label="Enter Booking Request ID"
-                      onChange={(e) => {
-                        // setCarDataObj((prevState) => {
-                        //   return {
-                        //     ...carDataObj,
-                        //     monthlyRate: e.target.value,
-                        //   };
-                        // });
-                      }}
+                      onChange={(e) => {}}
                       name="bookingRequestId"
                       size="small"
                       style={{
@@ -226,7 +325,7 @@ export const BookingRequestInAdmin = (props) => {
                         "this field is required",
                         "Booking Request Id is not valid",
                       ]}
-                      //value={carDataObj.monthlyRate}
+                      value={booking.boId}
                     />
                   </Grid>
                 </Grid>
@@ -263,14 +362,7 @@ export const BookingRequestInAdmin = (props) => {
                   >
                     <TextValidator
                       label="Enter Customer NIC"
-                      onChange={(e) => {
-                        // setCarDataObj((prevState) => {
-                        //   return {
-                        //     ...carDataObj,
-                        //     monthlyRate: e.target.value,
-                        //   };
-                        // });
-                      }}
+                      onChange={(e) => {}}
                       name="customerNic"
                       size="small"
                       style={{
@@ -286,7 +378,7 @@ export const BookingRequestInAdmin = (props) => {
                         "this field is required",
                         "Customer Nic is not valid",
                       ]}
-                      //value={carDataObj.monthlyRate}
+                      value={booking.cusNic}
                     />
                   </Grid>
                 </Grid>
@@ -322,14 +414,7 @@ export const BookingRequestInAdmin = (props) => {
                     style={{ height: "70%", position: "relative" }}
                   >
                     <TextValidator
-                      onChange={(e) => {
-                        // setCarDataObj((prevState) => {
-                        //   return {
-                        //     ...carDataObj,
-                        //     monthlyRate: e.target.value,
-                        //   };
-                        // });
-                      }}
+                      onChange={(e) => {}}
                       name="bookingRequestDate"
                       size="small"
                       type={"Date"}
@@ -342,7 +427,7 @@ export const BookingRequestInAdmin = (props) => {
                         margin: "auto",
                       }}
                       validators={["required"]}
-                      //value={carDataObj.monthlyRate}
+                      value={date}
                     />
                   </Grid>
                 </Grid>
@@ -378,14 +463,7 @@ export const BookingRequestInAdmin = (props) => {
                     style={{ height: "70%", position: "relative" }}
                   >
                     <TextValidator
-                      onChange={(e) => {
-                        // setCarDataObj((prevState) => {
-                        //   return {
-                        //     ...carDataObj,
-                        //     monthlyRate: e.target.value,
-                        //   };
-                        // });
-                      }}
+                      onChange={(e) => {}}
                       name="bookingRequestTime"
                       size="small"
                       type={"Time"}
@@ -398,7 +476,7 @@ export const BookingRequestInAdmin = (props) => {
                         margin: "auto",
                       }}
                       validators={["required"]}
-                      //value={carDataObj.monthlyRate}
+                      value={time}
                     />
                   </Grid>
                 </Grid>
@@ -435,14 +513,7 @@ export const BookingRequestInAdmin = (props) => {
                   >
                     <TextValidator
                       label="Enter Booking Request Cost"
-                      onChange={(e) => {
-                        // setCarDataObj((prevState) => {
-                        //   return {
-                        //     ...carDataObj,
-                        //     monthlyRate: e.target.value,
-                        //   };
-                        // });
-                      }}
+                      onChange={(e) => {}}
                       name="bookingRequestCost"
                       size="small"
                       style={{
@@ -459,7 +530,7 @@ export const BookingRequestInAdmin = (props) => {
                         "Booking Request Cost is not valid",
                       ]}
                       type={"Number"}
-                      //value={carDataObj.monthlyRate}
+                      value={booking.cost}
                     />
                   </Grid>
                 </Grid>
@@ -494,23 +565,24 @@ export const BookingRequestInAdmin = (props) => {
                 size={"small"}
                 style={{ width: "70%", height: "70%", display: "flex" }}
                 onClick={async (e) => {
-                  // let file = document.getElementById("carImagesFile").files;
-                  // console.log("Car Obj = ", carDataObj);
-                  // console.log("check = ", obj);
-                  // for (let i = 0; i < file.length; i++) {
-                  //   formData.append("carImgFile", file[i], file[i].name);
-                  // }
-                  // formData.append(
-                  //   "dto",
-                  //   new Blob([JSON.stringify(carDataObj)], {
-                  //     type: "application/json",
-                  //   })
-                  // );
-                  // if (
-                  //   window.confirm("Do you want to save this car") == true
-                  // ) {
-                  //   let response = await CarService.postCar(formData);
-                  // }
+                  console.log("Booking Obj - ", booking);
+                  if (
+                    window.confirm(
+                      "Do You Want To Accept Booking Request..?"
+                    ) == true
+                  ) {
+                    // let res =
+                    //   await PlaceBookingRequestService.placeBookingRequestAccept(
+                    //     booking
+                    //   );
+                    customerNotificationsArr.push({
+                      id: booking.boId,
+                      message:
+                        booking.boId +
+                        " Id Request is Successfully Accepted. Please Come on pickup date to borrow your rental car.",
+                    });
+                    clearFields();
+                  }
                 }}
               />
             </Grid>
@@ -535,25 +607,7 @@ export const BookingRequestInAdmin = (props) => {
                   display: "flex",
                   backgroundColor: "grey",
                 }}
-                onClick={async (e) => {
-                  // let file = document.getElementById("carImagesFile").files;
-                  // console.log("Car Obj = ", carDataObj);
-                  // console.log("check = ", obj);
-                  // for (let i = 0; i < file.length; i++) {
-                  //   formData.append("carImgFile", file[i], file[i].name);
-                  // }
-                  // formData.append(
-                  //   "dto",
-                  //   new Blob([JSON.stringify(carDataObj)], {
-                  //     type: "application/json",
-                  //   })
-                  // );
-                  // if (
-                  //   window.confirm("Do you want to update this car") == true
-                  // ) {
-                  //   let response = await CarService.putCar(formData);
-                  // }
-                }}
+                onClick={async (e) => {}}
               />
             </Grid>
             <Grid

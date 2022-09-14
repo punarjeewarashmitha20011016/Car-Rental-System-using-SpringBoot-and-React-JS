@@ -6,11 +6,11 @@ export const BookingRequestInAdminDetails = (props) => {
     <Grid
       container
       spacing={0}
-      style={{ position: "relative", width: "90%", height: "90%" }}
+      style={{ position: "relative", width: "100%", height: "100%" }}
     >
       <Grid item xs={12} style={{ height: "100%" }}>
         <CommonTable
-          style={{ width: "100%", height: "90%" }}
+          style={{ width: "100%", height: "100%" }}
           tblRows={[
             "Row No",
             "Booking Id",

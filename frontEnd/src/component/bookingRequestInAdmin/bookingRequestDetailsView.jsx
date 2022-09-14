@@ -27,7 +27,7 @@ export const BookingRequestInAdminDetails = (props) => {
             "Loss Damage",
             "Cost",
           ]}
-          dataList={[]}
+          dataList={props.dataList}
         />
       </Grid>
     </Grid>

@@ -1,7 +1,8 @@
 import { Grid, TextField, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
+import placeBookingRequest from "../../services/placeBookingRequest/placeBookingRequest";
 import CommonButton from "../common/btn";
 import CommonTable from "../common/table/table";
 import { BookingRequestInAdminDetails } from "./bookingRequestDetailsView";
@@ -10,6 +11,63 @@ import classes from "./bookingRequestInAdmin.module.css";
 export const BookingRequestInAdmin = (props) => {
   const [view, setView] = useState(null);
   const [check, setCheck] = useState(false);
+  const [bookingRequestList, setBookingRequestList] = useState([]);
+  const [dataList, setDataList] = useState([]);
+  const [searchBoIdTxt, setSearchBoIdTxt] = useState(null);
+  const [dataListForDetailsTbl, setDataListForDetailsTbl] = useState([]);
+  const setDataToTable = (list) => {
+    let arr = [];
+    let rowNo = 1;
+    list.forEach((data) => {
+      arr.push(
+        <tr>
+          <td>{rowNo++}</td>
+          <td>{data.boId}</td>
+          <td>{data.cusNic}</td>
+          <td>{data.date}</td>
+          <td>{data.time}</td>
+          <td>{data.cost}</td>
+        </tr>
+      );
+    });
+    setDataList(arr);
+  };
+
+  const setDataToDetailsTable = (list) => {
+    console.log(list);
+    let arr = [];
+    let rowNo = 1;
+    list.bookingDetails.forEach((data) => {
+      arr.push(
+        <tr>
+          <td>{rowNo++}</td>
+          <td>{data.bookingId}</td>
+          <td>{data.car_RegNo}</td>
+          <td>{data.driverNic}</td>
+          <td>{data.carType}</td>
+          <td>{data.rentalType}</td>
+          <td>{data.dateOfPickup}</td>
+          <td>{data.timeOfPickup}</td>
+          <td>{data.pickupVenue}</td>
+          <td>{data.returnedDate}</td>
+          <td>{data.returnedTime}</td>
+          <td>{data.returnedVenue}</td>
+          <td>{data.lossDamage}</td>
+          <td>{data.cost}</td>
+        </tr>
+      );
+    });
+    setDataListForDetailsTbl(arr);
+  };
+  useEffect(() => {
+    const getAllBookingRequest = async () => {
+      let res = await placeBookingRequest.placeBookingRequestGetAll();
+      bookingRequestList.push(res.data.data);
+      setDataToTable(res.data.data);
+    };
+
+    getAllBookingRequest();
+  }, []);
   return (
     <div className={classes.mainContainer}>
       <div className={classes.container}>
@@ -40,6 +98,10 @@ export const BookingRequestInAdmin = (props) => {
                 style={{ height: "80%", width: "90%", display: "flex" }}
                 size={"small"}
                 placeholder={"Search Booking Request with Booking ID"}
+                onChange={(e) => {
+                  setSearchBoIdTxt(e.target.value);
+                }}
+                value={searchBoIdTxt}
               />
             </Grid>
             <Grid
@@ -56,6 +118,12 @@ export const BookingRequestInAdmin = (props) => {
                 variant={"contained"}
                 label={"Search"}
                 style={{ width: "80%", height: "80%", display: "flex" }}
+                onClick={async (e) => {
+                  let res = await placeBookingRequest.placeBookingRequestSearch(
+                    searchBoIdTxt
+                  );
+                  setDataToDetailsTable(res.data.data);
+                }}
               />
             </Grid>
           </Grid>
@@ -83,7 +151,7 @@ export const BookingRequestInAdmin = (props) => {
                   "Request Time",
                   "Cost",
                 ]}
-                dataList={[]}
+                dataList={dataList}
               />
             ) : (
               view
@@ -509,88 +577,11 @@ export const BookingRequestInAdmin = (props) => {
                   backgroundColor: "#4BBDE1",
                 }}
                 onClick={async (e) => {
-                  //   console.log("onClick");
-                  //   let res = await CarService.fetchCars();
-                  //   let rowData = res.data.data;
-                  //   let dataList = [];
-                  //   let rowNo = 1;
-                  //   await rowData.map(async (row) => {
-                  //     dataList.push(
-                  //       <tr>
-                  //         <td>{rowNo++}</td>
-                  //         <td>{row.c_RegNo}</td>
-                  //         <td>{row.brand}</td>
-                  //         <td>{row.type}</td>
-                  //         <td>{row.transmissionType}</td>
-                  //         <td>{row.fuelType}</td>
-                  //         <td>{row.noOfPassengers}</td>
-                  //         <td>{row.mileageInKm}</td>
-                  //         <td>{row.freeKmPerDay}</td>
-                  //         <td>{row.freeKmPerMonth}</td>
-                  //         <td>{row.dailyRate}</td>
-                  //         <td>{row.monthlyRate}</td>
-                  //         <td>{row.carBookedOrNotStatus}</td>
-                  //         <td>{row.maintenanceStatus}</td>
-                  //         <td>{row.lossDamageWaiver}</td>
-                  //         <td>
-                  //           <img
-                  //             src={baseUrl + "/" + row.images.firstImage}
-                  //             width="100px"
-                  //           ></img>
-                  //         </td>
-                  //         <td>
-                  //           <img
-                  //             src={baseUrl + "/" + row.images.secondImage}
-                  //             width="100px"
-                  //           ></img>
-                  //         </td>
-                  //         <td>
-                  //           <img
-                  //             src={baseUrl + "/" + row.images.thirdImage}
-                  //             width="100px"
-                  //           ></img>
-                  //         </td>
-                  //         <td>
-                  //           <img
-                  //             src={baseUrl + "/" + row.images.fourthImage}
-                  //             width="100px"
-                  //           ></img>
-                  //         </td>
-                  //       </tr>
-                  //     );
-                  //   });
-                  //   setCarList(res.data.data);
-                  //   setCheck(true);
-                  //   setView(
-                  //     <CommonTable
-                  //       width="100%"
-                  //       height="100%"
-                  //       tblRows={[
-                  //         "Row No",
-                  //         "Reg No",
-                  //         "Brand",
-                  //         "Type",
-                  //         "Transmission Type",
-                  //         "Fuel Type",
-                  //         "No Of Passengers",
-                  //         "Mileage In KM",
-                  //         "Free KM Per Day",
-                  //         "Free KM Per Month",
-                  //         "Daily Rate",
-                  //         "Monthly Rate",
-                  //         "Booked Status",
-                  //         "Maintenance Status",
-                  //         "loss Damage Waiver",
-                  //         "Car Image 1",
-                  //         "Car Image 2",
-                  //         "Car Image 3",
-                  //         "Car Image 4",
-                  //       ]}
-                  //       dataList={dataList}
-                  //       id="carViewAllTableId"
-                  //     />
-                  //   );
-                  setView(<BookingRequestInAdminDetails />);
+                  setView(
+                    <BookingRequestInAdminDetails
+                      dataList={dataListForDetailsTbl}
+                    />
+                  );
                   setCheck(true);
                 }}
                 onDblClick={async (e) => {

@@ -23,6 +23,9 @@ import customerService from "../../services/customerService/customerService";
 import DriverService from "../../services/driverService/driverService";
 import AdminService from "../../services/adminService/adminService";
 
+import Context from "../../store/auth-context";
+import { cusNicStore } from "../../store/cusNicStore";
+
 const Login = (props) => {
   const imgArr = [
     logo1,
@@ -56,10 +59,17 @@ const Login = (props) => {
   let navigate = useNavigate();
   const checkLogin = async () => {
     if (loginObj.userName != "" && loginObj.password != "") {
-      let responseCustomer = await customerService.searchCustomer(
+      let responseCustomer = await customerService.searchCustomerForLogin(
         loginObj.userName,
         loginObj.password
       );
+
+      let responseCustomerObj =
+        await customerService.searchCustomerByEmailAndPassword(
+          loginObj.userName,
+          loginObj.password
+        );
+
       let responseDriver = await DriverService.searchDrivers(
         loginObj.userName,
         loginObj.password
@@ -71,6 +81,7 @@ const Login = (props) => {
 
       console.log("working = " + responseCustomer.data.data);
       if (responseCustomer.data.data == true) {
+        cusNicStore.cusNic = responseCustomerObj.data.data.nic;
         return "customer";
       } else if (responseDriver.data.data == true) {
         return "driver";
@@ -120,12 +131,7 @@ const Login = (props) => {
             </Typography>
           </Grid>
           <Grid item xs={12} style={{ height: "50%" }}>
-            <ValidatorForm
-              style={{ width: "100%", height: "90%" }}
-              // ref={useRef("form")}
-              // onSubmit={handleSubmit}
-              // onError={errors => console.log(errors)}
-            >
+            <ValidatorForm style={{ width: "100%", height: "90%" }}>
               <Grid
                 item
                 xs={12}

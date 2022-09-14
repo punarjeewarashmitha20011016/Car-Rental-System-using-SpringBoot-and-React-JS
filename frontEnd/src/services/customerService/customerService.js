@@ -72,11 +72,27 @@ class CustomerService {
     return await promise;
   };
 
-  searchCustomer = async (userName, password) => {
+  searchCustomerForLogin = async (userName, password) => {
     const promise = new Promise((resolve, reject) => {
       instance
         .get(
           `customer/loginCheckCustomer?email=${userName}&password=${password}`
+        ) //10s
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((er) => {
+          console.log("error: " + er);
+          return resolve(er);
+        });
+    });
+    return await promise;
+  };
+  searchCustomerByEmailAndPassword = async (userName, password) => {
+    const promise = new Promise((resolve, reject) => {
+      instance
+        .get(
+          `customer/searchCustomerByEmailAndPassword?email=${userName}&password=${password}`
         ) //10s
         .then((res) => {
           return resolve(res);

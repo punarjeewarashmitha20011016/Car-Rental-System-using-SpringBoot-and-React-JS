@@ -1,6 +1,12 @@
 import HomePage from "../pages/homePage";
 import { Route, Routes, useLocation } from "react-router-dom";
-import React, { Fragment, useCallback, useState } from "react";
+import React, {
+  Component,
+  Fragment,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import NavBar from "../component/navBar/navBar";
 import LoginPage from "../pages/loginPage";
 import { CustomerSignupPage } from "../pages/customerSignupPage";
@@ -20,6 +26,7 @@ import { PlaceBookingRequestPage } from "../pages/placeBookingRequestPage";
 import { CustomerNotificationsPage } from "../pages/customerNotificationsPage";
 import { DriverSchedulePage } from "../pages/driverSchedulePage";
 import { DriverAccountPage } from "../pages/driverAccountPage";
+
 function App() {
   const adminNavPaths = [
     "/adminDashboard",
@@ -187,7 +194,6 @@ function App() {
             path="/viewMyAccount"
             element={<ViewMyAccount />}
           ></Route>
-
           <Route
             exact
             path="/placeBookingRequest"

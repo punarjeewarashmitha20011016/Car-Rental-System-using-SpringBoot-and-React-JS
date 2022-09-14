@@ -4,21 +4,42 @@ import { useEffect } from "react";
 import { MdOutlineNavigateBefore } from "react-icons/md";
 import { MdOutlineNavigateNext } from "react-icons/md";
 import CarService from "../../services/carService/carService";
+import { carRegNoStore } from "../../store/carRegNoStore";
 import { ViewBlock } from "./viewBlock";
+import { useNavigate } from "react-router-dom";
 
 import classes from "./viewCars.module.css";
 export const ViewCars = (props) => {
   const [view, setView] = useState([]);
   const [check, setCheck] = useState(false);
+  let navigate = useNavigate();
   const fetchCarsForViews = () => {
-    fetch();
     console.log("aa1 =", view.length);
+    fetch();
   };
+  const setEventToBtn = (e) => {
+    carRegNoStore.carRegNo = e.data.c_RegNo;
+    navigate("/placeBookingRequest");
+  };
+  useEffect(() => {
+    check == true && setCheck(false);
+  }, []);
   const fetch = async () => {
     let res = await CarService.fetchCars();
     console.log("res = ", res.data.data);
-    view.length == 0 &&
+    let checkForBtnDisable = false;
+    view.splice(0, view.length);
+    setCheck(false);
+    view.length === 0 &&
       res.data.data.forEach((e) => {
+        if (
+          (e.carBookedOrNotStatus === "Not Booked") |
+          (e.maintenanceStatus === "No Maintenance Required")
+        ) {
+          checkForBtnDisable = false;
+        } else {
+          checkForBtnDisable = true;
+        }
         let images = e.images;
         let heading = e.images.firstImage.split("/")[1].split(".")[0];
         view.push(
@@ -38,6 +59,9 @@ export const ViewCars = (props) => {
               images.fourthImage,
             ]}
             heading={heading}
+            checkForButtonDisable={checkForBtnDisable}
+            setEventToBtn={setEventToBtn}
+            carObj={e}
           />
         );
       });

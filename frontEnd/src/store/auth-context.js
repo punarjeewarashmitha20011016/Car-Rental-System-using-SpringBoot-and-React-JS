@@ -1,6 +1,5 @@
 import React from "react";
-const context = React.createContext({data:{
-    navBtns: "",
-    style: { display: "" }
-  }})
+const context = React.createContext({
+  loggedCusNic: "",
+});
 export default context;

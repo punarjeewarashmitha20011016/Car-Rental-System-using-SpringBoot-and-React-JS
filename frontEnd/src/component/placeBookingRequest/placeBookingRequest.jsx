@@ -5,11 +5,662 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useState } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
+import carService from "../../services/carService/carService";
+import PlaceBookingRequestService from "../../services/placeBookingRequest/placeBookingRequest";
 import CommonButton from "../common/btn";
 import CommonTable from "../common/table/table";
+import BookingService from "../../services/bookingService/bookingService";
+
 import classes from "./placeBookingRequest.module.css";
+import { useEffect } from "react";
+import { cusNicStore } from "../../store/cusNicStore";
+import { carRegNoStore } from "../../store/carRegNoStore";
+import { addToList } from "../../store/addToListArr";
+
 export const PlaceBookingRequest = (props) => {
+  const [carRegField, setCarRegField] = useState(null);
+  const [carRegNoForAutoComplete, setCarRegNoForAutoComplete] = useState([]);
+  const [addToListObj, setAddToListObj] = useState({
+    boId: "",
+    carRegNo: carRegNoStore.carRegNo,
+    cusNic: cusNicStore.cusNic,
+    driverNic: "",
+    carType: "",
+    rentalType: "",
+    dateOfPickup: "",
+    timeOfPickup: "",
+    pickupVenue: "",
+    returnedDate: "",
+    returnedTime: "",
+    returnVenue: "",
+    lossDamageWaiver: "",
+    cost: "",
+  });
+  const [dataList, setDataList] = useState([]);
+  const formData = new FormData();
+  const [checkTicked, setCheckedTick] = useState(false);
+  const [checkDisabled, setCheckDisabled] = useState(true);
+  const [paymentsId, setPaymentsId] = useState(null);
+
+  const getAvailableDriver = async () => {
+    let res = await PlaceBookingRequestService.getAvailableDriver();
+    console.log("checked = ", checkTicked);
+    checkTicked == true
+      ? setAddToListObj((prevState) => {
+          return {
+            ...addToListObj,
+            driverNic: res.data.data.nic,
+          };
+        })
+      : setAddToListObj((prevState) => {
+          return {
+            ...addToListObj,
+            driverNic: null,
+          };
+        });
+  };
+  const setDataToTable = () => {
+    let arr = [];
+    let rowNo = 1;
+    addToList.forEach((data) => {
+      console.log("datal = ", data);
+      arr.push(
+        <tr>
+          <td>{rowNo++}</td>
+          <td>{data.boId}</td>
+          <td>{data.carRegNo}</td>
+          <td>{data.cusNic}</td>
+          <td>{data.carType}</td>
+          <td>{data.rentalType}</td>
+          <td>{data.dateOfPickup}</td>
+          <td>{data.timeOfPickup}</td>
+          <td>{data.pickupVenue}</td>
+          <td>{data.returnedDate}</td>
+          <td>{data.returnedTime}</td>
+          <td>{data.returnVenue}</td>
+          <td>{data.lossDamageWaiver}</td>
+          <td>{data.cost}</td>
+        </tr>
+      );
+    });
+    setDataList(arr);
+  };
+  const updateTableRows = (data) => {
+    for (let i = 0; i < dataList.length; i++) {
+      if (dataList[i].props.children[2].props.children === data.carRegNo) {
+        let row = dataList[i].props.children[0];
+        dataList.splice(i, 1);
+        dataList.push(
+          <tr>
+            <td>{row}</td>
+            <td>{data.boId}</td>
+            <td>{data.carRegNo}</td>
+            <td>{data.cusNic}</td>
+            <td>{data.carType}</td>
+            <td>{data.rentalType}</td>
+            <td>{data.dateOfPickup}</td>
+            <td>{data.timeOfPickup}</td>
+            <td>{data.pickupVenue}</td>
+            <td>{data.returnedDate}</td>
+            <td>{data.returnedTime}</td>
+            <td>{data.returnVenue}</td>
+            <td>{data.lossDamageWaiver}</td>
+            <td>{data.cost}</td>
+          </tr>
+        );
+      }
+    }
+  };
+  const calculateTotalCost = () => {
+    let total = 0;
+    addToList.forEach((data) => {
+      total += data.cost;
+    });
+    return total;
+  };
+
+  function getTotalDaysRentingTheCar(dateOfPickup, returnDate) {
+    console.log(dateOfPickup + " = " + returnDate);
+    let count = dateOfPickup;
+    let count2 = 0;
+    while (count < returnDate) {
+      count++;
+      count2++;
+      console.log(count);
+    }
+    console.log(count2);
+    return count2;
+  }
+
+  function getTotalMonthsRentingTheCar(dateOfPickup, returnDate) {
+    let count = dateOfPickup;
+    let count2 = 0;
+    while (count < returnDate) {
+      count++;
+      count2++;
+      console.log(count);
+    }
+    console.log(count2);
+    return count2;
+  }
+
+  function totalCostOfLossDamageWaiver() {
+    let total = 0;
+    for (let i = 0; i < addToList.length; i++) {
+      total += addToList[i].lossDamageWaiver;
+    }
+    return total;
+  }
+  const calculateTotalCostPerCar = async () => {
+    let totalCost = 0;
+    for (let i = 0; i < addToList.length; i++) {
+      if (addToList[i].carRegNo == addToListObj.carRegNo) {
+        console.log("checks");
+        let car = await searchCarDetails(addToListObj.carRegNo);
+        let calculatedCostOfRentingDates = undefined;
+        console.log(addToList[i].carRegNo);
+        var pickupDate = addToList[i].dateOfPickup.split("-");
+        var day1 = pickupDate[2];
+        var month1 = pickupDate[1];
+
+        var returnDate = addToList[i].returnedDate.split("-");
+        var day2 = returnDate[2];
+        var month2 = returnDate[1];
+        if (addToList[i].rentalType == "Monthly") {
+          let rate = car.monthlyRate;
+          console.log(rate);
+          let months = getTotalMonthsRentingTheCar(month1, month2);
+          calculatedCostOfRentingDates = rate * months;
+        } else if (addToList[i].rentalType == "Daily") {
+          let rate = car.dailyRate;
+          console.log(rate);
+          console.log(addToList[i].dateOfPickup);
+          let days = getTotalDaysRentingTheCar(day1, day2);
+          console.log(days);
+          calculatedCostOfRentingDates = rate * days;
+        }
+        let total =
+          parseFloat(addToList[i].lossDamageWaiver) +
+          calculatedCostOfRentingDates;
+        totalCost += total;
+        addToList[i].cost = total;
+      }
+    }
+    setAddToListObj((prevState) => {
+      return {
+        ...addToListObj,
+        cost: totalCost,
+      };
+    });
+    console.log(totalCost);
+    return totalCost;
+  };
+
+  const searchCarDetails = async (regNo) => {
+    let res = await carService.searchCar(regNo);
+    console.log("res = ", res);
+    return res.data.data;
+  };
+
+  const checkCarAlreadyExists = () => {
+    for (let i = 0; i < addToList.length; i++) {
+      if (addToList[i].carRegNo == addToListObj.carRegNo) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  let bookingId = null;
+  useEffect(() => {
+    setCarRegField(
+      <TextValidator
+        disabled={true}
+        id={"carRegNoFieldInPlaceBookingRequest"}
+        placeholder="Enter Car_RegNo"
+        size={"small"}
+        onChange={async (e) => {}}
+        value={addToListObj.carRegNo}
+        validators={["required", "matchRegexp:^[A-Z]{3}[-][0-9]{3}$"]}
+        errorMessages={["this field is required", "Car Reg No is not valid"]}
+        onKeyDown={(e) => {
+          e.key === "Tab" && e.preventDefault();
+          e.target.value.match("^[A-Z]{3}[-][0-9]{3}$") &&
+            e.key === "Enter" &&
+            document.getElementById("customerNicFieldInPlaceBookingRequest");
+        }}
+      />
+    );
+    clearFields();
+    const setBookingIdAndCarDetailsToField = async () => {
+      await setBookingIdToField();
+      let resCar = await carService.searchCar(carRegNoStore.carRegNo);
+      let carObj = resCar.data.data;
+      setAddToListObj((prevState) => {
+        return {
+          ...addToListObj,
+          boId: bookingId,
+          cusNic: cusNicStore.cusNic,
+          carRegNo: carRegNoStore.carRegNo,
+          carType: carObj.type,
+          lossDamageWaiver: carObj.lossDamageWaiver,
+        };
+      });
+    };
+    setDataToTable();
+    setBookingIdAndCarDetailsToField();
+  }, []);
+
+  const setBookingIdToField = async () => {
+    let boIdInBooking = undefined;
+    let boIdInBookingRequest = undefined;
+    let boIdInPendingBooking = undefined;
+
+    let paymentIdInBooking = undefined;
+    let paymentIdInPendingBooking = undefined;
+    let paymentIdInBookingRequest = undefined;
+
+    /*Generating Booking Id from Booking Table*/
+    let resBooking = await BookingService.generateBookingId();
+    boIdInBooking = resBooking.data.data;
+    console.log("boIdInBooking = ", boIdInBooking);
+
+    /*Generating Payments Id from Payments Table*/
+    let resPayment = await BookingService.generatePaymentsId();
+    paymentIdInBooking = resPayment.data.data;
+    console.log("paymentIdInBooking = ", paymentIdInBooking);
+
+    /*Searching BoId And PaymentsId from PendingBooking and Booking Request Tables for
+     * Checking Whether Generated Booking Id Is Available In One Of The Tables*/
+
+    let placeBookingRequestGet =
+      await PlaceBookingRequestService.placeBookingRequestGetAll();
+    let placeBookingRequestGetAll = placeBookingRequestGet.data.data;
+
+    let placeBookingRequestPendingGetAll =
+      await PlaceBookingRequestService.placeBookingRequestGetAllPendingBookings();
+    let getAllPendingBookings = placeBookingRequestPendingGetAll.data.data;
+
+    try {
+      if (placeBookingRequestGetAll.length != 0) {
+        let max1 = undefined;
+        let max2 = undefined;
+
+        if (placeBookingRequestGetAll.length != 1) {
+          for (let i = 0; i < placeBookingRequestGetAll.length; i++) {
+            console.log(placeBookingRequestGetAll[i]);
+            let temp = parseInt(
+              placeBookingRequestGetAll[i].boId.split("-")[1]
+            );
+            console.log("Temp1 = " + temp);
+            console.log("Length = " + placeBookingRequestGetAll.length);
+            for (let j = i + 1; j < placeBookingRequestGetAll.length; j++) {
+              console.log("Length2 = " + j);
+              let temp2 = parseInt(
+                placeBookingRequestGetAll[j].boId.split("-")[1]
+              );
+              console.log("Temp2 = " + temp2);
+              if (temp < temp2) {
+                temp = temp2;
+                console.log("TEMP2 = " + temp);
+
+                if (temp < 10) {
+                  max1 = "BO-00" + temp;
+                } else if (temp < 100) {
+                  max1 = "BO-0" + temp;
+                } else {
+                  max1 = "BO-" + temp;
+                }
+              }
+            }
+          }
+        } else {
+          max1 = placeBookingRequestGetAll[0].boId;
+        }
+        boIdInBookingRequest = max1;
+
+        if (placeBookingRequestGetAll.length != 1) {
+          for (let i = 0; i < placeBookingRequestGetAll.length; i++) {
+            let temp = parseInt(
+              placeBookingRequestGetAll[i].payments.paymentsId.split("-")[1]
+            );
+            for (let j = i + 1; j < placeBookingRequestGetAll.length; j++) {
+              let temp2 = parseInt(
+                placeBookingRequestGetAll[j].payments.paymentsId.split("-")[1]
+              );
+              if (temp < temp2) {
+                temp = temp2;
+                if (temp < 10) {
+                  max2 = "POR-00" + temp;
+                } else if (temp < 100) {
+                  max2 = "POR-0" + temp;
+                } else {
+                  max2 = "POR-" + temp;
+                }
+              }
+            }
+          }
+        } else {
+          max2 = placeBookingRequestGetAll[0].payments.paymentsId;
+        }
+
+        paymentIdInBookingRequest = max2;
+      }
+      if (getAllPendingBookings.length != 0) {
+        let max1 = undefined;
+        let max2 = undefined;
+
+        if (getAllPendingBookings.length != 1) {
+          for (let i = 0; i < getAllPendingBookings.length; i++) {
+            let temp = parseInt(getAllPendingBookings[i].boId.split("-")[1]);
+            for (let j = i + 1; j < getAllPendingBookings.length; j++) {
+              let temp2 = parseInt(getAllPendingBookings[j].boId.split("-")[1]);
+              if (temp < temp2) {
+                temp = temp2;
+                if (temp < 10) {
+                  max1 = "BO-00" + temp;
+                } else if (temp < 100) {
+                  max1 = "BO-0" + temp;
+                } else {
+                  max1 = "BO-" + temp;
+                }
+              }
+            }
+          }
+        } else {
+          max1 = getAllPendingBookings[0].boId;
+        }
+
+        boIdInPendingBooking = max1;
+
+        if (getAllPendingBookings.length != 1) {
+          for (let i = 0; i < getAllPendingBookings.length; i++) {
+            let temp = parseInt(
+              getAllPendingBookings[i].payments.paymentsId.split("-")[1]
+            );
+            for (let j = i + 1; j < getAllPendingBookings.length; j++) {
+              let temp2 = parseInt(
+                getAllPendingBookings[j].payments.paymentsId.split("-")[1]
+              );
+              if (temp < temp2) {
+                temp = temp2;
+                if (temp < 10) {
+                  max2 = "POR-00" + temp;
+                } else if (temp < 100) {
+                  max2 = "POR-0" + temp;
+                } else {
+                  max2 = "POR-" + temp;
+                }
+              }
+            }
+          }
+        } else {
+          max2 = getAllPendingBookings[0].payments.paymentsId;
+        }
+        paymentIdInPendingBooking = max2;
+      }
+    } catch (e) {
+      console.log(
+        boIdInBooking +
+          " Is Not Consists In Any Of The Booking Request Or Pending Booking Databases"
+      );
+    } finally {
+      console.log("boIdInBookingRequest - " + boIdInBookingRequest);
+      console.log("boIdInPendingBooking - " + boIdInPendingBooking);
+
+      let idBookingInt = parseInt(boIdInBooking.split("-")[1]);
+      let idRequestInt = undefined;
+      let idPendingInt = undefined;
+
+      if (boIdInBookingRequest != undefined) {
+        idRequestInt = parseInt(boIdInBookingRequest.split("-")[1]);
+      }
+      if (boIdInPendingBooking != undefined) {
+        idPendingInt = parseInt(boIdInPendingBooking.split("-")[1]);
+      }
+      console.log("idBookingInt - " + idBookingInt);
+      console.log("idRequestInt - " + idRequestInt);
+      console.log("idPendingInt - " + idPendingInt);
+
+      if (idBookingInt == (idPendingInt | idRequestInt)) {
+        console.log("condition 1");
+        let boId = undefined;
+        let id = parseInt(boIdInBooking.split("-")[1]);
+        id = id + 1;
+        if (id < 10) {
+          boId = "BO-00" + id;
+        } else if (id < 100) {
+          boId = "BO-0" + id;
+        } else {
+          boId = "BO-" + id;
+        }
+        bookingId = boId;
+      } else if (idBookingInt < (idPendingInt | idRequestInt)) {
+        console.log("boid in booking is less than");
+        if ((idRequestInt > idPendingInt) | (idPendingInt == undefined)) {
+          console.log("check");
+          let boId = undefined;
+          let id = parseInt(boIdInBookingRequest.split("-")[1]);
+          id = id + 1;
+          if (id < 10) {
+            boId = "BO-00" + id;
+          } else if (id < 100) {
+            boId = "BO-0" + id;
+          } else {
+            boId = "BO-" + id;
+          }
+          bookingId = boId;
+        } else if (
+          (idPendingInt > idRequestInt) |
+          (idRequestInt == undefined)
+        ) {
+          let boId = undefined;
+          let id = parseInt(boIdInPendingBooking.split("-")[1]);
+          id = id + 1;
+          if (id < 10) {
+            boId = "BO-00" + id;
+          } else if (id < 100) {
+            boId = "BO-0" + id;
+          } else {
+            boId = "BO-" + id;
+          }
+          bookingId = boId;
+        }
+        console.log("no check");
+      } else if (idBookingInt > idPendingInt && idBookingInt > idRequestInt) {
+        console.log(
+          "condition last = bookingid :" +
+            idBookingInt +
+            " / pending : " +
+            idPendingInt +
+            " / request : " +
+            idRequestInt
+        );
+        bookingId = boIdInBooking;
+      } else if (idPendingInt == undefined && idRequestInt == undefined) {
+        console.log("condition last last last");
+        bookingId = boIdInBooking;
+      } else if (idBookingInt > idPendingInt || idBookingInt > idRequestInt) {
+        bookingId = boIdInBooking;
+      }
+
+      /*Generating Customer Id When Payments Id Consists In One of The Pending Or Request Table*/
+
+      console.log("BookingRequestPayment - " + paymentIdInBookingRequest);
+      console.log("PendingBookingPayment - " + paymentIdInPendingBooking);
+
+      let idBookingPaymentInt = parseInt(paymentIdInBooking.split("-")[1]);
+      let idRequestPaymentInt = undefined;
+      let idPendingPaymentInt = undefined;
+
+      if (paymentIdInBookingRequest != undefined) {
+        idRequestPaymentInt = parseInt(paymentIdInBookingRequest.split("-")[1]);
+      }
+      if (paymentIdInPendingBooking != undefined) {
+        idPendingPaymentInt = parseInt(paymentIdInPendingBooking.split("-")[1]);
+      }
+      console.log("idBookingPaymentInt - " + idBookingPaymentInt);
+      console.log("idRequestPaymentInt - " + idRequestPaymentInt);
+      console.log("idPendingPaymentInt - " + idPendingPaymentInt);
+
+      if (idBookingPaymentInt == (idPendingPaymentInt | idRequestPaymentInt)) {
+        console.log("condition 1");
+        let pId = undefined;
+        let id = parseInt(paymentIdInBooking.split("-")[1]);
+        id = id + 1;
+        if (id < 10) {
+          pId = "POR-00" + id;
+        } else if (id < 100) {
+          pId = "POR-0" + id;
+        } else {
+          pId = "POR-" + id;
+        }
+        setPaymentsId(pId);
+      } else if (
+        idBookingPaymentInt <
+        (idPendingPaymentInt | idRequestPaymentInt)
+      ) {
+        console.log("boid in booking is less than");
+        if (
+          (idRequestPaymentInt > idPendingPaymentInt) |
+          (idPendingPaymentInt == undefined)
+        ) {
+          let pId = undefined;
+          let id = parseInt(paymentIdInBookingRequest.split("-")[1]);
+          id = id + 1;
+          if (id < 10) {
+            pId = "POR-00" + id;
+          } else if (id < 100) {
+            pId = "POR-0" + id;
+          } else {
+            pId = "POR-" + id;
+          }
+          setPaymentsId(pId);
+        } else if (
+          (idPendingPaymentInt > idRequestPaymentInt) |
+          (idRequestPaymentInt == undefined)
+        ) {
+          let pId = undefined;
+          let id = parseInt(paymentIdInPendingBooking.split("-")[1]);
+          id = id + 1;
+          if (id < 10) {
+            pId = "POR-00" + id;
+          } else if (id < 100) {
+            pId = "POR-0" + id;
+          } else {
+            pId = "POR-" + id;
+          }
+          setPaymentsId(pId);
+        }
+      } else if (
+        idBookingPaymentInt > (idPendingPaymentInt && idRequestPaymentInt)
+      ) {
+        console.log("condition last");
+        setPaymentsId(paymentIdInBooking);
+      } else if (
+        idPendingPaymentInt == undefined &&
+        idRequestPaymentInt == undefined
+      ) {
+        setPaymentsId(paymentIdInBooking);
+      } else if (
+        idBookingPaymentInt > idPendingPaymentInt ||
+        idBookingPaymentInt > idRequestPaymentInt
+      ) {
+        setPaymentsId(paymentIdInBooking);
+      }
+    }
+  };
+
+  const clearFields = () => {
+    console.log("Car Reg No Store = ", carRegNoStore.carRegNo);
+    console.log("Cus Nic Store = ", cusNicStore.cusNic);
+    setAddToListObj({
+      boId: bookingId,
+      carRegNo: "",
+      cusNic: cusNicStore.cusNic,
+      driverNic: "",
+      carType: "",
+      rentalType: "",
+      dateOfPickup: "",
+      timeOfPickup: "",
+      pickupVenue: "",
+      returnedDate: "",
+      returnedTime: "",
+      returnVenue: "",
+      lossDamageWaiver: "",
+      cost: "",
+    });
+  };
+  const searchBooking = async () => {
+    carRegNoForAutoComplete.splice(0, carRegNoForAutoComplete.length);
+    let res = await PlaceBookingRequestService.placeBookingRequestSearch(
+      addToListObj.boId
+    );
+    let data = res.data.data;
+
+    carRegNoForAutoComplete.length == 0 &&
+      data.bookingDetails.forEach((e) => {
+        carRegNoForAutoComplete.push(e.car_RegNo);
+      });
+    console.log(carRegNoForAutoComplete);
+    setCarRegField(
+      <Autocomplete
+        autoHighlight
+        filterSelectedOptions
+        disablePortal
+        id="carRegNoFieldInPlaceBookingRequest"
+        options={carRegNoForAutoComplete}
+        style={{
+          position: "absolute",
+          width: "73%",
+          inset: "0 0 0 0",
+          margin: "auto",
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            size={"small"}
+            label="Type"
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              inset: "0 0 0 0",
+              margin: "auto",
+            }}
+          />
+        )}
+        onChange={(value) => {
+          setAddToListObj((prevState) => {
+            return {
+              ...addToListObj,
+              carRegNo: value,
+            };
+          });
+        }}
+      />
+    );
+
+    setAddToListObj({
+      boId: data.boId,
+      carRegNo: carRegNoStore.carRegNo,
+      cusNic: cusNicStore.cusNic,
+      driverNic: "",
+      carType: "",
+      rentalType: "",
+      dateOfPickup: "",
+      timeOfPickup: "",
+      pickupVenue: "",
+      returnedDate: "",
+      returnedTime: "",
+      returnVenue: "",
+      lossDamageWaiver: "",
+      cost: "",
+    });
+  };
   return (
     <div className={classes.mainContainer}>
       <div className={classes.container}>
@@ -24,7 +675,7 @@ export const PlaceBookingRequest = (props) => {
                     style={{
                       height: "40%",
                       display: "flex",
-                      alignItems: "center",
+                      alignItems: "start",
                       justifyContent: "center",
                     }}
                   >
@@ -43,6 +694,32 @@ export const PlaceBookingRequest = (props) => {
                     <TextValidator
                       placeholder="Enter Booking Id"
                       size={"small"}
+                      onChange={(e) => {
+                        setAddToListObj((prevState) => {
+                          return {
+                            ...addToListObj,
+                            boId: e.target.value,
+                          };
+                        });
+                      }}
+                      value={addToListObj.boId}
+                      validators={["required", "matchRegexp:^(BO-)[0-9]{3}$"]}
+                      errorMessages={[
+                        "this field is required",
+                        "Booking Id is not valid",
+                      ]}
+                      onKeyDown={(e) => {
+                        e.key === "Tab" && e.preventDefault();
+                        if (e.target.value.match("^(BO-)[0-9]{3}$")) {
+                          e.key === "Enter" &&
+                            document
+                              .getElementById(
+                                "carTypeFieldInPlaceBookingRequest"
+                              )
+                              .focus();
+                        }
+                        e.key === "Control" && searchBooking();
+                      }}
                     />
                   </Grid>
                 </Grid>
@@ -54,7 +731,7 @@ export const PlaceBookingRequest = (props) => {
                     style={{
                       height: "40%",
                       display: "flex",
-                      alignItems: "center",
+                      alignItems: "start",
                       justifyContent: "center",
                     }}
                   >
@@ -68,12 +745,10 @@ export const PlaceBookingRequest = (props) => {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
+                      position: "relative",
                     }}
                   >
-                    <TextValidator
-                      placeholder="Enter Car_RegNo"
-                      size={"small"}
-                    />
+                    {carRegField}
                   </Grid>
                 </Grid>
                 <Grid container item xs={3} style={{ height: "100%" }}>
@@ -83,7 +758,7 @@ export const PlaceBookingRequest = (props) => {
                     style={{
                       height: "40%",
                       display: "flex",
-                      alignItems: "center",
+                      alignItems: "start",
                       justifyContent: "center",
                     }}
                   >
@@ -100,8 +775,37 @@ export const PlaceBookingRequest = (props) => {
                     }}
                   >
                     <TextValidator
+                      disabled={true}
+                      id={"customerNicFieldInPlaceBookingRequest"}
                       placeholder="Enter Customer Nic"
                       size={"small"}
+                      onChange={(e) => {
+                        setAddToListObj((prevState) => {
+                          return {
+                            ...addToListObj,
+                            cusNic: e.target.value,
+                          };
+                        });
+                      }}
+                      value={addToListObj.cusNic}
+                      validators={[
+                        "required",
+                        "matchRegexp:^^(([0-9]{9}[Vv]{1})||([0-9]{12}))$",
+                      ]}
+                      errorMessages={[
+                        "this field is required",
+                        "Customer Nic is not valid",
+                      ]}
+                      onKeyDown={(e) => {
+                        e.key === "Tab" && e.preventDefault();
+                        e.target.value.match(
+                          "^(([0-9]{9}[Vv]{1})||([0-9]{12}))$"
+                        ) &&
+                          e.key === "Enter" &&
+                          document.getElementById(
+                            "driverCheckBoxInPlaceBookingRequest"
+                          );
+                      }}
                     />
                   </Grid>
                 </Grid>
@@ -112,7 +816,7 @@ export const PlaceBookingRequest = (props) => {
                     style={{
                       height: "40%",
                       display: "flex",
-                      alignItems: "center",
+                      alignItems: "start",
                       justifyContent: "center",
                     }}
                   >
@@ -128,7 +832,12 @@ export const PlaceBookingRequest = (props) => {
                       justifyContent: "center",
                     }}
                   >
-                    <Checkbox />
+                    <Checkbox
+                      id={"driverCheckBoxInPlaceBookingRequest"}
+                      onChange={(e) => {
+                        setCheckedTick(e.target.checked);
+                      }}
+                    />
                   </Grid>
                 </Grid>
               </Grid>
@@ -162,11 +871,11 @@ export const PlaceBookingRequest = (props) => {
                       autoHighlight
                       filterSelectedOptions
                       disablePortal
-                      id="combo-box-demo"
+                      id="carTypeFieldInPlaceBookingRequest"
                       options={["Luxury", "Semi-Luxury"]}
                       style={{
                         position: "absolute",
-                        width: "78%",
+                        width: "73%",
                         inset: "0 0 0 0",
                         margin: "auto",
                       }}
@@ -186,13 +895,14 @@ export const PlaceBookingRequest = (props) => {
                         />
                       )}
                       onChange={(e, value) => {
-                        // setCarDataObj((prevState) => {
-                        //   return {
-                        //     ...carDataObj,
-                        //     maintenanceStatus: value,
-                        //   };
-                        // });
+                        setAddToListObj((prevState) => {
+                          return {
+                            ...addToListObj,
+                            carType: value,
+                          };
+                        });
                       }}
+                      value={addToListObj.carType}
                     />
                   </Grid>
                 </Grid>
@@ -229,7 +939,7 @@ export const PlaceBookingRequest = (props) => {
                       options={["Daily", "Monthly"]}
                       style={{
                         position: "absolute",
-                        width: "78%",
+                        width: "73%",
                         inset: "0 0 0 0",
                         margin: "auto",
                       }}
@@ -249,13 +959,14 @@ export const PlaceBookingRequest = (props) => {
                         />
                       )}
                       onChange={(e, value) => {
-                        // setCarDataObj((prevState) => {
-                        //   return {
-                        //     ...carDataObj,
-                        //     maintenanceStatus: value,
-                        //   };
-                        // });
+                        setAddToListObj((prevState) => {
+                          return {
+                            ...addToListObj,
+                            rentalType: value,
+                          };
+                        });
                       }}
+                      value={addToListObj.rentalType}
                     />
                   </Grid>
                 </Grid>
@@ -288,10 +999,19 @@ export const PlaceBookingRequest = (props) => {
                       type={"Date"}
                       style={{
                         position: "absolute",
-                        width: "78%",
+                        width: "73%",
                         inset: "0 0 0 0",
                         margin: "auto",
                       }}
+                      onChange={(e) => {
+                        setAddToListObj((prevState) => {
+                          return {
+                            ...addToListObj,
+                            dateOfPickup: e.target.value,
+                          };
+                        });
+                      }}
+                      value={addToListObj.dateOfPickup}
                     />
                   </Grid>
                 </Grid>
@@ -324,10 +1044,19 @@ export const PlaceBookingRequest = (props) => {
                       type={"Time"}
                       style={{
                         position: "absolute",
-                        width: "78%",
+                        width: "73%",
                         inset: "0 0 0 0",
                         margin: "auto",
                       }}
+                      onChange={(e) => {
+                        setAddToListObj((prevState) => {
+                          return {
+                            ...addToListObj,
+                            timeOfPickup: e.target.value,
+                          };
+                        });
+                      }}
+                      value={addToListObj.timeOfPickup}
                     />
                   </Grid>
                 </Grid>
@@ -360,6 +1089,28 @@ export const PlaceBookingRequest = (props) => {
                     <TextValidator
                       placeholder="Enter Pickup Venue"
                       size={"small"}
+                      onChange={(e) => {
+                        setAddToListObj((prevState) => {
+                          return {
+                            ...addToListObj,
+                            pickupVenue: e.target.value,
+                          };
+                        });
+                      }}
+                      value={addToListObj.pickupVenue}
+                      validators={["required", "matchRegexp:^[A-z]{2,}$"]}
+                      errorMessages={[
+                        "this field is required",
+                        "Pickup Venue is not valid",
+                      ]}
+                      onKeyDown={(e) => {
+                        e.key === "Tab" && e.preventDefault();
+                        e.target.value.match("^[A-z]{2,}$") &&
+                          e.key === "Enter" &&
+                          document.getElementById(
+                            "returnedDateInPlaceBookingRequest"
+                          );
+                      }}
                     />
                   </Grid>
                 </Grid>
@@ -389,6 +1140,7 @@ export const PlaceBookingRequest = (props) => {
                     }}
                   >
                     <TextValidator
+                      id={"returnedDateInPlaceBookingRequest"}
                       size={"small"}
                       type={"Date"}
                       style={{
@@ -397,6 +1149,15 @@ export const PlaceBookingRequest = (props) => {
                         inset: "0 0 0 0",
                         margin: "auto",
                       }}
+                      onChange={(e) => {
+                        setAddToListObj((prevState) => {
+                          return {
+                            ...addToListObj,
+                            returnedDate: e.target.value,
+                          };
+                        });
+                      }}
+                      value={addToListObj.returnedDate}
                     />
                   </Grid>
                 </Grid>
@@ -433,6 +1194,15 @@ export const PlaceBookingRequest = (props) => {
                         inset: "0 0 0 0",
                         margin: "auto",
                       }}
+                      onChange={(e) => {
+                        setAddToListObj((prevState) => {
+                          return {
+                            ...addToListObj,
+                            returnedTime: e.target.value,
+                          };
+                        });
+                      }}
+                      value={addToListObj.returnedTime}
                     />
                   </Grid>
                 </Grid>
@@ -462,6 +1232,28 @@ export const PlaceBookingRequest = (props) => {
                     <TextValidator
                       placeholder="Enter Return Venue"
                       size={"small"}
+                      onChange={(e) => {
+                        setAddToListObj((prevState) => {
+                          return {
+                            ...addToListObj,
+                            returnVenue: e.target.value,
+                          };
+                        });
+                      }}
+                      value={addToListObj.returnVenue}
+                      validators={["required", "matchRegexp:^[A-z]{2,}$"]}
+                      errorMessages={[
+                        "this field is required",
+                        "Return Venue is not valid",
+                      ]}
+                      onKeyDown={(e) => {
+                        e.key === "Tab" && e.preventDefault();
+                        e.target.value.match("^[A-z]{2,}$") &&
+                          e.key === "Enter" &&
+                          document.getElementById(
+                            "lossDamageWaiverFieldInPlaceBookingRequest"
+                          );
+                      }}
                     />
                   </Grid>
                 </Grid>
@@ -492,8 +1284,26 @@ export const PlaceBookingRequest = (props) => {
                     }}
                   >
                     <TextValidator
+                      disabled={true}
+                      id={"lossDamageWaiverFieldInPlaceBookingRequest"}
                       placeholder="Enter Loss Damage Waiver"
                       size={"small"}
+                      onChange={(e) => {}}
+                      type={"Number"}
+                      value={addToListObj.lossDamageWaiver}
+                      validators={["required", "matchRegexp:^[0-9]{1,}$"]}
+                      errorMessages={[
+                        "this field is required",
+                        "Loss Damage Waiver is not valid",
+                      ]}
+                      onKeyDown={(e) => {
+                        e.key === "Tab" && e.preventDefault();
+                        e.target.value.match("^[0-9]{1,}$") &&
+                          e.key === "Enter" &&
+                          document.getElementById(
+                            "lossDamageWaiverSlipPathFieldInPlaceBookingRequest"
+                          );
+                      }}
                     />
                   </Grid>
                 </Grid>
@@ -522,7 +1332,7 @@ export const PlaceBookingRequest = (props) => {
                     }}
                   >
                     <TextValidator
-                      placeholder="Enter Pickup Venue"
+                      id={"lossDamageWaiverSlipPathFieldInPlaceBookingRequest"}
                       size={"small"}
                       type={"file"}
                       style={{
@@ -561,6 +1371,28 @@ export const PlaceBookingRequest = (props) => {
                       placeholder="Enter Cost Per One Car Booking"
                       size={"small"}
                       type={"Number"}
+                      onChange={(e) => {
+                        setAddToListObj((prevState) => {
+                          return {
+                            ...addToListObj,
+                            cost: e.target.value,
+                          };
+                        });
+                      }}
+                      value={addToListObj.cost}
+                      validators={["required", "matchRegexp:^[0-9]{0,}$"]}
+                      errorMessages={[
+                        "this field is required",
+                        "Cost Per One Car Booking is not valid",
+                      ]}
+                      onKeyDown={(e) => {
+                        e.key === "Tab" && e.preventDefault();
+                        e.target.value.match("^[0-9]{0,}$") &&
+                          e.key === "Enter" &&
+                          document.getElementById(
+                            "totalCostPerBookingInPlaceBookingRequest"
+                          );
+                      }}
                     />
                   </Grid>
                 </Grid>
@@ -588,9 +1420,26 @@ export const PlaceBookingRequest = (props) => {
                     }}
                   >
                     <TextValidator
+                      id={"totalCostPerBookingInPlaceBookingRequest"}
                       placeholder="Enter Total Cost Per Booking"
                       size={"small"}
                       type={"Number"}
+                      disabled={true}
+                      onChange={(e) => {}}
+                      value={calculateTotalCost()}
+                      validators={["required", "matchRegexp:^[0-9]{0,}$"]}
+                      errorMessages={[
+                        "this field is required",
+                        "Total Cost Per Booking is not valid",
+                      ]}
+                      onKeyDown={(e) => {
+                        e.key === "Tab" && e.preventDefault();
+                        e.target.value.match("^[0-9]{0,}$") &&
+                          e.key === "Enter" &&
+                          document.getElementById(
+                            "requestBookingBtnInPlaceBookingRequest"
+                          );
+                      }}
                     />
                   </Grid>
                 </Grid>
@@ -625,7 +1474,7 @@ export const PlaceBookingRequest = (props) => {
                 "Loss Damage",
                 "Cost",
               ]}
-              dataList={[]}
+              dataList={dataList}
               style={{ width: "90%", height: "90%" }}
             />
           </Grid>
@@ -641,11 +1490,79 @@ export const PlaceBookingRequest = (props) => {
               }}
             >
               <CommonButton
+                disabled={checkDisabled}
+                id={"requestBookingBtnInPlaceBookingRequest"}
                 variant={"contained"}
                 color={"primary"}
                 size={"small"}
                 label={"Request Booking"}
                 style={{ width: "70%" }}
+                onClick={async (e) => {
+                  let bookingDetailArr = [];
+                  addToList.forEach((data) => {
+                    console.log("Obj = ", data);
+                    let bookingDetailsObj = {
+                      bookingId: data.boId,
+                      car_RegNo: data.carRegNo,
+                      driverNic: data.driverNic,
+                      carType: data.carType,
+                      rentalType: data.rentalType,
+                      dateOfPickup: data.dateOfPickup,
+                      timeOfPickup: data.timeOfPickup,
+                      pickupVenue: data.pickupVenue,
+                      returnedDate: data.returnedDate,
+                      returnedTime: data.returnedTime,
+                      returnedVenue: data.returnVenue,
+                      lossDamage: data.lossDamageWaiver,
+                      cost: data.cost,
+                    };
+                    bookingDetailArr.push(bookingDetailsObj);
+                  });
+                  let booking = {
+                    boId: addToListObj.boId,
+                    cusNic: addToListObj.cusNic,
+                    date: new Date().toISOString().substring(0, 10),
+                    time: new Date().toLocaleTimeString(),
+                    cost: calculateTotalCost(),
+                    bookingDetails: bookingDetailArr,
+                    payments: {
+                      paymentsId: paymentsId,
+                      boId: addToListObj.boId,
+                      cusNic: addToListObj.cusNic,
+                      dateOfPayment: new Date().toISOString().substring(0, 10),
+                      timeOfPayment: new Date().toLocaleTimeString(),
+                      lossDamageWaiver: totalCostOfLossDamageWaiver(),
+                      lossDamageWaiverPaymentSlip: "",
+                      cost: calculateTotalCost(),
+                    },
+                  };
+                  formData.append(
+                    "dto",
+                    new Blob([JSON.stringify(booking)], {
+                      type: "application/json",
+                    })
+                  );
+                  let imgFile = document.getElementById(
+                    "lossDamageWaiverSlipPathFieldInPlaceBookingRequest"
+                  ).files;
+                  formData.append(
+                    "lossDamageWaiverSlip",
+                    imgFile[0],
+                    imgFile[0].name
+                  );
+
+                  if (
+                    window.confirm("Do you want to Place this Booking") == true
+                  ) {
+                    let res =
+                      PlaceBookingRequestService.placeBookingRequest(formData);
+                    setCheckDisabled(true);
+                    addToList.splice(0, addToList.length);
+                    alert(res.data.data.message);
+                    setDataToTable();
+                    await setBookingIdToField();
+                  }
+                }}
               />
             </Grid>
 
@@ -702,6 +1619,24 @@ export const PlaceBookingRequest = (props) => {
                 size={"small"}
                 label={"Add To List"}
                 style={{ width: "70%" }}
+                onClick={async (e) => {
+                  setCheckDisabled(false);
+                  if (checkCarAlreadyExists() == true) {
+                    for (let i = 0; i < addToList.length; i++) {
+                      if (addToList[i].carRegNo == addToListObj.carRegNo) {
+                        addToList[i] = addToListObj;
+                      }
+                    }
+                    getAvailableDriver();
+                    await calculateTotalCostPerCar();
+                    updateTableRows(addToListObj);
+                  } else {
+                    getAvailableDriver();
+                    addToList.push(addToListObj);
+                    await calculateTotalCostPerCar();
+                    setDataToTable();
+                  }
+                }}
               />
             </Grid>
 
@@ -721,6 +1656,12 @@ export const PlaceBookingRequest = (props) => {
                 size={"small"}
                 label={"Clear List"}
                 style={{ width: "70%" }}
+                onClick={async (e) => {
+                  addToList.splice(0, addToList.length);
+                  setDataToTable();
+                  clearFields();
+                  await setBookingIdToField();
+                }}
               />
             </Grid>
           </Grid>

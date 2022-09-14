@@ -68,5 +68,19 @@ class CarService {
     });
     return await promise;
   };
+
+  searchCar = async (id) => {
+    const promise = new Promise((resolve, reject) => {
+      instance
+        .get("bookingCarRequestController/searchCarsInBooking?regNo=" + id)
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((err) => {
+          return resolve(err);
+        });
+    });
+    return await promise;
+  };
 }
 export default new CarService();

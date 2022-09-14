@@ -82,13 +82,25 @@ export const ViewBlock = (props) => {
             justifyContent: "center",
           }}
         >
-          <CommonButton
-            disabled={true}
-            variant={"contained"}
-            size={"large"}
-            style={{ width: "70%", height: "50%" }}
-            label={"Book Now"}
-          />
+          {props.checkForButtonDisable == false ? (
+            <CommonButton
+              disabled={false}
+              variant={"contained"}
+              size={"large"}
+              style={{ width: "70%", height: "50%" }}
+              label={"Book Now"}
+              onClick={props.setEventToBtn}
+              data={props.carObj}
+            />
+          ) : (
+            <CommonButton
+              disabled={true}
+              variant={"contained"}
+              size={"large"}
+              style={{ width: "70%", height: "50%" }}
+              label={"Book Now"}
+            />
+          )}
         </Grid>
       </Grid>
     </Grid>

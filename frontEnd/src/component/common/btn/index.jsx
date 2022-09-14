@@ -35,7 +35,7 @@ class CommonButton extends Component {
     if (event.detail === 1) {
       const { onClick, disabled } = this.props;
       if (disabled) return;
-      onClick && onClick({ event });
+      onClick && onClick({ event, data: this.props.data });
     }
   };
 

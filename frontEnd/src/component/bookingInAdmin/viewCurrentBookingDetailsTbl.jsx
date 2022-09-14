@@ -3,7 +3,7 @@ import CommonTable from "../common/table/table";
 export const ViewCurrentBookingDetailsTable = (props) => {
   return (
     <CommonTable
-      dataList={[]}
+      dataList={props.dataListForDetailsTbl}
       tblRows={[
         "Row No",
         "Booking Id",

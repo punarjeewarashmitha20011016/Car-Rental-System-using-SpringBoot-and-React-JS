@@ -1,6 +1,7 @@
 import { Grid } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
+import placeBookingRequest from "../../services/placeBookingRequest/placeBookingRequest";
 import CommonButton from "../common/btn";
 
 import classes from "./bookingInAdmin.module.css";
@@ -11,6 +12,75 @@ import { ViewCurrentBookings } from "./viewCurrentBookings";
 export const BookingInAdmin = (props) => {
   const [check, setCheck] = useState(false);
   const [view, setView] = useState(null);
+  const [booking, setBooking] = useState({
+    boId: "",
+    cusNic: "",
+    date: "",
+    time: "",
+    cost: "",
+    bookingDetails: "",
+    payments: {
+      paymentsId: "",
+      boId: "",
+      cusNic: "",
+      dateOfPayment: "",
+      timeOfPayment: "",
+      lossDamageWaiver: "",
+      lossDamageWaiverPaymentSlip: "",
+      cost: "",
+    },
+  });
+  const [addToList, setAddToList] = useState({
+    bookingIdInBooking: "",
+    c_RegNo: "",
+    cusNicInPlacingBookingRequest: "",
+    driverNicNo: "",
+    carTypeInBooking: "",
+    tripInKMInBooking: "",
+    extraKmDrivenInBooking: "",
+    rentalTypeInBooking: "",
+    dateOfPickupInBooking: "",
+    timeOfPickupInBooking: "",
+    pickupVenueInBooking: "",
+    returnedDateInBooking: "",
+    returnedTimeInBooking: "",
+    returnVenueInBooking: "",
+    damageStatus: "",
+    lossDamageWaiverInBooking: "",
+    costInBooking: "",
+  });
+  const [dataList, setDataList] = useState([]);
+  const [dataListForDetailsTbl, setDataListForDetailsTbl] = useState([]);
+  const setDataToTable = async (list) => {
+    let arr = [];
+    let rowNo = 1;
+    list != null &&
+      list.forEach((data) => {
+        arr.push(
+          <tr>
+            <td>{rowNo++}</td>
+            <td>{data.boId}</td>
+            <td>{data.cusNic}</td>
+            <td>{data.date}</td>
+            <td>{data.time}</td>
+            <td>{data.cost}</td>
+          </tr>
+        );
+      });
+    setDataList(arr);
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      let res =
+        await placeBookingRequest.placeBookingRequestGetAllPendingBookings();
+      let data = res.data.data;
+      setDataListForDetailsTbl(data);
+      setDataToTable(data);
+    };
+
+    loadData();
+  });
   return (
     <div className={classes.mainContainer}>
       <div className={classes.container}>
@@ -145,7 +215,12 @@ export const BookingInAdmin = (props) => {
                   style={{ display: "flex", width: "80%", height: "70%" }}
                   onClick={(e) => {
                     setCheck(true);
-                    setView(<ViewCurrentBookings />);
+                    setView(
+                      <ViewCurrentBookings
+                        dataList={dataList}
+                        dataListForDetailsTbl={dataListForDetailsTbl}
+                      />
+                    );
                   }}
                   onDblClick={(e) => {
                     setCheck(false);

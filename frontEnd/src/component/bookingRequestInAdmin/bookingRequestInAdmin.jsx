@@ -9,7 +9,6 @@ import { BookingRequestInAdminDetails } from "./bookingRequestDetailsView";
 import PlaceBookingRequestService from "../../services/placeBookingRequest/placeBookingRequest";
 
 import classes from "./bookingRequestInAdmin.module.css";
-import { customerNotificationsArr } from "../../store/customerNotifications";
 
 export const BookingRequestInAdmin = (props) => {
   const [view, setView] = useState(null);
@@ -361,6 +360,7 @@ export const BookingRequestInAdmin = (props) => {
                     style={{ height: "70%", position: "relative" }}
                   >
                     <TextValidator
+                      disabled={true}
                       label="Enter Customer NIC"
                       onChange={(e) => {}}
                       name="customerNic"
@@ -414,7 +414,7 @@ export const BookingRequestInAdmin = (props) => {
                     style={{ height: "70%", position: "relative" }}
                   >
                     <TextValidator
-                      onChange={(e) => {}}
+                      disabled={true}
                       name="bookingRequestDate"
                       size="small"
                       type={"Date"}
@@ -463,7 +463,7 @@ export const BookingRequestInAdmin = (props) => {
                     style={{ height: "70%", position: "relative" }}
                   >
                     <TextValidator
-                      onChange={(e) => {}}
+                      disabled={true}
                       name="bookingRequestTime"
                       size="small"
                       type={"Time"}
@@ -513,7 +513,7 @@ export const BookingRequestInAdmin = (props) => {
                   >
                     <TextValidator
                       label="Enter Booking Request Cost"
-                      onChange={(e) => {}}
+                      disabled={true}
                       name="bookingRequestCost"
                       size="small"
                       style={{
@@ -571,10 +571,10 @@ export const BookingRequestInAdmin = (props) => {
                       "Do You Want To Accept Booking Request..?"
                     ) == true
                   ) {
-                    // let res =
-                    //   await PlaceBookingRequestService.placeBookingRequestAccept(
-                    //     booking
-                    //   );
+                    let res =
+                      await PlaceBookingRequestService.placeBookingRequestAccept(
+                        booking
+                      );
                     clearFields();
                   }
                 }}

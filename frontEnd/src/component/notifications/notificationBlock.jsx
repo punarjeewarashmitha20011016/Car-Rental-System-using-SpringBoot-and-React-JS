@@ -1,7 +1,7 @@
 import { Grid, Typography } from "@mui/material";
 import CommonButton from "../common/btn";
 
-export const CustomerNotificationsBlock = (props) => {
+export const NotificationsBlock = (props) => {
   return (
     <Grid
       container

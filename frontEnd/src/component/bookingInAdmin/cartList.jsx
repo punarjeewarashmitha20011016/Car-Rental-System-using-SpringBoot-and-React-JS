@@ -3,7 +3,8 @@ import CommonTable from "../common/table/table";
 export const CartList = (props) => {
   return (
     <CommonTable
-      dataList={[]}
+      style={{ width: "90%", height: "90%" }}
+      dataList={props.dataList}
       tblRows={[
         "Row No",
         "Booking Id",

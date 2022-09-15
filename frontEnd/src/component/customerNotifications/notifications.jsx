@@ -1,4 +1,4 @@
-import { CustomerNotificationsBlock } from "../notifications/customerNotificationBlock";
+import { NotificationsBlock } from "../notifications/notificationBlock";
 import PlaceBookingRequestService from "../../services/placeBookingRequest/placeBookingRequest";
 import classes from "./notifications.module.css";
 import { cusNicStore } from "../../store/cusNicStore";
@@ -19,7 +19,7 @@ export const CustomerNotifications = (props) => {
             e.boId +
             " Id Request is Successfully Accepted. Please Come on pickup date to borrow your rental car.";
           list.push(
-            <CustomerNotificationsBlock label={message} id={id++} data={list} />
+            <NotificationsBlock label={message} id={id++} data={list} />
           );
         }
       });

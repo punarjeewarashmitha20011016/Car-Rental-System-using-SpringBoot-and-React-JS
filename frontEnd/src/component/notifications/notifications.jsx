@@ -1,5 +1,23 @@
+import { useEffect, useState } from "react";
+import bookingService from "../../services/bookingService/bookingService";
+import { NotificationsBlock } from "./notificationBlock";
 import classes from "./notifications.module.css";
 export const Notifications = (props) => {
+  const [dataList, setDataList] = useState([]);
+  useEffect(() => {
+    const loadNotifications = async () => {
+      let res = await bookingService.getCarNotifications();
+      let data = res.data.data;
+      let list = [];
+      let id = 1;
+      data.forEach((e) => {
+        let message = e.regNo + " " + e.message;
+        list.push(<NotificationsBlock label={message} id={id++} data={list} />);
+      });
+      setDataList(list);
+    };
+    loadNotifications();
+  }, []);
   return (
     <div className={classes.mainContainer}>
       <div className={classes.container}>
@@ -11,7 +29,11 @@ export const Notifications = (props) => {
             display: "relative",
             display: "flex",
           }}
-        ></div>
+        >
+          {dataList.map((e) => {
+            return e;
+          })}
+        </div>
       </div>
     </div>
   );

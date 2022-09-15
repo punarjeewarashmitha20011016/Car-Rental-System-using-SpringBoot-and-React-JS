@@ -4,6 +4,7 @@ import React from "react";
 import CommonButton from "../common/btn";
 import { useState } from "react";
 import placeBookingRequest from "../../services/placeBookingRequest/placeBookingRequest";
+import { useEffect } from "react";
 export const MainFields = (props) => {
   const [booking, setBooking] = useState({
     boId: "",
@@ -112,6 +113,10 @@ export const MainFields = (props) => {
       }
     }
   };
+
+  useEffect(() => {
+    props.btnClickBoolReturn(booking, addToListObj);
+  }, [addToListObj]);
   return (
     <ValidatorForm style={{ width: "100%", height: "100%" }}>
       <Grid item container xs={12} style={{ height: "20%" }}>
@@ -225,7 +230,7 @@ export const MainFields = (props) => {
             onChange={(e, value) => {
               booking.bookingDetails.forEach((e) => {
                 if (e.car_RegNo === value) {
-                  console.log(value);
+                  console.log(e);
                   setDateAndTime(
                     {
                       date: e.dateOfPickup,
@@ -257,7 +262,7 @@ export const MainFields = (props) => {
                       returnedTime: e.returnedTime,
                       returnVenue: e.returnedVenue,
                       damageStatus: "",
-                      lossDamageWaiver: e.lossDamageWaiver,
+                      lossDamageWaiver: e.lossDamage,
                       cost: e.cost,
                     };
                   });
@@ -889,7 +894,7 @@ export const MainFields = (props) => {
                   }}
                 />
               )}
-              onChange={(value) => {
+              onChange={(e, value) => {
                 setAddToListObj((prevState) => {
                   return {
                     ...addToListObj,

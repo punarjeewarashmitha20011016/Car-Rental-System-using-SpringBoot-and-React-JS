@@ -4,12 +4,12 @@ import { useState } from "react";
 import bookingService from "../../services/bookingService/bookingService";
 import placeBookingRequest from "../../services/placeBookingRequest/placeBookingRequest";
 import { bookingStoreObj } from "../../store/bookingStore";
+import { BookingTable } from "../common/bookingTable/bookingTable";
 import CommonButton from "../common/btn";
 
 import classes from "./bookingInAdmin.module.css";
 import { CartList } from "./cartList";
 import { MainFields } from "./mainField";
-import { ViewCurrentBookings } from "./viewCurrentBookings";
 
 export const BookingInAdmin = (props) => {
   const [check, setCheck] = useState(false);
@@ -34,36 +34,36 @@ export const BookingInAdmin = (props) => {
     cost: "",
   });
   const [addToList, setAddToList] = useState([]);
-  const [dataList, setDataList] = useState([]);
-  const [dataListForDetailsTbl, setDataListForDetailsTbl] = useState([]);
-
-  const setDataToTable = async (list) => {
-    let arr = [];
-    let rowNo = 1;
-    list != null &&
-      list.forEach((data) => {
-        arr.push(
-          <tr>
-            <td>{rowNo++}</td>
-            <td>{data.boId}</td>
-            <td>{data.cusNic}</td>
-            <td>{data.date}</td>
-            <td>{data.time}</td>
-            <td>{data.cost}</td>
-          </tr>
-        );
-      });
-    setDataList(arr);
+  const [dataListForTable, setDataListForTable] = useState([]);
+  const [detailsRows, setDetailsRowsMethod] = useState(null);
+  const setDetailsRows = (rowNo, data) => {
+    setDetailsRowsMethod(
+      <tr>
+        <td>{rowNo++}</td>
+        <td>{data.bookingId}</td>
+        <td>{data.car_RegNo}</td>
+        <td>{data.driverNic}</td>
+        <td>{data.carType}</td>
+        <td>{data.rentalType}</td>
+        <td>{data.dateOfPickup}</td>
+        <td>{data.timeOfPickup}</td>
+        <td>{data.pickupVenue}</td>
+        <td>{data.returnedDate}</td>
+        <td>{data.returnedTime}</td>
+        <td>{data.returnedVenue}</td>
+        <td>{data.lossDamage}</td>
+        <td>{data.cost}</td>
+      </tr>
+    );
+    return;
   };
-
   useEffect(() => {
     const loadData = async () => {
       let res =
         await placeBookingRequest.placeBookingRequestGetAllPendingBookings();
       if (res != null) {
         let data = res.data.data;
-        setDataListForDetailsTbl(data);
-        setDataToTable(data);
+        setDataListForTable(data);
       }
     };
     loadData();
@@ -321,9 +321,34 @@ export const BookingInAdmin = (props) => {
                   onClick={(e) => {
                     setCheck(true);
                     setView(
-                      <ViewCurrentBookings
-                        dataList={dataList}
-                        dataListForDetailsTbl={dataListForDetailsTbl}
+                      <BookingTable
+                        tblRows={[
+                          "Row No",
+                          "Booking Id",
+                          "Customer Nic",
+                          "Booked Date",
+                          "Booked Time",
+                          "Cost",
+                        ]}
+                        resData={dataListForTable}
+                        setDetailsRows={setDetailsRows}
+                        setDetailsRowsToTable={detailsRows}
+                        tblRowsForDetailsTable={[
+                          "Row No",
+                          "Booking Id",
+                          "Car_RegNo",
+                          "Driver Nic",
+                          "Car Type",
+                          "Rental Type",
+                          "Date of Pickup",
+                          "Time of Pickup",
+                          "Pickup Venue",
+                          "Returned Date",
+                          "Returned Time",
+                          "Returned Venue",
+                          "Loss Damage",
+                          "Cost",
+                        ]}
                       />
                     );
                   }}

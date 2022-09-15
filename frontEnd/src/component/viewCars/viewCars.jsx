@@ -12,6 +12,9 @@ import classes from "./viewCars.module.css";
 export const ViewCars = (props) => {
   const [view, setView] = useState([]);
   const [check, setCheck] = useState(false);
+  const [leftRightNav, setLeftRightNav] = useState({
+    left: 0,
+  });
   let navigate = useNavigate();
   const fetchCarsForViews = () => {
     console.log("aa1 =", view.length);
@@ -96,9 +99,14 @@ export const ViewCars = (props) => {
             <MdOutlineNavigateBefore
               style={{ fontSize: "4em", cursor: "pointer" }}
               onClick={(e) => {
-                let container = document.getElementById("carImgContainer");
-                console.log("container  = ", container);
-                container.style.left = "10%";
+                console.log(leftRightNav);
+                let leftNav = leftRightNav.left + 10;
+                setLeftRightNav((prevState) => {
+                  return {
+                    ...leftRightNav,
+                    left: leftNav,
+                  };
+                });
               }}
             />
           </Grid>
@@ -108,11 +116,11 @@ export const ViewCars = (props) => {
             xs={10}
             style={{
               height: "80%",
+              position: "relative",
+              overflow: "hidden",
               display: "flex",
               alignItems: "center",
               justifyContent: "start",
-              position: "relative",
-              overflow: "hidden",
             }}
           >
             <div
@@ -123,6 +131,7 @@ export const ViewCars = (props) => {
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
+                left: leftRightNav.left + "px",
               }}
               id={"carImgContainer"}
             >
@@ -146,9 +155,14 @@ export const ViewCars = (props) => {
             <MdOutlineNavigateNext
               style={{ fontSize: "4em", cursor: "pointer" }}
               onClick={(e) => {
-                let container = document.getElementById("carImgContainer");
-                console.log("container  = ", container);
-                container.style.right = "10%";
+                console.log(leftRightNav.right);
+                let rightNav = leftRightNav.left - 10;
+                setLeftRightNav((prevState) => {
+                  return {
+                    ...leftRightNav,
+                    left: rightNav,
+                  };
+                });
               }}
             />
           </Grid>

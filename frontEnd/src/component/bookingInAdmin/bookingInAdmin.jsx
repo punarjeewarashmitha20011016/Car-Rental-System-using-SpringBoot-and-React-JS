@@ -322,6 +322,12 @@ export const BookingInAdmin = (props) => {
                     setCheck(true);
                     setView(
                       <BookingTable
+                        style={{
+                          width: "95%",
+                          height: "95%",
+                          borderRadius: "0",
+                          boxShadow: "0 0 0 0",
+                        }}
                         tblRows={[
                           "Row No",
                           "Booking Id",

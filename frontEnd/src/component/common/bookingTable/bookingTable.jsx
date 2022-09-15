@@ -36,7 +36,7 @@ export const BookingTable = (props) => {
   }, []);
   return (
     <div className={classes.mainContainer}>
-      <div className={classes.container}>
+      <div className={classes.container} style={props.style}>
         <Grid
           container
           spacing={0}

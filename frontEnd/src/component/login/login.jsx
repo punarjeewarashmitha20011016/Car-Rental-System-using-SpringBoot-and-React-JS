@@ -23,7 +23,6 @@ import customerService from "../../services/customerService/customerService";
 import DriverService from "../../services/driverService/driverService";
 import AdminService from "../../services/adminService/adminService";
 
-import Context from "../../store/auth-context";
 import { cusNicStore } from "../../store/cusNicStore";
 
 const Login = (props) => {

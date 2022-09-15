@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import bookingService from "../../services/bookingService/bookingService";
 import placeBookingRequest from "../../services/placeBookingRequest/placeBookingRequest";
+import { bookingStoreObj } from "../../store/bookingStore";
 import CommonButton from "../common/btn";
 
 import classes from "./bookingInAdmin.module.css";
@@ -13,24 +14,7 @@ import { ViewCurrentBookings } from "./viewCurrentBookings";
 export const BookingInAdmin = (props) => {
   const [check, setCheck] = useState(false);
   const [view, setView] = useState(null);
-  const [booking, setBooking] = useState({
-    boId: "",
-    cusNic: "",
-    date: "",
-    time: "",
-    cost: "",
-    bookingDetails: "",
-    payments: {
-      paymentsId: "",
-      boId: "",
-      cusNic: "",
-      dateOfPayment: "",
-      timeOfPayment: "",
-      lossDamageWaiver: "",
-      lossDamageWaiverPaymentSlip: "",
-      cost: "",
-    },
-  });
+
   const [addToListObj, setAddToListObj] = useState({
     boId: "",
     c_RegNo: "",
@@ -86,7 +70,7 @@ export const BookingInAdmin = (props) => {
   }, []);
 
   const btnClickBoolReturn = (bookingData, data) => {
-    setBooking(bookingData);
+    bookingStoreObj.length == 0 && bookingStoreObj.push(bookingData);
     setAddToListObj(data);
   };
   return (
@@ -130,6 +114,7 @@ export const BookingInAdmin = (props) => {
                   style={{ width: "80%", height: "70%", display: "flex" }}
                   onClick={async (e) => {
                     let bookingDetailsArr = [];
+
                     addToList.forEach((e) => {
                       let bookingDetails = {
                         bookingId: e.boId,
@@ -149,22 +134,48 @@ export const BookingInAdmin = (props) => {
                         lossDamage: e.lossDamageWaiver,
                         cost: e.cost,
                       };
+                      bookingDetailsArr.push(bookingDetails);
                     });
-                    let bookingObj = {
-                      boId: booking.boId,
-                      cusNic: booking.cusNic,
-                      date: booking.date,
-                      time: booking.time,
-                      cost: booking.cost,
-                      bookingDetails: bookingDetailsArr,
-                      payments: booking.payments,
-                    };
-                    if (
-                      window.confirm("Do you want to Place this booking..?") ==
-                      true
-                    ) {
-                      let res = bookingService.placeBooking(bookingObj);
-                    }
+                    console.log(bookingStoreObj);
+                    bookingStoreObj.forEach((e) => {
+                      let bookingObj = {
+                        boId: e.boId,
+                        cusNic: e.cusNic,
+                        date: e.date,
+                        time: e.time,
+                        cost: e.cost,
+                        bookingDetails: bookingDetailsArr,
+                        payments: {
+                          paymentId: e.payments.paymentsId,
+                          boId: e.payments.boId,
+                          cusNic: e.payments.cusNic,
+                          dateOfPayment: e.payments.dateOfPayment,
+                          timeOfPayment: e.payments.timeOfPayment,
+                          lossDamageWaiver: e.payments.lossDamageWaiver,
+                          lossDamageWaiverPaymentSlip:
+                            e.payments.lossDamageWaiverPaymentSlip,
+                          cost: e.payments.cost,
+                        },
+                      };
+                      if (e.boId != "") {
+                        if (
+                          window.confirm(
+                            "Do you want to Place this booking..?"
+                          ) == true
+                        ) {
+                          let res = bookingService.placeBooking(bookingObj);
+                          bookingStoreObj = [];
+                        } else {
+                          alert(
+                            "Placing Booking Is Unsuccessful. Please Fill Data Again"
+                          );
+                        }
+                      } else {
+                        alert(
+                          "Placing Booking Is Unsuccessful. Please Fill Data Again"
+                        );
+                      }
+                    });
                   }}
                 />
               </Grid>
@@ -189,17 +200,26 @@ export const BookingInAdmin = (props) => {
                     display: "flex",
                   }}
                   onClick={(e) => {
-                    if (addToList.length != 0) {
-                      for (let i = 0; i < addToList.length; i++) {
-                        if (addToList[i].boId == addToListObj.boId) {
-                          addToList.splice(i, 1);
-                          addToList.push(addToListObj);
-                        } else {
-                          addToList.push(addToListObj);
+                    console.log("====================================");
+                    console.log(addToList);
+                    console.log("====================================");
+                    if (addToListObj.boId != "") {
+                      if (addToList.length != 0) {
+                        for (let i = 0; i < addToList.length; i++) {
+                          if (addToList[i].boId == addToListObj.boId) {
+                            addToList.splice(i, 1);
+                            addToList.push(addToListObj);
+                          } else {
+                            addToList.push(addToListObj);
+                          }
                         }
+                      } else {
+                        addToList.push(addToListObj);
                       }
                     } else {
-                      addToList.push(addToListObj);
+                      alert(
+                        "Adding Data To Booking List is Unsuccessful. Please Fill Data Again"
+                      );
                     }
                   }}
                 />

@@ -32,7 +32,23 @@ export const ViewAllBookings = (props) => {
   useEffect(() => {
     const loadData = async () => {
       let res = await bookingService.getAllBookings();
-      data == null && setData(res.data.data);
+      let list = res.data.data;
+      let arr = [];
+      let rowNo = 1;
+      list != null &&
+        list.forEach((data) => {
+          arr.push(
+            <tr>
+              <td>{rowNo++}</td>
+              <td>{data.boId}</td>
+              <td>{data.cusNic}</td>
+              <td>{data.date}</td>
+              <td>{data.time}</td>
+              <td>{data.cost}</td>
+            </tr>
+          );
+        });
+      setData(arr);
     };
     loadData();
   }, []);

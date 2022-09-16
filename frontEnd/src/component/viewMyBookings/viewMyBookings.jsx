@@ -34,7 +34,24 @@ export const ViewMyBookings = (props) => {
       let res = await placeBookingRequest.getCustomerOwnBookings(
         cusNicStore.cusNic
       );
-      data == null && setData(res.data.data);
+      let list = res.data.data;
+      let arr = [];
+      let rowNo = 1;
+      list != null &&
+        list.forEach((data) => {
+          arr.push(
+            <tr>
+              <td>{rowNo++}</td>
+              <td>{data.boId}</td>
+              <td>{data.reqStatus}</td>
+              <td>{data.cusNic}</td>
+              <td>{data.bookedDate}</td>
+              <td>{data.bookedTime}</td>
+              <td>{data.cost}</td>
+            </tr>
+          );
+        });
+      setData(arr);
     };
     loadData();
   }, []);

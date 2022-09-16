@@ -1587,6 +1587,7 @@ export const PlaceBookingRequest = (props) => {
                     alert(res.data.data.message);
                     setDataToTable();
                     await setBookingIdToField();
+                    clearFields();
                   }
                 }}
               />
@@ -1607,6 +1608,7 @@ export const PlaceBookingRequest = (props) => {
                 size={"small"}
                 label={"Update Booking"}
                 style={{ width: "70%", backgroundColor: "grey" }}
+                onClick={(e) => {}}
               />
             </Grid>
 

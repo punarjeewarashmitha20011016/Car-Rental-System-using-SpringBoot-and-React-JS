@@ -63,7 +63,22 @@ export const BookingInAdmin = (props) => {
         await placeBookingRequest.placeBookingRequestGetAllPendingBookings();
       if (res != null) {
         let data = res.data.data;
-        setDataListForTable(data);
+        let arr = [];
+        let rowNo = 1;
+        data != null &&
+          data.forEach((data) => {
+            arr.push(
+              <tr>
+                <td>{rowNo++}</td>
+                <td>{data.boId}</td>
+                <td>{data.cusNic}</td>
+                <td>{data.date}</td>
+                <td>{data.time}</td>
+                <td>{data.cost}</td>
+              </tr>
+            );
+          });
+        setDataListForTable(arr);
       }
     };
     loadData();

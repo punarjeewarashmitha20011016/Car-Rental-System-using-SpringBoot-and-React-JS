@@ -14,23 +14,7 @@ export const BookingTable = (props) => {
   useEffect(() => {
     const getAllBookings = async () => {
       let res = props.resData;
-      let list = res;
-      let arr = [];
-      let rowNo = 1;
-      list != null &&
-        list.forEach((data) => {
-          arr.push(
-            <tr>
-              <td>{rowNo++}</td>
-              <td>{data.boId}</td>
-              <td>{data.cusNic}</td>
-              <td>{data.date}</td>
-              <td>{data.time}</td>
-              <td>{data.cost}</td>
-            </tr>
-          );
-        });
-      setDataList(arr);
+      setDataList(res);
     };
     getAllBookings();
   }, []);

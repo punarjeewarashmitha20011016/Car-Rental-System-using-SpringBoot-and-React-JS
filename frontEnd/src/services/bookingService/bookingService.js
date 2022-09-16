@@ -118,6 +118,46 @@ class BookingService {
     });
     return await promise;
   };
+  getDailyIncome = async () => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .get("bookingCarController/getDailyIncome")
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(undefined);
+        });
+    });
+    return await promise;
+  };
+
+  getMonthlyIncome = async () => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .get("bookingCarController/getMonthlyIncome")
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(undefined);
+        });
+    });
+    return await promise;
+  };
+  getAnnualIncome = async () => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .get("bookingCarController/getAnnualIncome")
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(undefined);
+        });
+    });
+    return await promise;
+  };
 }
 
 export default new BookingService();

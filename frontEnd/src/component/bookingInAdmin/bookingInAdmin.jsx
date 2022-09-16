@@ -34,10 +34,12 @@ export const BookingInAdmin = (props) => {
     cost: "",
   });
   const [addToList, setAddToList] = useState([]);
-  const [dataListForTable, setDataListForTable] = useState([]);
-  const [detailsRows, setDetailsRowsMethod] = useState(null);
+  const [dataListForTable, setDataListForTable] = useState({
+    data: null,
+    resData: null,
+  });
   const setDetailsRows = (rowNo, data) => {
-    setDetailsRowsMethod(
+    return (
       <tr>
         <td>{rowNo++}</td>
         <td>{data.bookingId}</td>
@@ -55,18 +57,17 @@ export const BookingInAdmin = (props) => {
         <td>{data.cost}</td>
       </tr>
     );
-    return;
   };
   useEffect(() => {
     const loadData = async () => {
       let res =
         await placeBookingRequest.placeBookingRequestGetAllPendingBookings();
       if (res != null) {
-        let data = res.data.data;
+        let list = res.data.data;
         let arr = [];
         let rowNo = 1;
-        data != null &&
-          data.forEach((data) => {
+        list != null &&
+          list.forEach((data) => {
             arr.push(
               <tr>
                 <td>{rowNo++}</td>
@@ -78,7 +79,13 @@ export const BookingInAdmin = (props) => {
               </tr>
             );
           });
-        setDataListForTable(arr);
+        setDataListForTable((prevState) => {
+          return {
+            ...dataListForTable,
+            data: arr,
+            resData: list,
+          };
+        });
       }
     };
     loadData();
@@ -353,7 +360,6 @@ export const BookingInAdmin = (props) => {
                         ]}
                         resData={dataListForTable}
                         setDetailsRows={setDetailsRows}
-                        setDetailsRowsToTable={detailsRows}
                         tblRowsForDetailsTable={[
                           "Row No",
                           "Booking Id",

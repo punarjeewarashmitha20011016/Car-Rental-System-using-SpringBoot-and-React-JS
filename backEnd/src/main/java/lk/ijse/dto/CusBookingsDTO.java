@@ -19,5 +19,5 @@ public class CusBookingsDTO {
     private LocalDate bookedDate;
     private String bookedTime;
     private double cost;
-    private List<CusOwnBookingDetailsDTO> details;
+    private List<CusOwnBookingDetailsDTO> bookingDetails;
 }

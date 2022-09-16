@@ -4,9 +4,8 @@ import { BookingTable } from "../common/bookingTable/bookingTable";
 import { cusNicStore } from "../../store/cusNicStore";
 export const ViewMyBookings = (props) => {
   const [dataObj, setData] = useState({ data: null, resData: null });
-  const [detailsRows, setDetailsRowsMethod] = useState(null);
   const setDetailsRows = (rowNo, data) => {
-    setDetailsRowsMethod(
+    return (
       <tr>
         <td>{rowNo++}</td>
         <td>{data.bookingId}</td>
@@ -76,7 +75,6 @@ export const ViewMyBookings = (props) => {
         ]}
         resData={dataObj}
         setDetailsRows={setDetailsRows}
-        setDetailsRowsToTable={detailsRows}
         tblRowsForDetailsTable={[
           "Row No",
           "Booking Id",

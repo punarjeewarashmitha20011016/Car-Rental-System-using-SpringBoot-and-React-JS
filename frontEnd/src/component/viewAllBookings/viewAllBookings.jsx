@@ -3,10 +3,12 @@ import { useState } from "react";
 import bookingService from "../../services/bookingService/bookingService";
 import { BookingTable } from "../common/bookingTable/bookingTable";
 export const ViewAllBookings = (props) => {
-  const [data, setData] = useState(null);
-  const [detailsRows, setDetailsRowsMethod] = useState(null);
+  const [dataObj, setData] = useState({
+    data: null,
+    resData: null,
+  });
   const setDetailsRows = (rowNo, data) => {
-    setDetailsRowsMethod(
+    return (
       <tr>
         <td>{rowNo++}</td>
         <td>{data.bookingId}</td>
@@ -27,7 +29,6 @@ export const ViewAllBookings = (props) => {
         <td>{data.cost}</td>
       </tr>
     );
-    return;
   };
   useEffect(() => {
     const loadData = async () => {
@@ -35,6 +36,7 @@ export const ViewAllBookings = (props) => {
       let list = res.data.data;
       let arr = [];
       let rowNo = 1;
+      console.log(list);
       list != null &&
         list.forEach((data) => {
           arr.push(
@@ -48,13 +50,19 @@ export const ViewAllBookings = (props) => {
             </tr>
           );
         });
-      setData(arr);
+      setData((prevState) => {
+        return {
+          ...dataObj,
+          data: arr,
+          resData: list,
+        };
+      });
     };
     loadData();
   }, []);
 
   return (
-    data != null && (
+    dataObj.data != null && (
       <BookingTable
         tblRows={[
           "Row No",
@@ -64,9 +72,8 @@ export const ViewAllBookings = (props) => {
           "Booked Time",
           "Cost",
         ]}
-        resData={data}
+        resData={dataObj}
         setDetailsRows={setDetailsRows}
-        setDetailsRowsToTable={detailsRows}
         tblRowsForDetailsTable={[
           "Row No",
           "Booking Id",

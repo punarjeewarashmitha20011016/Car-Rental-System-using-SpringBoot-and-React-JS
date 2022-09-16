@@ -14,10 +14,11 @@ export const BookingTable = (props) => {
   useEffect(() => {
     const getAllBookings = async () => {
       let res = props.resData.data;
+      console.log("res = ", res);
       setDataList(res);
     };
     getAllBookings();
-  }, []);
+  });
   return (
     <div className={classes.mainContainer}>
       <div className={classes.container} style={props.style}>
@@ -76,13 +77,14 @@ export const BookingTable = (props) => {
                 onClick={async () => {
                   let data = props.resData.resData;
                   data.forEach((e) => {
+                    console.log("e = " + e.boId);
                     if (searchTxt === e.boId) {
                       let arr = [];
                       let rowNo = 1;
                       e.bookingDetails.length != 0 &&
                         e.bookingDetails.forEach((details) => {
-                          props.setDetailsRows(rowNo, details);
-                          arr.push(props.setDetailsRowsToTable);
+                          let data = props.setDetailsRows(rowNo, details);
+                          arr.push(data);
                         });
                       setDataToDetailsTable(arr);
                     }

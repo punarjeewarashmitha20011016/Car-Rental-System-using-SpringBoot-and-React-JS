@@ -611,7 +611,6 @@ export const PlaceBookingRequest = (props) => {
       data.bookingDetails.forEach((e) => {
         carRegNoForAutoComplete.push(e.car_RegNo);
       });
-    console.log(carRegNoForAutoComplete);
     setCarRegField(
       <Autocomplete
         autoHighlight
@@ -641,12 +640,32 @@ export const PlaceBookingRequest = (props) => {
             }}
           />
         )}
-        onChange={(value) => {
-          setAddToListObj((prevState) => {
-            return {
-              ...addToListObj,
-              carRegNo: value,
-            };
+        onChange={(e, value) => {
+          data.bookingDetails.forEach(async (list) => {
+            console.log("====================================");
+            console.log(list);
+            console.log("====================================");
+            if (list.car_RegNo === value) {
+              console.log("====================================");
+              console.log(data.carRegNo);
+              console.log("====================================");
+              setAddToListObj((prevState) => {
+                return {
+                  ...addToListObj,
+                  carRegNo: value,
+                  carType: list.carType,
+                  rentalType: list.rentalType,
+                  dateOfPickup: list.dateOfPickup,
+                  timeOfPickup: list.timeOfPickup,
+                  pickupVenue: list.pickupVenue,
+                  returnedDate: list.returnedDate,
+                  returnedTime: list.returnedTime,
+                  returnVenue: list.returnedVenue,
+                  lossDamageWaiver: list.lossDamage,
+                  cost: list.cost,
+                };
+              });
+            }
           });
         }}
       />

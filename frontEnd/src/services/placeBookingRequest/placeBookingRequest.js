@@ -105,6 +105,34 @@ class PlaceBookingRequestService {
     });
     return await promise;
   };
+  updateBookingRequest = async (data) => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .put("bookingCarRequestController/updateBookingRequest", data, {
+          header: { ContentType: false, ProcessData: false },
+        })
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(res);
+        });
+    });
+    return await promise;
+  };
+  deleteBookingRequest = async (id) => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .delete("bookingCarRequestController/deleteBookingRequest?boId=" + id)
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(res);
+        });
+    });
+    return await promise;
+  };
 }
 
 export default new PlaceBookingRequestService();

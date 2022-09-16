@@ -44,6 +44,142 @@ export const PlaceBookingRequest = (props) => {
   const [checkDisabled, setCheckDisabled] = useState(true);
   const [paymentsId, setPaymentsId] = useState(null);
 
+  const [dateOfPickup, setDateOfPickup] = useState(null);
+  const [timeOfPickup, setTimeOfPickup] = useState(null);
+  const [returnedDate, setReturnedDate] = useState(null);
+  const [returnedTime, setReturnedTime] = useState(null);
+
+  const [totalCostOfBooking, setTotalCostOfBooking] = useState(null);
+
+  let dateOfPickupDup = null;
+  let returnDateDup = null;
+
+  const setBookingAlgorithm = () => {
+    let bookingDetailArr = [];
+    addToList.forEach((data) => {
+      console.log("Obj = ", data);
+      let bookingDetailsObj = {
+        bookingId: data.boId,
+        car_RegNo: data.carRegNo,
+        driverNic: data.driverNic,
+        carType: data.carType,
+        rentalType: data.rentalType,
+        dateOfPickup: data.dateOfPickup,
+        timeOfPickup: data.timeOfPickup,
+        pickupVenue: data.pickupVenue,
+        returnedDate: data.returnedDate,
+        returnedTime: data.returnedTime,
+        returnedVenue: data.returnVenue,
+        lossDamage: data.lossDamageWaiver,
+        cost: data.cost,
+      };
+      bookingDetailArr.push(bookingDetailsObj);
+    });
+    let booking = {
+      boId: addToListObj.boId,
+      cusNic: addToListObj.cusNic,
+      date: new Date().toISOString().substring(0, 10),
+      time: new Date().toLocaleTimeString(),
+      cost: totalCostOfBooking,
+      bookingDetails: bookingDetailArr,
+      payments: {
+        paymentsId: paymentsId,
+        boId: addToListObj.boId,
+        cusNic: addToListObj.cusNic,
+        dateOfPayment: new Date().toISOString().substring(0, 10),
+        timeOfPayment: new Date().toLocaleTimeString(),
+        lossDamageWaiver: totalCostOfLossDamageWaiver(),
+        lossDamageWaiverPaymentSlip: "",
+        cost: totalCostOfBooking,
+      },
+    };
+    console.log(booking);
+    formData.append(
+      "dto",
+      new Blob([JSON.stringify(booking)], {
+        type: "application/json",
+      })
+    );
+    let imgFile = document.getElementById(
+      "lossDamageWaiverSlipPathFieldInPlaceBookingRequest"
+    ).files;
+    formData.append("lossDamageWaiverSlip", imgFile[0], imgFile[0].name);
+  };
+  const setDateAndTime = (data, type) => {
+    let tm = data.time[8] + data.time[9];
+    console.log("type = ", type);
+    console.log(data);
+    if (tm === "PM") {
+      var timer = data.time;
+      var hours = Number(timer.match(/^(\d+)/)[1]);
+      var minutes = Number(timer.match(/:(\d+)/)[1]);
+      var AMPM = timer.match(/\s(.*)$/)[1];
+      if (AMPM == "PM" && hours < 12) hours = hours + 12;
+      if (AMPM == "AM" && hours == 12) hours = hours - 12;
+      var sHours = hours.toString();
+      var sMinutes = minutes.toString();
+      if (hours < 10) sHours = "0" + sHours;
+      if (minutes < 10) sMinutes = "0" + sMinutes;
+      if (type === "Pickup") {
+        let t = sHours + ":" + sMinutes + ":" + data.time[5] + data.time[6];
+        setTimeOfPickup(t);
+      } else {
+        let t = sHours + ":" + sMinutes + ":" + data.time[5] + data.time[6];
+        setReturnedTime(t);
+      }
+    } else {
+      if (type === "Pickup") {
+        let d =
+          data.time[0] +
+          data.time[1] +
+          data.time[2] +
+          data.time[3] +
+          data.time[4];
+        setTimeOfPickup(d);
+      } else if (type === "Returned") {
+        let d =
+          data.time[0] +
+          data.time[1] +
+          data.time[2] +
+          data.time[3] +
+          data.time[4];
+        setReturnedTime(d);
+      }
+    }
+    let dt = data.date;
+    if (dt[1] && dt[2] < 10) {
+      if (type === "Pickup") {
+        let d = dt[0] + "-" + 0 + dt[1] + "-" + 0 + dt[2];
+        setDateOfPickup(d);
+        dateOfPickupDup = d;
+      } else {
+        let d = dt[0] + "-" + 0 + dt[1] + "-" + 0 + dt[2];
+        setReturnedDate(d);
+        returnDateDup = d;
+      }
+    } else if (dt[1] < 10) {
+      if (type === "Pickup") {
+        let d = dt[0] + "-" + 0 + dt[1] + "-" + dt[2];
+        setDateOfPickup(d);
+        dateOfPickupDup = d;
+      } else {
+        let d = dt[0] + "-" + 0 + dt[1] + "-" + dt[2];
+        setReturnedDate(d);
+        returnDateDup = d;
+      }
+    } else if (dt[2] < 10) {
+      if (type === "Pickup") {
+        let d = dt[0] + "-" + dt[1] + "-" + 0 + dt[2];
+        setDateOfPickup(d);
+        dateOfPickupDup = d;
+      } else {
+        let d = dt[0] + "-" + dt[1] + "-" + 0 + dt[2];
+        setReturnedDate(d);
+        returnDateDup = d;
+      }
+    }
+  };
+
   const getAvailableDriver = async () => {
     let res = await PlaceBookingRequestService.getAvailableDriver();
     console.log("checked = ", checkTicked);
@@ -64,6 +200,7 @@ export const PlaceBookingRequest = (props) => {
   const setDataToTable = () => {
     let arr = [];
     let rowNo = 1;
+    console.log("addToList = ", addToList);
     addToList.forEach((data) => {
       console.log("datal = ", data);
       arr.push(
@@ -118,7 +255,7 @@ export const PlaceBookingRequest = (props) => {
     addToList.forEach((data) => {
       total += data.cost;
     });
-    return total;
+    setTotalCostOfBooking(total);
   };
 
   function getTotalDaysRentingTheCar(dateOfPickup, returnDate) {
@@ -157,10 +294,9 @@ export const PlaceBookingRequest = (props) => {
     let totalCost = 0;
     for (let i = 0; i < addToList.length; i++) {
       if (addToList[i].carRegNo == addToListObj.carRegNo) {
-        console.log("checks");
         let car = await searchCarDetails(addToListObj.carRegNo);
         let calculatedCostOfRentingDates = undefined;
-        console.log(addToList[i].carRegNo);
+        console.log(addToList[i].dateOfPickup);
         var pickupDate = addToList[i].dateOfPickup.split("-");
         var day1 = pickupDate[2];
         var month1 = pickupDate[1];
@@ -599,6 +735,18 @@ export const PlaceBookingRequest = (props) => {
       lossDamageWaiver: "",
       cost: "",
     });
+    setDateOfPickup("");
+    setTimeOfPickup("");
+    setReturnedDate("");
+    setReturnedTime("");
+    dateOfPickupDup = null;
+    returnDateDup = null;
+    let lossDamageSlipField = document.getElementById(
+      "lossDamageWaiverSlipPathFieldInPlaceBookingRequest"
+    );
+    if (lossDamageSlipField != undefined) {
+      lossDamageSlipField.innerHTML = "";
+    }
   };
   const searchBooking = async () => {
     carRegNoForAutoComplete.splice(0, carRegNoForAutoComplete.length);
@@ -606,7 +754,7 @@ export const PlaceBookingRequest = (props) => {
       addToListObj.boId
     );
     let data = res.data.data;
-
+    setPaymentsId(res.data.data.payments.paymentsId);
     carRegNoForAutoComplete.length == 0 &&
       data.bookingDetails.forEach((e) => {
         carRegNoForAutoComplete.push(e.car_RegNo);
@@ -642,23 +790,32 @@ export const PlaceBookingRequest = (props) => {
         )}
         onChange={(e, value) => {
           data.bookingDetails.forEach(async (list) => {
-            console.log("====================================");
-            console.log(list);
-            console.log("====================================");
             if (list.car_RegNo === value) {
-              console.log("====================================");
-              console.log(data.carRegNo);
-              console.log("====================================");
+              console.log(list);
+              setDateAndTime(
+                {
+                  date: list.dateOfPickup,
+                  time: list.timeOfPickup,
+                },
+                "Pickup"
+              );
+              setDateAndTime(
+                {
+                  date: list.returnedDate,
+                  time: list.returnedTime,
+                },
+                "Returned"
+              );
               setAddToListObj((prevState) => {
                 return {
                   ...addToListObj,
                   carRegNo: value,
                   carType: list.carType,
                   rentalType: list.rentalType,
-                  dateOfPickup: list.dateOfPickup,
+                  dateOfPickup: dateOfPickupDup,
                   timeOfPickup: list.timeOfPickup,
                   pickupVenue: list.pickupVenue,
-                  returnedDate: list.returnedDate,
+                  returnedDate: returnDateDup,
                   returnedTime: list.returnedTime,
                   returnVenue: list.returnedVenue,
                   lossDamageWaiver: list.lossDamage,
@@ -1038,8 +1195,9 @@ export const PlaceBookingRequest = (props) => {
                             dateOfPickup: e.target.value,
                           };
                         });
+                        setDateOfPickup(e.target.value);
                       }}
-                      value={addToListObj.dateOfPickup}
+                      value={dateOfPickup}
                     />
                   </Grid>
                 </Grid>
@@ -1081,8 +1239,9 @@ export const PlaceBookingRequest = (props) => {
                             timeOfPickup: e.target.value,
                           };
                         });
+                        setTimeOfPickup(e.target.value);
                       }}
-                      value={addToListObj.timeOfPickup}
+                      value={timeOfPickup}
                     />
                   </Grid>
                 </Grid>
@@ -1179,14 +1338,16 @@ export const PlaceBookingRequest = (props) => {
                         margin: "auto",
                       }}
                       onChange={(e) => {
+                        console.log(e.target.value);
                         setAddToListObj((prevState) => {
                           return {
                             ...addToListObj,
                             returnedDate: e.target.value,
                           };
                         });
+                        setReturnedDate(e.target.value);
                       }}
-                      value={addToListObj.returnedDate}
+                      value={returnedDate}
                     />
                   </Grid>
                 </Grid>
@@ -1228,8 +1389,9 @@ export const PlaceBookingRequest = (props) => {
                             returnedTime: e.target.value,
                           };
                         });
+                        setReturnedTime(e.target.value);
                       }}
-                      value={addToListObj.returnedTime}
+                      value={returnedTime}
                     />
                   </Grid>
                 </Grid>
@@ -1464,7 +1626,7 @@ export const PlaceBookingRequest = (props) => {
                       type={"Number"}
                       disabled={true}
                       onChange={(e) => {}}
-                      value={calculateTotalCost()}
+                      value={totalCostOfBooking}
                       validators={["required", "matchRegexp:^[0-9]{0,}$"]}
                       errorMessages={[
                         "this field is required",
@@ -1543,70 +1705,22 @@ export const PlaceBookingRequest = (props) => {
                 label={"Request Booking"}
                 style={{ width: "70%" }}
                 onClick={async (e) => {
-                  let bookingDetailArr = [];
-                  addToList.forEach((data) => {
-                    console.log("Obj = ", data);
-                    let bookingDetailsObj = {
-                      bookingId: data.boId,
-                      car_RegNo: data.carRegNo,
-                      driverNic: data.driverNic,
-                      carType: data.carType,
-                      rentalType: data.rentalType,
-                      dateOfPickup: data.dateOfPickup,
-                      timeOfPickup: data.timeOfPickup,
-                      pickupVenue: data.pickupVenue,
-                      returnedDate: data.returnedDate,
-                      returnedTime: data.returnedTime,
-                      returnedVenue: data.returnVenue,
-                      lossDamage: data.lossDamageWaiver,
-                      cost: data.cost,
-                    };
-                    bookingDetailArr.push(bookingDetailsObj);
-                  });
-                  let booking = {
-                    boId: addToListObj.boId,
-                    cusNic: addToListObj.cusNic,
-                    date: new Date().toISOString().substring(0, 10),
-                    time: new Date().toLocaleTimeString(),
-                    cost: calculateTotalCost(),
-                    bookingDetails: bookingDetailArr,
-                    payments: {
-                      paymentsId: paymentsId,
-                      boId: addToListObj.boId,
-                      cusNic: addToListObj.cusNic,
-                      dateOfPayment: new Date().toISOString().substring(0, 10),
-                      timeOfPayment: new Date().toLocaleTimeString(),
-                      lossDamageWaiver: totalCostOfLossDamageWaiver(),
-                      lossDamageWaiverPaymentSlip: "",
-                      cost: calculateTotalCost(),
-                    },
-                  };
-                  formData.append(
-                    "dto",
-                    new Blob([JSON.stringify(booking)], {
-                      type: "application/json",
-                    })
-                  );
-                  let imgFile = document.getElementById(
-                    "lossDamageWaiverSlipPathFieldInPlaceBookingRequest"
-                  ).files;
-                  formData.append(
-                    "lossDamageWaiverSlip",
-                    imgFile[0],
-                    imgFile[0].name
-                  );
-
+                  setBookingAlgorithm();
                   if (
                     window.confirm("Do you want to Place this Booking") == true
                   ) {
                     let res =
                       PlaceBookingRequestService.placeBookingRequest(formData);
-                    setCheckDisabled(true);
-                    addToList.splice(0, addToList.length);
-                    alert(res.data.data.message);
-                    setDataToTable();
-                    await setBookingIdToField();
-                    clearFields();
+                    if (res.status == 200) {
+                      setCheckDisabled(true);
+                      addToList.splice(0, addToList.length);
+                      alert(res.data.message);
+                      setDataToTable();
+                      await setBookingIdToField();
+                      clearFields();
+                    }
+                  } else {
+                    alert("Placing Booking Request is Unsuccessful");
                   }
                 }}
               />
@@ -1627,7 +1741,31 @@ export const PlaceBookingRequest = (props) => {
                 size={"small"}
                 label={"Update Booking"}
                 style={{ width: "70%", backgroundColor: "grey" }}
-                onClick={(e) => {}}
+                onClick={async (e) => {
+                  setBookingAlgorithm();
+                  if (
+                    window.confirm("Do you want to Update this Booking") == true
+                  ) {
+                    let res =
+                      await PlaceBookingRequestService.updateBookingRequest(
+                        formData
+                      );
+                    if (res.status == 200) {
+                      setCheckDisabled(true);
+                      addToList.splice(0, addToList.length);
+                      alert(res.data.message);
+                      setDataToTable();
+                      await setBookingIdToField();
+                      clearFields();
+                    }
+                  } else {
+                    alert(
+                      "Updating Booking " +
+                        addToListObj.boId +
+                        " is Unsuccessful"
+                    );
+                  }
+                }}
               />
             </Grid>
 
@@ -1647,6 +1785,32 @@ export const PlaceBookingRequest = (props) => {
                 size={"small"}
                 label={"Delete Booking"}
                 style={{ width: "70%" }}
+                onClick={async (e) => {
+                  if (
+                    window.confirm(
+                      "Do you want to remove request for booking " +
+                        addToListObj.boId +
+                        " id..?"
+                    ) == true
+                  ) {
+                    let res =
+                      await PlaceBookingRequestService.deleteBookingRequest(
+                        addToListObj.boId
+                      );
+                    if (res.status == 200) {
+                      alert(res.data.message);
+                      setDataToTable();
+                      await setBookingIdToField();
+                      clearFields();
+                    }
+                  } else {
+                    alert(
+                      "Deleting Booking Request of Booking Id " +
+                        addToListObj.boId +
+                        " is Unsuccessful"
+                    );
+                  }
+                }}
               />
             </Grid>
 
@@ -1667,8 +1831,10 @@ export const PlaceBookingRequest = (props) => {
                 label={"Add To List"}
                 style={{ width: "70%" }}
                 onClick={async (e) => {
+                  console.log(addToListObj);
                   setCheckDisabled(false);
                   if (checkCarAlreadyExists() == true) {
+                    console.log("exists");
                     for (let i = 0; i < addToList.length; i++) {
                       if (addToList[i].carRegNo == addToListObj.carRegNo) {
                         addToList[i] = addToListObj;
@@ -1678,10 +1844,12 @@ export const PlaceBookingRequest = (props) => {
                     await calculateTotalCostPerCar();
                     updateTableRows(addToListObj);
                   } else {
+                    console.log("not exists");
                     getAvailableDriver();
                     addToList.push(addToListObj);
-                    await calculateTotalCostPerCar();
                     setDataToTable();
+                    await calculateTotalCostPerCar();
+                    calculateTotalCost();
                   }
                 }}
               />

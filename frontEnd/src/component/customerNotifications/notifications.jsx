@@ -8,16 +8,15 @@ export const CustomerNotifications = (props) => {
   const [dataList, setDataList] = useState([]);
   useEffect(() => {
     const loadNotifications = async () => {
-      let res =
-        await PlaceBookingRequestService.placeBookingRequestGetAllPendingBookings();
+      let res = await PlaceBookingRequestService.getAllCustomerNotifications(
+        cusNicStore.cusNic
+      );
       let data = res.data.data;
       let list = [];
       let id = 1;
       data.forEach((e) => {
         if (e.cusNic === cusNicStore.cusNic) {
-          let message =
-            e.boId +
-            " Id Request is Successfully Accepted. Please Come on pickup date to borrow your rental car.";
+          let message = e.message;
           list.push(
             <NotificationsBlock label={message} id={id++} data={list} />
           );

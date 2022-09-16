@@ -32,7 +32,7 @@ public interface BookingCarRequestService {
 
     DriverDTO getAvailableDriver();
 
-    List<CustomerNotificationsDTO> getAllNotifications();
+    List<CustomerNotificationsDTO> getAllNotifications(String nic);
 
     List<CusBookingsDTO> getCustomerOwnBookings(String nic);
 }

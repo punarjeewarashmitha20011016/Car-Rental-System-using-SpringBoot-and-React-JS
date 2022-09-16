@@ -11,6 +11,7 @@ import lombok.ToString;
 @ToString
 public class CustomerNotificationsDTO {
     private int id;
+    private String nic;
     private String boId;
     private String message;
 }

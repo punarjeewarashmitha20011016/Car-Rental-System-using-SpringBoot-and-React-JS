@@ -133,6 +133,19 @@ class PlaceBookingRequestService {
     });
     return await promise;
   };
+  getAllCustomerNotifications = async (nic) => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .get("bookingCarRequestController/getAllNotifications?cusNic=" + nic)
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(res);
+        });
+    });
+    return await promise;
+  };
 }
 
 export default new PlaceBookingRequestService();

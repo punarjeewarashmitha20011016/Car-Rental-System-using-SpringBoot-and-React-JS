@@ -139,7 +139,7 @@ public class BookingCarRequestServiceImpl implements BookingCarRequestService {
             if (notificationsRepo.existsByBoId(dto.getBoId())) {
                 notificationsRepo.deleteByBoId(dto.getBoId());
             }
-            notificationsRepo.save(new CustomerNotifications(dto.getBoId(), dto.getBoId() + " Is Accepted. Collect Your Rental Car On Pickup Date"));
+            notificationsRepo.save(new CustomerNotifications(dto.getBoId(), dto.getCusNic(), dto.getBoId() + " Is Accepted. Collect Your Rental Car On Pickup Date"));
             repo.deleteById(dto.getBoId());
         }
     }
@@ -217,7 +217,7 @@ public class BookingCarRequestServiceImpl implements BookingCarRequestService {
             if (!paymentsRepo.existsById(bookingRequestDTO.getPayments().getPaymentsId())) {
                 throw new RuntimeException("Deleting Booking Request failed");
             }
-            notificationsRepo.save(new CustomerNotifications(boId, boId + " Is Declined. Because We Are Not Satisfied With Your Request..Please Try Again With A New Request"));
+            notificationsRepo.save(new CustomerNotifications(boId, bookingRequestDTO.getCusNic(), boId + " Is Declined. Because We Are Not Satisfied With Your Request..Please Try Again With A New Request"));
             System.out.println(bookingRequestDTO.getPayments().getPaymentsId());
             paymentsRepo.deleteById(bookingRequestDTO.getPayments().getPaymentsId());
             repo.deleteById(boId);
@@ -277,7 +277,7 @@ public class BookingCarRequestServiceImpl implements BookingCarRequestService {
     }
 
     @Override
-    public List<CustomerNotificationsDTO> getAllNotifications() {
+    public List<CustomerNotificationsDTO> getAllNotifications(String nic) {
         List<CustomerNotificationsDTO> map = mapper.map(notificationsRepo.findAll(), new TypeToken<List<CustomerNotificationsDTO>>() {
         }.getType());
         return map;

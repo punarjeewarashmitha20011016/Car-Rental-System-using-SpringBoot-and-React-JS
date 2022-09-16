@@ -16,14 +16,16 @@ import javax.persistence.Id;
 @ToString
 @Entity
 public class CustomerNotifications {
+    String nic;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String boId;
     private String message;
 
-    public CustomerNotifications(String boId, String message) {
+    public CustomerNotifications(String boId, String nic, String message) {
         this.boId = boId;
+        this.nic = nic;
         this.message = message;
     }
 }

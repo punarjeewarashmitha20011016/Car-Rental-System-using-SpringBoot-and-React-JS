@@ -11,7 +11,7 @@ export const Notifications = (props) => {
       let list = [];
       let id = 1;
       data.forEach((e) => {
-        let message = e.regNo + " " + e.message;
+        let message = e.message;
         list.push(<NotificationsBlock label={message} id={id++} data={list} />);
       });
       setDataList(list);

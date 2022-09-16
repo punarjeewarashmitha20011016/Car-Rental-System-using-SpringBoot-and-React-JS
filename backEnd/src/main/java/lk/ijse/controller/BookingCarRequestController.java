@@ -97,9 +97,9 @@ public class BookingCarRequestController {
         return new ResponseUtil(200, "Customer Own Bookings Fetched Successfully", bookingCarService.getCustomerOwnBookings(nic));
     }
 
-    @GetMapping(path = "getAllNotifications", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseUtil getAllNotifications() {
-        return new ResponseUtil(200, "Notifications Fetched Successfully", bookingCarService.getAllNotifications());
+    @GetMapping(path = "getAllNotifications", produces = MediaType.APPLICATION_JSON_VALUE, params = {"cusNic"})
+    ResponseUtil getAllNotifications(@RequestParam("cusNic")String nic) {
+        return new ResponseUtil(200, "Notifications Fetched Successfully", bookingCarService.getAllNotifications(nic));
     }
 
 

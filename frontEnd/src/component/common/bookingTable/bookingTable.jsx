@@ -13,7 +13,7 @@ export const BookingTable = (props) => {
   const [dataListOfDetailsTable, setDataToDetailsTable] = useState([]);
   useEffect(() => {
     const getAllBookings = async () => {
-      let res = props.resData;
+      let res = props.resData.data;
       setDataList(res);
     };
     getAllBookings();
@@ -74,7 +74,7 @@ export const BookingTable = (props) => {
                 label={"Search"}
                 style={{ width: "80%" }}
                 onClick={async () => {
-                  let data = props.resData;
+                  let data = props.resData.resData;
                   data.forEach((e) => {
                     if (searchTxt === e.boId) {
                       let arr = [];

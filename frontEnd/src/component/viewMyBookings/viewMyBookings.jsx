@@ -3,7 +3,7 @@ import placeBookingRequest from "../../services/placeBookingRequest/placeBooking
 import { BookingTable } from "../common/bookingTable/bookingTable";
 import { cusNicStore } from "../../store/cusNicStore";
 export const ViewMyBookings = (props) => {
-  const [data, setData] = useState(null);
+  const [dataObj, setData] = useState({ data: null, resData: null });
   const [detailsRows, setDetailsRowsMethod] = useState(null);
   const setDetailsRows = (rowNo, data) => {
     setDetailsRowsMethod(
@@ -51,13 +51,19 @@ export const ViewMyBookings = (props) => {
             </tr>
           );
         });
-      setData(arr);
+      setData((prevState) => {
+        return {
+          ...dataObj,
+          data: arr,
+          resData: list,
+        };
+      });
     };
     loadData();
   }, []);
 
   return (
-    data != null && (
+    dataObj.data != null && (
       <BookingTable
         tblRows={[
           "Row No",
@@ -68,7 +74,7 @@ export const ViewMyBookings = (props) => {
           "Booked Time",
           "Cost",
         ]}
-        resData={data}
+        resData={dataObj}
         setDetailsRows={setDetailsRows}
         setDetailsRowsToTable={detailsRows}
         tblRowsForDetailsTable={[

@@ -13,8 +13,45 @@ import { FaTools } from "react-icons/fa";
 
 import classes from "./adminDashboard.module.css";
 import classesCards from "./cards.module.css";
+import { useEffect } from "react";
+import { useState } from "react";
+import bookingService from "../../services/bookingService/bookingService";
+import carService from "../../services/carService/carService";
+import driverService from "../../services/driverService/driverService";
 
 export const AdminDashboard = (props) => {
+  const [dashboardData, setDashboardData] = useState({
+    noOfRegisteredUsers: "",
+    totalBookingsOfTheDay: "",
+    noOfAvailableAndRecievedCars: "",
+    noOfBookingsActivePerDay: "",
+    noOfAvailableAndOccupiedDrivers: "",
+    noOfCarsThatNeedMaintenanceAndUnderMaintenance: "",
+  });
+  useEffect(() => {
+    const loadData = async () => {
+      let todaysBookings = await bookingService.getCountOfTodayBookings();
+      let pendingBookings =
+        await bookingService.getCountOfTodayPendingBookings();
+
+      let underAndNeedMaintenanceCars =
+        await carService.countAllCarsUnderAndNeedMaintenance();
+      let countAllCars = await carService.countAllCars();
+      let availableDrivers = await driverService.countRegisteredDrivers();
+      setDashboardData((prevState) => {
+        return {
+          ...dashboardData,
+          totalBookingsOfTheDay: todaysBookings.data.data,
+          noOfBookingsActivePerDay: pendingBookings.data.data,
+          noOfCarsThatNeedMaintenanceAndUnderMaintenance:
+            underAndNeedMaintenanceCars.data.data,
+          noOfAvailableAndRecievedCars: countAllCars.data.data,
+          noOfAvailableAndOccupiedDrivers: availableDrivers.data.data,
+        };
+      });
+    };
+    loadData();
+  }, []);
   return (
     <Fragment>
       <section className={classes.dashboardContainer}>
@@ -51,7 +88,7 @@ export const AdminDashboard = (props) => {
             >
               <Cards
                 style={classesCards.card2}
-                Value={"10"}
+                Value={dashboardData.totalBookingsOfTheDay}
                 Text={"Total Bookings Of The Day"}
                 font={
                   <FaBriefcase style={{ fontSize: "500%", color: "white" }} />
@@ -70,7 +107,7 @@ export const AdminDashboard = (props) => {
             >
               <Cards
                 style={classesCards.card3}
-                Value={"10"}
+                Value={dashboardData.noOfAvailableAndRecievedCars}
                 Text={"Number of available and reserved cars"}
                 font={
                   <AiFillCar style={{ fontSize: "500%", color: "white" }} />
@@ -89,7 +126,7 @@ export const AdminDashboard = (props) => {
             >
               <Cards
                 style={classesCards.card4}
-                Value={"10"}
+                Value={dashboardData.noOfBookingsActivePerDay}
                 Text={"Number of Bookings active per day"}
                 font={
                   <VscVmActive style={{ fontSize: "500%", color: "white" }} />
@@ -108,7 +145,7 @@ export const AdminDashboard = (props) => {
             >
               <Cards
                 style={classesCards.card5}
-                Value={"10"}
+                Value={dashboardData.noOfAvailableAndOccupiedDrivers}
                 Text={"Number of available and occupied drivers"}
                 font={
                   <RiTaxiFill style={{ fontSize: "500%", color: "white" }} />
@@ -126,7 +163,9 @@ export const AdminDashboard = (props) => {
             >
               <Cards
                 style={classesCards.card6}
-                Value={"10"}
+                Value={
+                  dashboardData.noOfCarsThatNeedMaintenanceAndUnderMaintenance
+                }
                 Text={"Number of cars that need and under maintenance"}
                 font={<FaTools style={{ fontSize: "500%", color: "white" }} />}
               />

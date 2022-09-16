@@ -91,6 +91,33 @@ class BookingService {
     });
     return await promise;
   };
+
+  getCountOfTodayBookings = async () => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .get("bookingCarController/getCountOfTodayBookings")
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(res);
+        });
+    });
+    return await promise;
+  };
+  getCountOfTodayPendingBookings = async () => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .get("bookingCarController/getCountOfTodayPendingBookings")
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(res);
+        });
+    });
+    return await promise;
+  };
 }
 
 export default new BookingService();

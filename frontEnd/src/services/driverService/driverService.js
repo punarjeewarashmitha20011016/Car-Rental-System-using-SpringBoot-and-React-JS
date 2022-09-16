@@ -90,5 +90,18 @@ class DriverService {
     });
     return await promise;
   };
+  countRegisteredDrivers = async () => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .get("driver/countRegisteredDrivers")
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(res);
+        });
+    });
+    return await promise;
+  };
 }
 export default new DriverService();

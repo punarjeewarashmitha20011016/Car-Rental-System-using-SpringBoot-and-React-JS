@@ -33,14 +33,28 @@ export const ViewCars = (props) => {
     let checkForBtnDisable = false;
     view.splice(0, view.length);
     setCheck(false);
-    view.length === 0 &&
+    view.length != null &&
       res.data.data.forEach((e) => {
+        console.log("e.carBookedOrNotStatus = ", e);
         if (
-          (e.carBookedOrNotStatus === "Not Booked") |
-          (e.maintenanceStatus === "No Maintenance Required")
+          e.carBookedOrNotStatus === "Not Booked" &&
+          e.maintenanceStatus === "No Maintenance Required"
         ) {
           checkForBtnDisable = false;
-        } else {
+        } else if (
+          e.carBookedOrNotStatus === "Not Booked" &&
+          e.maintenanceStatus === "Under Maintenance"
+        ) {
+          checkForBtnDisable = true;
+        } else if (
+          e.carBookedOrNotStatus === "Booked" &&
+          e.maintenanceStatus === "No Maintenance Required"
+        ) {
+          checkForBtnDisable = true;
+        } else if (
+          e.carBookedOrNotStatus === "Booked" &&
+          e.maintenanceStatus === "Under Maintenance"
+        ) {
           checkForBtnDisable = true;
         }
         let images = e.images;

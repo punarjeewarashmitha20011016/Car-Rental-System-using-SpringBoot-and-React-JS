@@ -125,9 +125,7 @@ export const MainFields = (props) => {
           xs={3}
           style={{
             height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            position: "relative",
           }}
         >
           <TextValidator
@@ -142,6 +140,13 @@ export const MainFields = (props) => {
               });
             }}
             value={booking.boId}
+            style={{
+              position: "absolute",
+              width: "80%",
+              height: "50%",
+              inset: "0 0 0 0",
+              margin: "auto",
+            }}
           />
         </Grid>
         <Grid
@@ -193,9 +198,7 @@ export const MainFields = (props) => {
           xs={3}
           style={{
             height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            position: "relative",
           }}
         >
           <Autocomplete
@@ -205,10 +208,9 @@ export const MainFields = (props) => {
             id="combo-box-demo"
             options={carRegNoList}
             style={{
-              position: "relative",
-              width: "90%",
+              position: "absolute",
+              width: "80%",
               height: "50%",
-              display: "flex",
               inset: "0 0 0 0",
               margin: "auto",
             }}
@@ -276,9 +278,7 @@ export const MainFields = (props) => {
           xs={3}
           style={{
             height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            position: "relative",
           }}
         >
           <TextValidator
@@ -287,6 +287,13 @@ export const MainFields = (props) => {
             type={"Number"}
             disabled={true}
             value={booking.cost}
+            style={{
+              position: "absolute",
+              width: "80%",
+              height: "50%",
+              inset: "0 0 0 0",
+              margin: "auto",
+            }}
           />
         </Grid>
       </Grid>
@@ -320,9 +327,7 @@ export const MainFields = (props) => {
             xs={12}
             style={{
               height: "65%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              position: "relative",
             }}
           >
             <TextValidator
@@ -330,6 +335,13 @@ export const MainFields = (props) => {
               placeholder={"Enter Customer Id"}
               value={booking.cusNic}
               disabled={true}
+              style={{
+                position: "absolute",
+                width: "80%",
+                height: "70%",
+                inset: "0 0 0 0",
+                margin: "auto",
+              }}
             />
           </Grid>
         </Grid>
@@ -361,9 +373,7 @@ export const MainFields = (props) => {
             xs={12}
             style={{
               height: "65%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              position: "relative",
             }}
           >
             <TextValidator
@@ -371,6 +381,13 @@ export const MainFields = (props) => {
               size={"small"}
               placeholder={"Enter Driver Nic"}
               value={addToListObj.driverNic}
+              style={{
+                position: "absolute",
+                width: "80%",
+                height: "70%",
+                inset: "0 0 0 0",
+                margin: "auto",
+              }}
             />
           </Grid>
         </Grid>
@@ -402,9 +419,7 @@ export const MainFields = (props) => {
             xs={12}
             style={{
               height: "65%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              position: "relative",
             }}
           >
             <TextValidator
@@ -412,6 +427,13 @@ export const MainFields = (props) => {
               size={"small"}
               placeholder={"Enter Car Type"}
               value={addToListObj.carType}
+              style={{
+                position: "absolute",
+                width: "80%",
+                height: "70%",
+                inset: "0 0 0 0",
+                margin: "auto",
+              }}
             />
           </Grid>
         </Grid>
@@ -443,9 +465,7 @@ export const MainFields = (props) => {
             xs={12}
             style={{
               height: "65%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              position: "relative",
             }}
           >
             <TextValidator
@@ -453,6 +473,13 @@ export const MainFields = (props) => {
               disabled={true}
               placeholder={"Enter Rental Type"}
               value={addToListObj.rentalType}
+              style={{
+                position: "absolute",
+                width: "80%",
+                height: "70%",
+                inset: "0 0 0 0",
+                margin: "auto",
+              }}
             />
           </Grid>
         </Grid>
@@ -487,9 +514,7 @@ export const MainFields = (props) => {
             xs={12}
             style={{
               height: "65%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              position: "relative",
             }}
           >
             <TextValidator
@@ -504,6 +529,13 @@ export const MainFields = (props) => {
                 });
               }}
               value={addToListObj.tripInKM}
+              style={{
+                position: "absolute",
+                width: "80%",
+                height: "70%",
+                inset: "0 0 0 0",
+                margin: "auto",
+              }}
             />
           </Grid>
         </Grid>
@@ -537,9 +569,7 @@ export const MainFields = (props) => {
             xs={12}
             style={{
               height: "65%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              position: "relative",
             }}
           >
             <TextValidator
@@ -554,6 +584,13 @@ export const MainFields = (props) => {
                 });
               }}
               value={addToListObj.extraKmDriven}
+              style={{
+                position: "absolute",
+                width: "80%",
+                height: "70%",
+                inset: "0 0 0 0",
+                margin: "auto",
+              }}
             />
           </Grid>
         </Grid>
@@ -596,7 +633,7 @@ export const MainFields = (props) => {
               type={"Date"}
               style={{
                 position: "absolute",
-                width: "72%",
+                width: "80%",
                 height: "70%",
                 inset: "0 0 0 0",
                 margin: "auto",
@@ -644,7 +681,7 @@ export const MainFields = (props) => {
               type={"Time"}
               style={{
                 position: "absolute",
-                width: "72%",
+                width: "80%",
                 height: "70%",
                 inset: "0 0 0 0",
                 margin: "auto",
@@ -684,9 +721,7 @@ export const MainFields = (props) => {
             xs={12}
             style={{
               height: "65%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              position: "relative",
             }}
           >
             <TextValidator
@@ -694,6 +729,13 @@ export const MainFields = (props) => {
               size={"small"}
               placeholder={"Enter Pickup Venue"}
               value={addToListObj.pickupVenue}
+              style={{
+                position: "absolute",
+                width: "80%",
+                height: "70%",
+                inset: "0 0 0 0",
+                margin: "auto",
+              }}
             />
           </Grid>
         </Grid>
@@ -734,7 +776,7 @@ export const MainFields = (props) => {
               type={"Date"}
               style={{
                 position: "absolute",
-                width: "72%",
+                width: "80%",
                 height: "70%",
                 inset: "0 0 0 0",
                 margin: "auto",
@@ -780,7 +822,7 @@ export const MainFields = (props) => {
               type={"Time"}
               style={{
                 position: "absolute",
-                width: "72%",
+                width: "80%",
                 height: "70%",
                 inset: "0 0 0 0",
                 margin: "auto",
@@ -817,9 +859,7 @@ export const MainFields = (props) => {
             xs={12}
             style={{
               height: "65%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              position: "relative",
             }}
           >
             <TextValidator
@@ -827,6 +867,13 @@ export const MainFields = (props) => {
               size={"small"}
               placeholder={"Enter Return Venue"}
               value={addToListObj.returnVenue}
+              style={{
+                position: "absolute",
+                width: "80%",
+                height: "70%",
+                inset: "0 0 0 0",
+                margin: "auto",
+              }}
             />
           </Grid>
         </Grid>
@@ -874,7 +921,7 @@ export const MainFields = (props) => {
               options={["Damaged", "Not Damaged"]}
               style={{
                 position: "absolute",
-                width: "72%",
+                width: "80%",
                 height: "70%",
                 inset: "0 0 0 0",
                 margin: "auto",
@@ -935,9 +982,7 @@ export const MainFields = (props) => {
             xs={12}
             style={{
               height: "65%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              position: "relative",
             }}
           >
             <TextValidator
@@ -945,6 +990,13 @@ export const MainFields = (props) => {
               size={"small"}
               placeholder={"Enter Loss Damage Waiver"}
               value={addToListObj.lossDamageWaiver}
+              style={{
+                position: "absolute",
+                width: "80%",
+                height: "70%",
+                inset: "0 0 0 0",
+                margin: "auto",
+              }}
             />
           </Grid>
         </Grid>
@@ -978,9 +1030,7 @@ export const MainFields = (props) => {
             xs={12}
             style={{
               height: "65%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              position: "relative",
             }}
           >
             <TextValidator
@@ -988,6 +1038,13 @@ export const MainFields = (props) => {
               size={"small"}
               placeholder={"Enter Loss Damage Waiver Slip Path"}
               value={booking.payments.lossDamageWaiverPaymentSlip}
+              style={{
+                position: "absolute",
+                width: "80%",
+                height: "70%",
+                inset: "0 0 0 0",
+                margin: "auto",
+              }}
             />
           </Grid>
         </Grid>
@@ -1019,9 +1076,7 @@ export const MainFields = (props) => {
             xs={12}
             style={{
               height: "65%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              position: "relative",
             }}
           >
             <TextValidator
@@ -1030,6 +1085,13 @@ export const MainFields = (props) => {
               type={"Number"}
               placeholder={"Enter Cost"}
               value={addToListObj.cost}
+              style={{
+                position: "absolute",
+                width: "80%",
+                height: "70%",
+                inset: "0 0 0 0",
+                margin: "auto",
+              }}
             />
           </Grid>
         </Grid>

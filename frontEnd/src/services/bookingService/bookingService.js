@@ -65,5 +65,32 @@ class BookingService {
     });
     return await promise;
   };
+  getCarSchedule = async () => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .get("bookingCarController/getCarSchedule")
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(res);
+        });
+    });
+    return await promise;
+  };
+  getDriverSchedule = async (nic) => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .get("bookingCarController/getDriverSchedule?nic=" + nic)
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(res);
+        });
+    });
+    return await promise;
+  };
 }
+
 export default new BookingService();

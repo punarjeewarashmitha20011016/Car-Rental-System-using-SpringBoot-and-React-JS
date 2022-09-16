@@ -231,6 +231,13 @@ export const PlaceBookingRequest = (props) => {
             e.key === "Enter" &&
             document.getElementById("customerNicFieldInPlaceBookingRequest");
         }}
+        style={{
+          position: "absolute",
+          width: "80%",
+          height: "100%",
+          inset: "0 0 0 0",
+          margin: "auto",
+        }}
       />
     );
     clearFields();
@@ -614,7 +621,8 @@ export const PlaceBookingRequest = (props) => {
         options={carRegNoForAutoComplete}
         style={{
           position: "absolute",
-          width: "73%",
+          width: "80%",
+          height: "100%",
           inset: "0 0 0 0",
           margin: "auto",
         }}
@@ -686,14 +694,19 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      position: "relative",
                     }}
                   >
                     <TextValidator
                       placeholder="Enter Booking Id"
                       size={"small"}
+                      style={{
+                        position: "absolute",
+                        width: "80%",
+                        height: "100%",
+                        inset: "0 0 0 0",
+                        margin: "auto",
+                      }}
                       onChange={(e) => {
                         setAddToListObj((prevState) => {
                           return {
@@ -742,9 +755,6 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
                       position: "relative",
                     }}
                   >
@@ -769,9 +779,7 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      position: "relative",
                     }}
                   >
                     <TextValidator
@@ -805,6 +813,13 @@ export const PlaceBookingRequest = (props) => {
                           document.getElementById(
                             "driverCheckBoxInPlaceBookingRequest"
                           );
+                      }}
+                      style={{
+                        position: "absolute",
+                        width: "80%",
+                        height: "100%",
+                        inset: "0 0 0 0",
+                        margin: "auto",
                       }}
                     />
                   </Grid>
@@ -861,9 +876,6 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
                       position: "relative",
                     }}
                   >
@@ -875,7 +887,8 @@ export const PlaceBookingRequest = (props) => {
                       options={["Luxury", "Semi-Luxury"]}
                       style={{
                         position: "absolute",
-                        width: "73%",
+                        width: "80%",
+                        height: "100%",
                         inset: "0 0 0 0",
                         margin: "auto",
                       }}
@@ -925,9 +938,6 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
                       position: "relative",
                     }}
                   >
@@ -939,7 +949,8 @@ export const PlaceBookingRequest = (props) => {
                       options={["Daily", "Monthly"]}
                       style={{
                         position: "absolute",
-                        width: "73%",
+                        width: "80%",
+                        height: "100%",
                         inset: "0 0 0 0",
                         margin: "auto",
                       }}
@@ -988,9 +999,6 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
                       position: "relative",
                     }}
                   >
@@ -999,7 +1007,8 @@ export const PlaceBookingRequest = (props) => {
                       type={"Date"}
                       style={{
                         position: "absolute",
-                        width: "73%",
+                        width: "80%",
+                        height: "100%",
                         inset: "0 0 0 0",
                         margin: "auto",
                       }}
@@ -1033,9 +1042,6 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
                       position: "relative",
                     }}
                   >
@@ -1044,7 +1050,8 @@ export const PlaceBookingRequest = (props) => {
                       type={"Time"}
                       style={{
                         position: "absolute",
-                        width: "73%",
+                        width: "80%",
+                        height: "100%",
                         inset: "0 0 0 0",
                         margin: "auto",
                       }}
@@ -1081,9 +1088,7 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      position: "relative",
                     }}
                   >
                     <TextValidator
@@ -1111,6 +1116,13 @@ export const PlaceBookingRequest = (props) => {
                             "returnedDateInPlaceBookingRequest"
                           );
                       }}
+                      style={{
+                        position: "absolute",
+                        width: "80%",
+                        height: "100%",
+                        inset: "0 0 0 0",
+                        margin: "auto",
+                      }}
                     />
                   </Grid>
                 </Grid>
@@ -1133,9 +1145,6 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
                       position: "relative",
                     }}
                   >
@@ -1145,7 +1154,8 @@ export const PlaceBookingRequest = (props) => {
                       type={"Date"}
                       style={{
                         position: "absolute",
-                        width: "78%",
+                        width: "80%",
+                        height: "100%",
                         inset: "0 0 0 0",
                         margin: "auto",
                       }}
@@ -1179,9 +1189,6 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
                       position: "relative",
                     }}
                   >
@@ -1190,7 +1197,8 @@ export const PlaceBookingRequest = (props) => {
                       type={"Time"}
                       style={{
                         position: "absolute",
-                        width: "78%",
+                        width: "80%",
+                        height: "100%",
                         inset: "0 0 0 0",
                         margin: "auto",
                       }}
@@ -1224,9 +1232,7 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      position: "relative",
                     }}
                   >
                     <TextValidator
@@ -1254,6 +1260,13 @@ export const PlaceBookingRequest = (props) => {
                             "lossDamageWaiverFieldInPlaceBookingRequest"
                           );
                       }}
+                      style={{
+                        position: "absolute",
+                        width: "80%",
+                        height: "100%",
+                        inset: "0 0 0 0",
+                        margin: "auto",
+                      }}
                     />
                   </Grid>
                 </Grid>
@@ -1278,9 +1291,7 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      position: "relative",
                     }}
                   >
                     <TextValidator
@@ -1304,6 +1315,13 @@ export const PlaceBookingRequest = (props) => {
                             "lossDamageWaiverSlipPathFieldInPlaceBookingRequest"
                           );
                       }}
+                      style={{
+                        position: "absolute",
+                        width: "80%",
+                        height: "100%",
+                        inset: "0 0 0 0",
+                        margin: "auto",
+                      }}
                     />
                   </Grid>
                 </Grid>
@@ -1325,9 +1343,6 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
                       position: "relative",
                     }}
                   >
@@ -1336,8 +1351,9 @@ export const PlaceBookingRequest = (props) => {
                       size={"small"}
                       type={"file"}
                       style={{
-                        width: "78%",
                         position: "absolute",
+                        width: "80%",
+                        height: "100%",
                         inset: "0 0 0 0",
                         margin: "auto",
                       }}
@@ -1362,9 +1378,7 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      position: "relative",
                     }}
                   >
                     <TextValidator
@@ -1393,6 +1407,13 @@ export const PlaceBookingRequest = (props) => {
                             "totalCostPerBookingInPlaceBookingRequest"
                           );
                       }}
+                      style={{
+                        position: "absolute",
+                        width: "80%",
+                        height: "100%",
+                        inset: "0 0 0 0",
+                        margin: "auto",
+                      }}
                     />
                   </Grid>
                 </Grid>
@@ -1414,9 +1435,7 @@ export const PlaceBookingRequest = (props) => {
                     xs={12}
                     style={{
                       height: "60%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      position: "relative",
                     }}
                   >
                     <TextValidator
@@ -1439,6 +1458,13 @@ export const PlaceBookingRequest = (props) => {
                           document.getElementById(
                             "requestBookingBtnInPlaceBookingRequest"
                           );
+                      }}
+                      style={{
+                        position: "absolute",
+                        width: "80%",
+                        height: "100%",
+                        inset: "0 0 0 0",
+                        margin: "auto",
                       }}
                     />
                   </Grid>

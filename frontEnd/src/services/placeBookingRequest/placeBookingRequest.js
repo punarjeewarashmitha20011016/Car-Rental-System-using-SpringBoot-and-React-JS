@@ -92,6 +92,19 @@ class PlaceBookingRequestService {
     });
     return await promise;
   };
+  getCustomerOwnBookings = async (data) => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .get("bookingCarRequestController/getCustomerOwnBookings?nic=" + data)
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(res);
+        });
+    });
+    return await promise;
+  };
 }
 
 export default new PlaceBookingRequestService();

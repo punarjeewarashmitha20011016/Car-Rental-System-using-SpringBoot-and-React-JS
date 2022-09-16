@@ -24,6 +24,7 @@ import DriverService from "../../services/driverService/driverService";
 import AdminService from "../../services/adminService/adminService";
 
 import { cusNicStore } from "../../store/cusNicStore";
+import { driverUserNameStore } from "../../store/driverStore";
 
 const Login = (props) => {
   const imgArr = [
@@ -73,6 +74,7 @@ const Login = (props) => {
         loginObj.userName,
         loginObj.password
       );
+
       let responseAdmin = await AdminService.searchAdmins(
         loginObj.userName,
         loginObj.password
@@ -83,6 +85,10 @@ const Login = (props) => {
         cusNicStore.cusNic = responseCustomerObj.data.data.nic;
         return "customer";
       } else if (responseDriver.data.data == true) {
+        let data = await DriverService.searchDriverByUsername(
+          loginObj.userName
+        );
+        driverUserNameStore.userName = data.data.data.email;
         return "driver";
       } else if (responseAdmin.data.data == true) {
         return "admin";

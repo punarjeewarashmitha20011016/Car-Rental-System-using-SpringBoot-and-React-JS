@@ -1,122 +1,76 @@
-import { Grid, TextField } from "@mui/material";
-import { useState } from "react";
-import CommonButton from "../common/btn";
-import CommonTable from "../common/table/table";
-import classes from "./viewMyBookings.module.css";
-import { ViewAllBookingDetails } from "../viewMyBookings/ViewAllBookingDetails";
+import { useEffect, useState } from "react";
+import placeBookingRequest from "../../services/placeBookingRequest/placeBookingRequest";
+import { BookingTable } from "../common/bookingTable/bookingTable";
+import { cusNicStore } from "../../store/cusNicStore";
 export const ViewMyBookings = (props) => {
-  const [check, setCheck] = useState(false);
-  const [view, setView] = useState(null);
-  const [dataList, setDataList] = useState(null);
+  const [data, setData] = useState(null);
+  const [detailsRows, setDetailsRowsMethod] = useState(null);
+  const setDetailsRows = (rowNo, data) => {
+    setDetailsRowsMethod(
+      <tr>
+        <td>{rowNo++}</td>
+        <td>{data.bookingId}</td>
+        <td>{data.car_RegNo}</td>
+        <td>{data.driverNic}</td>
+        <td>{data.carType}</td>
+        <td>{data.rentalType}</td>
+        <td>{data.tripInKm}</td>
+        <td>{data.extraKmDriven}</td>
+        <td>{data.dateOfPickup}</td>
+        <td>{data.timeOfPickup}</td>
+        <td>{data.pickupVenue}</td>
+        <td>{data.returnedDate}</td>
+        <td>{data.returnedTime}</td>
+        <td>{data.returnedVenue}</td>
+        <td>{data.damageStatus}</td>
+        <td>{data.lossDamage}</td>
+        <td>{data.cost}</td>
+      </tr>
+    );
+    return;
+  };
+  useEffect(() => {
+    const loadData = async () => {
+      let res = await placeBookingRequest.getCustomerOwnBookings(
+        cusNicStore.cusNic
+      );
+      data == null && setData(res.data.data);
+    };
+    loadData();
+  }, []);
+
   return (
-    <div className={classes.mainContainer}>
-      <div className={classes.container}>
-        <Grid
-          container
-          spacing={0}
-          style={{
-            width: "95%",
-            height: "95%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Grid
-            container
-            item
-            xs={12}
-            style={{ height: "20%", display: "flex" }}
-          >
-            <Grid
-              item
-              xs={7}
-              style={{
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <TextField
-                size={"small"}
-                style={{ width: "85%", display: "flex" }}
-                placeholder={"Search Current Booking Details"}
-              />
-            </Grid>
-            <Grid
-              item
-              xs={2}
-              style={{
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <CommonButton
-                variant={"contained"}
-                color={"primary"}
-                label={"Search"}
-                style={{ width: "80%" }}
-              />
-            </Grid>
-            <Grid
-              item
-              xs={3}
-              style={{
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <CommonButton
-                variant={"contained"}
-                color={"success"}
-                label={"View Booking Details"}
-                style={{ width: "80%" }}
-                onClick={(e) => {
-                  setCheck(true);
-                  setView(<ViewAllBookingDetails />);
-                }}
-                onDblClick={(e) => {
-                  setCheck(false);
-                }}
-              />
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            item
-            xs={12}
-            style={{
-              height: "80%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {check === false ? (
-              <CommonTable
-                tblRows={[
-                  "Row No",
-                  "Booking Id",
-                  "Status",
-                  "Customer Nic",
-                  "Booked Date",
-                  "Booked Time",
-                  "Cost",
-                ]}
-                dataList={[]}
-                style={{ width: "90%", height: "90%", display: "flex" }}
-              />
-            ) : (
-              view
-            )}
-          </Grid>
-        </Grid>
-      </div>
-    </div>
+    data != null && (
+      <BookingTable
+        tblRows={[
+          "Row No",
+          "Booking Id",
+          "Status",
+          "Customer Nic",
+          "Booked Date",
+          "Booked Time",
+          "Cost",
+        ]}
+        resData={data}
+        setDetailsRows={setDetailsRows}
+        setDetailsRowsToTable={detailsRows}
+        tblRowsForDetailsTable={[
+          "Row No",
+          "Booking Id",
+          "Car_RegNo",
+          "Driver Nic",
+          "Car Type",
+          "Rental Type",
+          "Date of Pickup",
+          "Time of Pickup",
+          "Pickup Venue",
+          "Returned Date",
+          "Returned Time",
+          "Returned Venue",
+          "Loss Damage",
+          "Cost",
+        ]}
+      />
+    )
   );
 };

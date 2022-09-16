@@ -11,6 +11,7 @@ import classes from "./manageCars.module.css";
 
 import CarService from "../../services/carService/carService";
 import { baseUrl } from "../../baseUrl";
+import bookingService from "../../services/bookingService/bookingService";
 
 export const ManageCars = (props) => {
   const [view, setView] = useState(null);
@@ -33,10 +34,29 @@ export const ManageCars = (props) => {
     lossDamageWaiver: "",
   });
   const formData = new FormData();
-  const [carList, setCarList] = useState(null);
   const [check, setCheck] = useState(false);
   const [checkDisabled, setCheckDisabled] = useState(true);
 
+  const loadCarSchedule = async () => {
+    let res = await bookingService.getCarSchedule();
+    let data = res.data.data;
+    let arr = [];
+    let rowNo = 0;
+    data.forEach((e) => {
+      arr.push(
+        <tr>
+          <td>{rowNo++}</td>
+          <td>{e.c_RegNo}</td>
+          <td>{e.bookedStatus}</td>
+          <td>{e.bookedDate}</td>
+          <td>{e.bookedTime}</td>
+          <td>{e.returnedDate}</td>
+          <td>{e.returnedTime}</td>
+        </tr>
+      );
+    });
+    return arr;
+  };
   return (
     <Fragment>
       <div className={classes.mainContainer}>
@@ -1357,7 +1377,6 @@ export const ManageCars = (props) => {
                       );
                     });
 
-                    setCarList(res.data.data);
                     setCheck(true);
                     setView(
                       <CommonTable
@@ -1411,7 +1430,9 @@ export const ManageCars = (props) => {
                   label={"View Schedule"}
                   size={"medium"}
                   style={{ display: "flex", width: "70%", height: "40%" }}
-                  onClick={(e) => {
+                  onClick={async (e) => {
+                    let list = await loadCarSchedule();
+                    console.log(list);
                     console.log("onClick");
                     setCheck(true);
                     setView(

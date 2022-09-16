@@ -77,5 +77,18 @@ class DriverService {
     });
     return await promise;
   };
+  searchDriverByUsername = async (userName) => {
+    let promise = new Promise((resolve, reject) => {
+      instance
+        .get("driver/searchDriverByUsername?userName=" + userName)
+        .then((res) => {
+          return resolve(res);
+        })
+        .catch((res) => {
+          return resolve(res);
+        });
+    });
+    return await promise;
+  };
 }
 export default new DriverService();

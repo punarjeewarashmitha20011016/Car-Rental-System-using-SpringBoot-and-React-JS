@@ -29,7 +29,7 @@ public class BookingRequest {
     private LocalDate date;
     private String time;
     private double cost;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingEntity")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingEntity", fetch = FetchType.EAGER)
     @NotFound(action = NotFoundAction.IGNORE)
     private List<BookingRequestDetails> bookingDetails;
 

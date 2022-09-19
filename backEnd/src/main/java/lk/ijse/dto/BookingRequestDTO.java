@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.ElementCollection;
+import javax.persistence.FetchType;
 import java.time.LocalDate;
 import java.util.List;
 

@@ -2,4 +2,7 @@ Manifest-Version: 1.0
 Created-By: IntelliJ IDEA
 Built-By: Punarjeewa
 Build-Jdk: 1.8.0_271
+Implementation-Version: 1.0.0
+Implementation-Vendor-Id: lk.ijse
+Main-Class: ${start-class}
 

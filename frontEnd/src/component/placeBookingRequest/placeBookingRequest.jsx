@@ -39,7 +39,7 @@ export const PlaceBookingRequest = (props) => {
     cost: "",
   });
   const [dataList, setDataList] = useState([]);
-  const formData = new FormData();
+  let formData = new FormData();
   const [checkTicked, setCheckedTick] = useState(false);
   const [checkDisabled, setCheckDisabled] = useState(true);
   const [paymentsId, setPaymentsId] = useState(null);
@@ -747,6 +747,7 @@ export const PlaceBookingRequest = (props) => {
     if (lossDamageSlipField != undefined) {
       lossDamageSlipField.innerHTML = "";
     }
+    formData = new FormData();
   };
   const searchBooking = async () => {
     carRegNoForAutoComplete.splice(0, carRegNoForAutoComplete.length);
@@ -1847,8 +1848,8 @@ export const PlaceBookingRequest = (props) => {
                     console.log("not exists");
                     getAvailableDriver();
                     addToList.push(addToListObj);
-                    setDataToTable();
                     await calculateTotalCostPerCar();
+                    setDataToTable();
                     calculateTotalCost();
                   }
                 }}

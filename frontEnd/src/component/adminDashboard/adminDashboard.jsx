@@ -30,14 +30,58 @@ export const AdminDashboard = (props) => {
   });
   useEffect(() => {
     const loadData = async () => {
-      let todaysBookings = await bookingService.getCountOfTodayBookings();
-      let pendingBookings =
-        await bookingService.getCountOfTodayPendingBookings();
+      let tdBookings = await bookingService.getCountOfTodayBookings();
+      let todaysBookings =
+        tdBookings.data.code == 200
+          ? tdBookings
+          : {
+              data: {
+                data: 0,
+              },
+            };
 
-      let underAndNeedMaintenanceCars =
+      let pdBookings = await bookingService.getCountOfTodayPendingBookings();
+      let pendingBookings =
+        pdBookings.data.code == 200
+          ? pdBookings
+          : {
+              data: {
+                data: 0,
+              },
+            };
+
+      let underAndNeedMaintenanceCarsDup =
         await carService.countAllCarsUnderAndNeedMaintenance();
-      let countAllCars = await carService.countAllCars();
-      let availableDrivers = await driverService.countRegisteredDrivers();
+      let underAndNeedMaintenanceCars =
+        underAndNeedMaintenanceCarsDup.data.code == 200
+          ? underAndNeedMaintenanceCarsDup
+          : {
+              data: {
+                data: 0,
+              },
+            };
+
+      let countAllCarsDup = await carService.countAllCars();
+      console.log(countAllCarsDup);
+      let countAllCars =
+        countAllCarsDup.response.data.code == 200
+          ? countAllCarsDup
+          : {
+              data: {
+                data: 0,
+              },
+            };
+
+      let availableDriversDup = await driverService.countRegisteredDrivers();
+      let availableDrivers =
+        availableDriversDup.data.code == 200
+          ? availableDriversDup
+          : {
+              data: {
+                data: 0,
+              },
+            };
+
       setDashboardData((prevState) => {
         return {
           ...dashboardData,

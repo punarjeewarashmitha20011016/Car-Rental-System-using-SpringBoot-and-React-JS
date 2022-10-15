@@ -132,7 +132,7 @@ const Login = (props) => {
             }}
           >
             <Typography variant="h4" component="h3">
-              WebPos
+              Login
             </Typography>
           </Grid>
           <Grid item xs={12} style={{ height: "50%" }}>
